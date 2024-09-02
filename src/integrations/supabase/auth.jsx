@@ -47,7 +47,6 @@ export const SupabaseAuthProviderInner = ({ children }) => {
       await supabase.auth.signOut();
       setSession(null);
       queryClient.clear();
-      localStorage.removeItem('supabase.auth.token');
       navigate('/login');
     } catch (error) {
       console.error('Error during logout:', error);
