@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { SupabaseAuthProvider, useSupabaseAuth } from '@/integrations/supabase'
 import { ThemeProvider } from 'next-themes'
-import Layout from './components/Layout'
 import Index from './pages/Index'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -15,14 +14,14 @@ import FAQ from './pages/FAQ'
 import Settings from './pages/Settings'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
-import Chat from './pages/Chat'
+import Layout from './components/Layout'
 
 const queryClient = new QueryClient()
 
 const ProtectedRoute = ({ children }) => {
   const { session } = useSupabaseAuth();
   if (!session) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   return children;
 };
@@ -40,14 +39,56 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
-              <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/subscription" element={<Subscription />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat />} />
-              </Route>
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Profile />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/search"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Search />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/subscription"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Subscription />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/faq"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <FAQ />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Settings />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </TooltipProvider>
         </ThemeProvider>
