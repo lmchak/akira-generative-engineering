@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,7 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Input } from "@/components/ui/input";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
-import VoiceInput from '@/components/VoiceInput';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
@@ -21,6 +21,7 @@ const Profile = () => {
     last_name: '',
     avatar_url: '',
     email: '',
+    privacy_level: 'public',
   });
 
   useEffect(() => {
@@ -30,12 +31,17 @@ const Profile = () => {
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
         email: profile.email || '',
+        privacy_level: profile.privacy_level || 'public',
       });
     }
   }, [profile]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -107,6 +113,20 @@ const Profile = () => {
               value={formData.avatar_url}
               onChange={handleInputChange}
             />
+            <Select
+              name="privacy_level"
+              value={formData.privacy_level}
+              onValueChange={(value) => handleSelectChange('privacy_level', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Privacy Level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="public">Public</SelectItem>
+                <SelectItem value="private">Private</SelectItem>
+                <SelectItem value="friends">Friends Only</SelectItem>
+              </SelectContent>
+            </Select>
             <Button type="submit" className="w-full">
               Update Profile
             </Button>

@@ -25,7 +25,8 @@ const updateProfile = async ({ id, ...profile }) => {
     new_first_name: profile.first_name,
     new_last_name: profile.last_name,
     new_avatar_url: profile.avatar_url,
-    new_email: profile.email
+    new_email: profile.email,
+    new_privacy_level: profile.privacy_level
   });
   if (error) throw error;
   return data;
