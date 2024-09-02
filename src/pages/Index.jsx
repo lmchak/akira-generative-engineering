@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
+import { FaApple } from 'react-icons/fa'
 
 const Index = () => {
   return (
@@ -11,7 +12,7 @@ const Index = () => {
       </div>
       <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">Welcome to AMU</h1>
       <p className="text-xl sm:text-2xl mb-8 text-center">Capturing Moments, Creating Memories</p>
-      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
         <Button asChild size="lg" className="w-full sm:w-auto bg-white text-purple-600 hover:bg-gray-100 hover:text-purple-700">
           <Link to="/register">Sign Up</Link>
         </Button>
@@ -19,7 +20,7 @@ const Index = () => {
           <Link to="/login">Log In</Link>
         </Button>
       </div>
-      <div className="mt-6">
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <Button
           size="lg"
           variant="outline"
@@ -28,6 +29,15 @@ const Index = () => {
         >
           <FcGoogle className="mr-2 h-5 w-5" />
           Continue with Google
+        </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          className="w-full sm:w-auto bg-transparent border-white text-white hover:bg-white hover:text-purple-600"
+          onClick={() => alert('Apple sign-in not implemented')}
+        >
+          <FaApple className="mr-2 h-5 w-5" />
+          Continue with Apple
         </Button>
       </div>
     </div>
