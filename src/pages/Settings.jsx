@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useTheme } from 'next-themes';
 
 const Settings = () => {
   const [email, setEmail] = useState('user@example.com');
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleSave = (e) => {
     e.preventDefault();
     // Placeholder for saving settings
     alert('Settings saved!');
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <Layout>
@@ -42,8 +52,8 @@ const Settings = () => {
           <Label htmlFor="darkMode">Dark Mode</Label>
           <Switch
             id="darkMode"
-            checked={darkMode}
-            onCheckedChange={setDarkMode}
+            checked={theme === 'dark'}
+            onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
           />
         </div>
         <Button type="submit">Save Settings</Button>
