@@ -5,12 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
-import { Send, Mic, PaperclipIcon, MoreVertical, Settings, Trash2 } from 'lucide-react';
+import { Send, Mic, PaperclipIcon, MoreVertical, Settings, Trash2, Edit2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { supabase } from '@/lib/supabase';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -28,21 +29,49 @@ const Chat = () => {
     frequencyPenalty: 0,
     presencePenalty: 0,
   });
+  const [editingChatId, setEditingChatId] = useState(null);
+  const [editingChatName, setEditingChatName] = useState('');
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSend = () => {
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchSavedChats();
+    }
+  }, [session?.user?.id]);
+
+  const fetchSavedChats = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setSavedChats(data);
+    } catch (error) {
+      console.error('Error fetching saved chats:', error);
+    }
+  };
+
+  const handleSend = async () => {
     if (input.trim()) {
       const newMessage = { text: input, sender: 'user', timestamp: new Date().toISOString() };
-      setMessages([...messages, newMessage]);
+      const updatedMessages = [...messages, newMessage];
+      setMessages(updatedMessages);
       setInput('');
       
       // Simulate AI response
-      setTimeout(() => {
+      setTimeout(async () => {
         const aiResponse = { text: generateAIResponse(input), sender: 'ai', timestamp: new Date().toISOString() };
-        setMessages(prevMessages => [...prevMessages, aiResponse]);
+        const finalMessages = [...updatedMessages, aiResponse];
+        setMessages(finalMessages);
+        
+        // Save the updated chat to Supabase
+        await saveChat(finalMessages);
       }, 1000);
     }
   };
@@ -57,21 +86,83 @@ const Chat = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const saveChat = () => {
-    const newSavedChat = {
-      id: Date.now(),
-      name: `Chat ${savedChats.length + 1}`,
-      messages: messages,
-    };
-    setSavedChats([...savedChats, newSavedChat]);
+  const saveChat = async (chatMessages) => {
+    try {
+      const { data, error } = await supabase
+        .from('chats')
+        .insert({
+          user_id: session.user.id,
+          name: `Chat ${savedChats.length + 1}`,
+          messages: chatMessages,
+        })
+        .select();
+
+      if (error) throw error;
+      
+      // Refresh the list of saved chats
+      await fetchSavedChats();
+    } catch (error) {
+      console.error('Error saving chat:', error);
+    }
   };
 
-  const removeChat = (chatId) => {
-    setSavedChats(savedChats.filter(chat => chat.id !== chatId));
+  const removeChat = async (chatId) => {
+    try {
+      const { error } = await supabase
+        .from('chats')
+        .delete()
+        .eq('id', chatId);
+
+      if (error) throw error;
+      
+      // Refresh the list of saved chats
+      await fetchSavedChats();
+    } catch (error) {
+      console.error('Error removing chat:', error);
+    }
+  };
+
+  const startEditingChat = (chatId, chatName) => {
+    setEditingChatId(chatId);
+    setEditingChatName(chatName);
+  };
+
+  const saveEditedChatName = async () => {
+    try {
+      const { error } = await supabase
+        .from('chats')
+        .update({ name: editingChatName })
+        .eq('id', editingChatId);
+
+      if (error) throw error;
+      
+      // Refresh the list of saved chats
+      await fetchSavedChats();
+      setEditingChatId(null);
+      setEditingChatName('');
+    } catch (error) {
+      console.error('Error updating chat name:', error);
+    }
+  };
+
+  const loadChat = async (chatId) => {
+    try {
+      const { data, error } = await supabase
+        .from('chats')
+        .select('messages')
+        .eq('id', chatId)
+        .single();
+
+      if (error) throw error;
+      
+      setMessages(data.messages);
+    } catch (error) {
+      console.error('Error loading chat:', error);
+    }
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col`}>
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -87,10 +178,27 @@ const Chat = () => {
         <div className="flex-grow overflow-y-auto">
           {savedChats.map((chat) => (
             <div key={chat.id} className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <span>{chat.name}</span>
-              <Button variant="ghost" size="icon" onClick={() => removeChat(chat.id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              {editingChatId === chat.id ? (
+                <Input
+                  value={editingChatName}
+                  onChange={(e) => setEditingChatName(e.target.value)}
+                  onBlur={saveEditedChatName}
+                  onKeyPress={(e) => e.key === 'Enter' && saveEditedChatName()}
+                  className="w-full"
+                />
+              ) : (
+                <>
+                  <span onClick={() => loadChat(chat.id)} className="cursor-pointer">{chat.name}</span>
+                  <div>
+                    <Button variant="ghost" size="icon" onClick={() => startEditingChat(chat.id, chat.name)}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => removeChat(chat.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
@@ -158,7 +266,7 @@ const Chat = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-screen">
         {/* Chat Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -175,7 +283,7 @@ const Chat = () => {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={saveChat}>
+            <Button variant="outline" size="sm" onClick={() => saveChat(messages)}>
               Save Chat
             </Button>
           </div>
