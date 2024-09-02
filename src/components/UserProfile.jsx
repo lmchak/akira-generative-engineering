@@ -1,80 +1,75 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useSupabaseAuth } from '@/integrations/supabase'
-import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toast } from 'sonner'
+import { supabase } from '@/lib/supabase'
 
 const UserProfile = () => {
-  const { session } = useSupabaseAuth()
-  const { data: profile, isLoading } = useProfile(session?.user?.id)
-  const updateProfileMutation = useUpdateProfile()
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    avatar_url: ''
-  })
+  const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (profile) {
-      setFormData({
-        first_name: profile.first_name || '',
-        last_name: profile.last_name || '',
-        avatar_url: profile.avatar_url || ''
-      })
-    }
-  }, [profile])
+    fetchProfile()
+  }, [])
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+  const fetchProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        if (error) throw error
+        setProfile(data)
+      }
+    } catch (error) {
+      alert(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleSubmit = async (e) => {
+  const updateProfile = async (e) => {
     e.preventDefault()
     try {
-      await updateProfileMutation.mutateAsync({
-        id: session.user.id,
-        ...formData
+      const { error } = await supabase.rpc('update_profile', {
+        user_id: profile.id,
+        new_first_name: profile.first_name,
+        new_last_name: profile.last_name,
+        new_avatar_url: profile.avatar_url
       })
-      toast.success('Profile updated successfully!')
+      if (error) throw error
+      alert('Profile updated successfully!')
     } catch (error) {
-      toast.error('Failed to update profile: ' + error.message)
+      alert(error.message)
     }
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>
   if (!profile) return <div>No profile data</div>
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Avatar className="w-24 h-24 mx-auto">
-        <AvatarImage src={formData.avatar_url} alt={formData.first_name} />
-        <AvatarFallback>{formData.first_name?.[0]}{formData.last_name?.[0]}</AvatarFallback>
-      </Avatar>
+    <form onSubmit={updateProfile} className="space-y-4">
       <Input
         type="text"
-        name="first_name"
         placeholder="First Name"
-        value={formData.first_name}
-        onChange={handleInputChange}
+        value={profile.first_name || ''}
+        onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
       />
       <Input
         type="text"
-        name="last_name"
         placeholder="Last Name"
-        value={formData.last_name}
-        onChange={handleInputChange}
+        value={profile.last_name || ''}
+        onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
       />
       <Input
         type="text"
-        name="avatar_url"
         placeholder="Avatar URL"
-        value={formData.avatar_url}
-        onChange={handleInputChange}
+        value={profile.avatar_url || ''}
+        onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
       />
-      <Button type="submit" className="w-full">Update Profile</Button>
+      <Button type="submit">Update Profile</Button>
     </form>
   )
 }
