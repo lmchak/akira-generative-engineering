@@ -17,9 +17,6 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        railway: ['Railway', 'sans-serif'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
