@@ -1,33 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useTheme } from 'next-themes';
+import { useSupabaseAuth } from '@/integrations/supabase';
+import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 
 const Settings = () => {
-  const [email, setEmail] = useState('user@example.com');
-  const [notifications, setNotifications] = useState(true);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { session } = useSupabaseAuth();
+  const { data: profile, isLoading } = useProfile(session?.user?.id);
+  const updateProfile = useUpdateProfile();
+
+  const [email, setEmail] = useState('');
+  const [notifications, setNotifications] = useState(true);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (profile) {
+      setEmail(profile.email || '');
+      setNotifications(profile.notifications || true);
+    }
+  }, [profile]);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-    // Placeholder for saving settings
-    alert('Settings saved!');
+    try {
+      await updateProfile.mutateAsync({
+        id: session.user.id,
+        email,
+        notifications,
+      });
+      alert('Settings saved successfully!');
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      alert('Failed to save settings. Please try again.');
+    }
   };
 
-  if (!mounted) {
+  if (!mounted || isLoading) {
     return null;
   }
 
   return (
-    <Layout>
+    <div>
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
       <form onSubmit={handleSave} className="space-y-6">
         <div>
@@ -58,7 +76,13 @@ const Settings = () => {
         </div>
         <Button type="submit">Save Settings</Button>
       </form>
-    </Layout>
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Danger Zone</h2>
+        <Button variant="destructive" onClick={() => alert('Account deletion functionality to be implemented')}>
+          Delete Account
+        </Button>
+      </div>
+    </div>
   );
 };
 

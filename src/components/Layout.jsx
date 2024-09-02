@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const { logout } = useSupabaseAuth();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -66,8 +66,8 @@ const Layout = ({ children }) => {
         </div>
       </aside>
 
-      {/* Mobile Header */}
       <div className="flex flex-col flex-1">
+        {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <Menu className="h-6 w-6" />
@@ -114,7 +114,7 @@ const Layout = ({ children }) => {
 
         {/* Main content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
-          {children}
+          <Outlet />
         </main>
 
         {/* Footer */}
