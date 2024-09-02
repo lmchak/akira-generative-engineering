@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
-import { Send, Mic, PaperclipIcon, MoreVertical, Settings, Trash2 } from 'lucide-react';
+import { Send, Mic, PaperclipIcon, MoreVertical, Settings, Trash2, Edit2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -28,6 +28,8 @@ const Chat = () => {
     frequencyPenalty: 0,
     presencePenalty: 0,
   });
+  const [editingChatId, setEditingChatId] = useState(null);
+  const [editingChatName, setEditingChatName] = useState('');
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -70,8 +72,21 @@ const Chat = () => {
     setSavedChats(savedChats.filter(chat => chat.id !== chatId));
   };
 
+  const startEditingChat = (chatId, chatName) => {
+    setEditingChatId(chatId);
+    setEditingChatName(chatName);
+  };
+
+  const saveEditedChatName = () => {
+    setSavedChats(savedChats.map(chat => 
+      chat.id === editingChatId ? { ...chat, name: editingChatName } : chat
+    ));
+    setEditingChatId(null);
+    setEditingChatName('');
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col`}>
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -87,10 +102,27 @@ const Chat = () => {
         <div className="flex-grow overflow-y-auto">
           {savedChats.map((chat) => (
             <div key={chat.id} className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <span>{chat.name}</span>
-              <Button variant="ghost" size="icon" onClick={() => removeChat(chat.id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              {editingChatId === chat.id ? (
+                <Input
+                  value={editingChatName}
+                  onChange={(e) => setEditingChatName(e.target.value)}
+                  onBlur={saveEditedChatName}
+                  onKeyPress={(e) => e.key === 'Enter' && saveEditedChatName()}
+                  className="w-full"
+                />
+              ) : (
+                <>
+                  <span>{chat.name}</span>
+                  <div>
+                    <Button variant="ghost" size="icon" onClick={() => startEditingChat(chat.id, chat.name)}>
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => removeChat(chat.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
@@ -158,7 +190,7 @@ const Chat = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-screen">
         {/* Chat Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
