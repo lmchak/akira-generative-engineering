@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { supabase } from '@/lib/supabase'
+import { useNavigate } from 'react-router-dom'
 
 const RegistrationForm = () => {
   const [firstName, setFirstName] = useState('')
@@ -10,6 +11,7 @@ const RegistrationForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -30,6 +32,7 @@ const RegistrationForm = () => {
       })
       if (error) throw error
       alert('Registration successful! Please check your email to verify your account.')
+      navigate('/profile')
     } catch (error) {
       alert(error.message)
     }
