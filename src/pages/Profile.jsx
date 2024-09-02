@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,20 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from '@/components/ChatInterface';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
-import { toast } from "sonner";
-import VoiceInput from '@/components/VoiceInput';
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
-  const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
-  const updateProfileMutation = useUpdateProfile();
+  const { data: profile, isLoading } = useProfile(session?.user?.id);
+  const updateProfile = useUpdateProfile();
 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     avatar_url: '',
-    email: '',
+    bio: '',
   });
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const Profile = () => {
         first_name: profile.first_name || '',
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
-        email: profile.email || '',
+        bio: profile.bio || '',
       });
     }
   }, [profile]);
@@ -42,15 +41,14 @@ const Profile = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateProfileMutation.mutateAsync({
+      await updateProfile.mutateAsync({
         id: session.user.id,
         ...formData,
       });
-      await refetch();
-      toast.success('Profile updated successfully!');
+      alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile. Please try again.');
+      alert('Failed to update profile. Please try again.');
     }
   };
 
@@ -95,16 +93,15 @@ const Profile = () => {
               onChange={handleInputChange}
             />
             <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-            <Input
               name="avatar_url"
               placeholder="Avatar URL"
               value={formData.avatar_url}
+              onChange={handleInputChange}
+            />
+            <Textarea
+              name="bio"
+              placeholder="Bio"
+              value={formData.bio}
               onChange={handleInputChange}
             />
             <Button type="submit" className="w-full">

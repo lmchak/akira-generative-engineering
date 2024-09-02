@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&family=Raleway:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -75,19 +75,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.brand-text {
-  font-family: 'Mr Dafoe', cursive;
-  font-size: 1.5em;
-  line-height: 1;
-  display: inline-flex;
-  align-items: flex-end;
-}
-
-.brand-text .js {
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
-  font-size: 0.5em;
-  margin-left: 0.1em;
 }

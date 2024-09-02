@@ -1,23 +1,7 @@
-# rUv.js
+# rUv - Social Media Application
 
-rUv.js is a cutting-edge social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests. Powered by Supabase, rUv.js offers a seamless and secure experience for users to create, share, and explore content.
+rUv is a modern social media application built with React and integrated with Supabase for backend services.
 
-## Features
-
-- User authentication and profile management
-- Image uploading and sharing
-- Social networking capabilities
-- Real-time chat functionality
-- Analytics dashboard for user insights
-- Subscription plans for enhanced features
-
-## Technology Stack
-
-- Frontend: React.js with Vite
-- Backend: Supabase (PostgreSQL database and authentication)
-- Styling: Tailwind CSS
-- State Management: React Query
-- Routing: React Router
 ## Configuration
 
 ### Environment Variables
