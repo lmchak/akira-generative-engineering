@@ -42,11 +42,19 @@ export const SupabaseAuthProviderInner = ({ children }) => {
     };
   }, [queryClient]);
 
+  useEffect(() => {
+    const session = supabase.auth.session();
+    if (session) {
+      setSession(session);
+    }
+  }, []);
+
   const logout = async () => {
     try {
       await supabase.auth.signOut();
       setSession(null);
       queryClient.clear();
+      localStorage.removeItem('supabase.auth.token');
       navigate('/login');
     } catch (error) {
       console.error('Error during logout:', error);

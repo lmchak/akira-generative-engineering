@@ -64,7 +64,7 @@ const Layout = () => {
           ))}
         </nav>
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <Button onClick={logout} variant="outline" className="w-full">
+          <Button onClick={() => { logout(); navigate('/login'); }} variant="outline" className="w-full">
             Log out
           </Button>
         </div>
@@ -113,7 +113,7 @@ const Layout = () => {
                   </Link>
                 ))}
               </nav>
-              <Button onClick={logout} variant="outline" className="w-full mt-4">
+              <Button onClick={() => { logout(); navigate('/login'); }} variant="outline" className="w-full mt-4">
                 Log out
               </Button>
             </div>
