@@ -15,6 +15,7 @@ import FAQ from './pages/FAQ'
 import Settings from './pages/Settings'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+import Chat from './pages/Chat'
 
 const queryClient = new QueryClient()
 
@@ -45,6 +46,7 @@ const App = () => (
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/chat" element={<Chat />} />
               </Route>
             </Routes>
           </TooltipProvider>
