@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { supabase } from '@/lib/supabase';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -36,42 +35,16 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchSavedChats();
-    }
-  }, [session?.user?.id]);
-
-  const fetchSavedChats = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setSavedChats(data);
-    } catch (error) {
-      console.error('Error fetching saved chats:', error);
-    }
-  };
-
-  const handleSend = async () => {
+  const handleSend = () => {
     if (input.trim()) {
       const newMessage = { text: input, sender: 'user', timestamp: new Date().toISOString() };
-      const updatedMessages = [...messages, newMessage];
-      setMessages(updatedMessages);
+      setMessages([...messages, newMessage]);
       setInput('');
       
       // Simulate AI response
-      setTimeout(async () => {
+      setTimeout(() => {
         const aiResponse = { text: generateAIResponse(input), sender: 'ai', timestamp: new Date().toISOString() };
-        const finalMessages = [...updatedMessages, aiResponse];
-        setMessages(finalMessages);
-        
-        // Save the updated chat to Supabase
-        await saveChat(finalMessages);
+        setMessages(prevMessages => [...prevMessages, aiResponse]);
       }, 1000);
     }
   };
@@ -86,40 +59,17 @@ const Chat = () => {
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const saveChat = async (chatMessages) => {
-    try {
-      const { data, error } = await supabase
-        .from('chats')
-        .insert({
-          user_id: session.user.id,
-          name: `Chat ${savedChats.length + 1}`,
-          messages: chatMessages,
-        })
-        .select();
-
-      if (error) throw error;
-      
-      // Refresh the list of saved chats
-      await fetchSavedChats();
-    } catch (error) {
-      console.error('Error saving chat:', error);
-    }
+  const saveChat = () => {
+    const newSavedChat = {
+      id: Date.now(),
+      name: `Chat ${savedChats.length + 1}`,
+      messages: messages,
+    };
+    setSavedChats([...savedChats, newSavedChat]);
   };
 
-  const removeChat = async (chatId) => {
-    try {
-      const { error } = await supabase
-        .from('chats')
-        .delete()
-        .eq('id', chatId);
-
-      if (error) throw error;
-      
-      // Refresh the list of saved chats
-      await fetchSavedChats();
-    } catch (error) {
-      console.error('Error removing chat:', error);
-    }
+  const removeChat = (chatId) => {
+    setSavedChats(savedChats.filter(chat => chat.id !== chatId));
   };
 
   const startEditingChat = (chatId, chatName) => {
@@ -127,38 +77,12 @@ const Chat = () => {
     setEditingChatName(chatName);
   };
 
-  const saveEditedChatName = async () => {
-    try {
-      const { error } = await supabase
-        .from('chats')
-        .update({ name: editingChatName })
-        .eq('id', editingChatId);
-
-      if (error) throw error;
-      
-      // Refresh the list of saved chats
-      await fetchSavedChats();
-      setEditingChatId(null);
-      setEditingChatName('');
-    } catch (error) {
-      console.error('Error updating chat name:', error);
-    }
-  };
-
-  const loadChat = async (chatId) => {
-    try {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('messages')
-        .eq('id', chatId)
-        .single();
-
-      if (error) throw error;
-      
-      setMessages(data.messages);
-    } catch (error) {
-      console.error('Error loading chat:', error);
-    }
+  const saveEditedChatName = () => {
+    setSavedChats(savedChats.map(chat => 
+      chat.id === editingChatId ? { ...chat, name: editingChatName } : chat
+    ));
+    setEditingChatId(null);
+    setEditingChatName('');
   };
 
   return (
@@ -188,7 +112,7 @@ const Chat = () => {
                 />
               ) : (
                 <>
-                  <span onClick={() => loadChat(chat.id)} className="cursor-pointer">{chat.name}</span>
+                  <span>{chat.name}</span>
                   <div>
                     <Button variant="ghost" size="icon" onClick={() => startEditingChat(chat.id, chat.name)}>
                       <Edit2 className="h-4 w-4" />
@@ -283,7 +207,7 @@ const Chat = () => {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={() => saveChat(messages)}>
+            <Button variant="outline" size="sm" onClick={saveChat}>
               Save Chat
             </Button>
           </div>
