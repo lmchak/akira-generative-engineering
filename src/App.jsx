@@ -1,10 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { SupabaseAuthProvider, useSupabaseAuth } from '@/integrations/supabase'
+import { SupabaseAuthProvider } from '@/integrations/supabase'
 import { ThemeProvider } from 'next-themes'
-import Layout from './components/Layout'
 import Index from './pages/Index'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -15,17 +14,8 @@ import FAQ from './pages/FAQ'
 import Settings from './pages/Settings'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
-import Chat from './pages/Chat'
 
 const queryClient = new QueryClient()
-
-const ProtectedRoute = ({ children }) => {
-  const { session } = useSupabaseAuth();
-  if (!session) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -38,16 +28,13 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/subscription" element={<Subscription />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
-              <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/subscription" element={<Subscription />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat />} />
-              </Route>
             </Routes>
           </TooltipProvider>
         </ThemeProvider>
