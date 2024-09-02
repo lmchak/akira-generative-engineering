@@ -10,8 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
@@ -23,7 +21,6 @@ const Profile = () => {
     last_name: '',
     avatar_url: '',
     email: '',
-    notifications: true,
     language: 'en',
     privacy_level: 'public',
   });
@@ -35,7 +32,6 @@ const Profile = () => {
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
         email: profile.email || '',
-        notifications: profile.notifications !== undefined ? profile.notifications : true,
         language: profile.language || 'en',
         privacy_level: profile.privacy_level || 'public',
       });
@@ -45,10 +41,6 @@ const Profile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSwitchChange = (name) => {
-    setFormData(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
   const handleSelectChange = (name, value) => {
@@ -123,14 +115,6 @@ const Profile = () => {
               value={formData.avatar_url}
               onChange={handleInputChange}
             />
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="notifications"
-                checked={formData.notifications}
-                onCheckedChange={() => handleSwitchChange('notifications')}
-              />
-              <Label htmlFor="notifications">Enable Notifications</Label>
-            </div>
             <Select
               name="language"
               value={formData.language}
