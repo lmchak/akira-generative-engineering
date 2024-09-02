@@ -42,13 +42,6 @@ export const SupabaseAuthProviderInner = ({ children }) => {
     };
   }, [queryClient]);
 
-  useEffect(() => {
-    const session = supabase.auth.session();
-    if (session) {
-      setSession(session);
-    }
-  }, []);
-
   const logout = async () => {
     try {
       await supabase.auth.signOut();
