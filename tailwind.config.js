@@ -19,7 +19,6 @@ module.exports = {
     extend: {
       fontFamily: {
         railway: ['Railway', 'sans-serif'],
-        mrdafoe: ['Mr Dafoe', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
