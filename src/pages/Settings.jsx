@@ -17,35 +17,30 @@ const Settings = () => {
   const { data: profile, isLoading } = useProfile(session?.user?.id);
   const updateProfile = useUpdateProfile();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    notifications: true,
-    language: 'en',
-    privacy_level: 'public',
-  });
+  const [email, setEmail] = useState('');
+  const [notifications, setNotifications] = useState(true);
+  const [language, setLanguage] = useState('en');
+  const [privacyLevel, setPrivacyLevel] = useState('public');
 
   useEffect(() => {
     setMounted(true);
     if (profile) {
-      setFormData({
-        email: profile.email || '',
-        notifications: profile.notifications !== undefined ? profile.notifications : true,
-        language: profile.language || 'en',
-        privacy_level: profile.privacy_level || 'public',
-      });
+      setEmail(profile.email || '');
+      setNotifications(profile.notifications || true);
+      setLanguage(profile.language || 'en');
+      setPrivacyLevel(profile.privacy_level || 'public');
     }
   }, [profile]);
-
-  const handleInputChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
 
   const handleSave = async (e) => {
     e.preventDefault();
     try {
       await updateProfile.mutateAsync({
         id: session.user.id,
-        ...formData,
+        email,
+        notifications,
+        language,
+        privacy_level: privacyLevel,
       });
       alert('Settings saved successfully!');
     } catch (error) {
@@ -80,14 +75,14 @@ const Settings = () => {
                   <Input
                     id="email"
                     type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="mt-1"
                   />
                 </div>
                 <div>
                   <Label htmlFor="language">Language</Label>
-                  <Select value={formData.language} onValueChange={(value) => handleInputChange('language', value)}>
+                  <Select value={language} onValueChange={setLanguage}>
                     <SelectTrigger className="w-full mt-1">
                       <SelectValue placeholder="Select Language" />
                     </SelectTrigger>
@@ -128,7 +123,7 @@ const Settings = () => {
               <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="privacyLevel">Privacy Level</Label>
-                  <Select value={formData.privacy_level} onValueChange={(value) => handleInputChange('privacy_level', value)}>
+                  <Select value={privacyLevel} onValueChange={setPrivacyLevel}>
                     <SelectTrigger className="w-full mt-1">
                       <SelectValue placeholder="Select Privacy Level" />
                     </SelectTrigger>
@@ -153,8 +148,8 @@ const Settings = () => {
                   <Label htmlFor="notifications">Enable Notifications</Label>
                   <Switch
                     id="notifications"
-                    checked={formData.notifications}
-                    onCheckedChange={(checked) => handleInputChange('notifications', checked)}
+                    checked={notifications}
+                    onCheckedChange={setNotifications}
                   />
                 </div>
                 <Button type="submit">Save Notification Settings</Button>
