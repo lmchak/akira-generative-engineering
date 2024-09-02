@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'
+import { FcGoogle } from 'react-icons/fc'
 
 const Index = () => {
   return (
@@ -16,6 +17,17 @@ const Index = () => {
         </Button>
         <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-transparent border-white text-white hover:bg-white hover:text-purple-600">
           <Link to="/login">Log In</Link>
+        </Button>
+      </div>
+      <div className="mt-6">
+        <Button
+          size="lg"
+          variant="outline"
+          className="w-full sm:w-auto bg-transparent border-white text-white hover:bg-white hover:text-purple-600"
+          onClick={() => alert('Google sign-in not implemented')}
+        >
+          <FcGoogle className="mr-2 h-5 w-5" />
+          Continue with Google
         </Button>
       </div>
     </div>

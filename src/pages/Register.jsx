@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import RegistrationForm from '@/components/RegistrationForm'
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaApple } from 'react-icons/fa'
+import { ArrowLeft } from 'lucide-react'
 
 const Register = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#1c1c28] text-white p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#1c1c28] text-white p-4 relative">
+      <Link to="/" className="absolute top-4 right-4">
+        <Button variant="ghost" size="icon">
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+      </Link>
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold mb-6 text-center">Create an account</h1>
         <p className="text-sm text-gray-400 mb-8 text-center">
