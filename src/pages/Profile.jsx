@@ -10,10 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
-  const { data: profile, isLoading } = useProfile(session?.user?.id);
+  const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
   const updateProfile = useUpdateProfile();
 
   const [formData, setFormData] = useState({
@@ -47,6 +50,14 @@ const Profile = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleSwitchChange = (name) => {
+    setFormData(prev => ({ ...prev, [name]: !prev[name] }));
+  };
+
+  const handleSelectChange = (name, value) => {
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -54,6 +65,7 @@ const Profile = () => {
         id: session.user.id,
         ...formData,
       });
+      await refetch(); // Refetch the profile data after update
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -120,6 +132,42 @@ const Profile = () => {
               value={formData.bio}
               onChange={handleInputChange}
             />
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="notifications"
+                checked={formData.notifications}
+                onCheckedChange={() => handleSwitchChange('notifications')}
+              />
+              <Label htmlFor="notifications">Enable Notifications</Label>
+            </div>
+            <Select
+              name="language"
+              value={formData.language}
+              onValueChange={(value) => handleSelectChange('language', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="es">Spanish</SelectItem>
+                <SelectItem value="fr">French</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select
+              name="privacy_level"
+              value={formData.privacy_level}
+              onValueChange={(value) => handleSelectChange('privacy_level', value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Privacy Level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="public">Public</SelectItem>
+                <SelectItem value="private">Private</SelectItem>
+                <SelectItem value="friends">Friends Only</SelectItem>
+              </SelectContent>
+            </Select>
             <Button type="submit" className="w-full">
               Update Profile
             </Button>
