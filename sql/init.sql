@@ -30,7 +30,6 @@ CREATE OR REPLACE FUNCTION update_profile(
   new_last_name TEXT,
   new_avatar_url TEXT,
   new_email TEXT,
-  new_language TEXT,
   new_privacy_level TEXT
 )
 RETURNS VOID AS $$
@@ -41,7 +40,6 @@ BEGIN
     last_name = COALESCE(new_last_name, last_name),
     avatar_url = COALESCE(new_avatar_url, avatar_url),
     email = COALESCE(new_email, email),
-    language = COALESCE(new_language, language),
     privacy_level = COALESCE(new_privacy_level, privacy_level),
     updated_at = NOW()
   WHERE id = user_id;

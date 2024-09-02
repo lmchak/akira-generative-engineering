@@ -21,7 +21,6 @@ const Profile = () => {
     last_name: '',
     avatar_url: '',
     email: '',
-    language: 'en',
     privacy_level: 'public',
   });
 
@@ -32,7 +31,6 @@ const Profile = () => {
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
         email: profile.email || '',
-        language: profile.language || 'en',
         privacy_level: profile.privacy_level || 'public',
       });
     }
@@ -115,20 +113,6 @@ const Profile = () => {
               value={formData.avatar_url}
               onChange={handleInputChange}
             />
-            <Select
-              name="language"
-              value={formData.language}
-              onValueChange={(value) => handleSelectChange('language', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-              </SelectContent>
-            </Select>
             <Select
               name="privacy_level"
               value={formData.privacy_level}
