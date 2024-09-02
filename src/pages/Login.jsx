@@ -1,23 +1,12 @@
 import React from 'react'
 import LoginForm from '@/components/LoginForm'
 import { Button } from "@/components/ui/button"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaApple } from 'react-icons/fa'
 import { ArrowLeft } from 'lucide-react'
-import { useSupabaseAuth } from '@/integrations/supabase'
-import { useEffect } from 'react'
 
 const Login = () => {
-  const navigate = useNavigate()
-  const { session } = useSupabaseAuth()
-
-  useEffect(() => {
-    if (session) {
-      navigate('/profile')
-    }
-  }, [session, navigate])
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1c1c28] text-white p-4 relative">
       <Link to="/" className="absolute top-4 right-4">
@@ -26,7 +15,7 @@ const Login = () => {
         </Button>
       </Link>
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Log in to your account</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Log in to your <span className="brand-text"><span>rUv</span><span className="js">.js</span></span> account</h1>
         <p className="text-sm text-gray-400 mb-8 text-center">
           Don't have an account? <Link to="/register" className="text-purple-500 hover:underline">Sign up</Link>
         </p>

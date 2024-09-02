@@ -7,19 +7,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from '@/components/ChatInterface';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
+import { toast } from "sonner";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
-  const { data: profile, isLoading } = useProfile(session?.user?.id);
-  const updateProfile = useUpdateProfile();
+  const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
+  const updateProfileMutation = useUpdateProfile();
 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     avatar_url: '',
-    bio: '',
+    email: '',
   });
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Profile = () => {
         first_name: profile.first_name || '',
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
-        bio: profile.bio || '',
+        email: profile.email || '',
       });
     }
   }, [profile]);
@@ -41,14 +41,15 @@ const Profile = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateProfile.mutateAsync({
+      await updateProfileMutation.mutateAsync({
         id: session.user.id,
         ...formData,
       });
-      alert('Profile updated successfully!');
+      await refetch();
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      toast.error('Failed to update profile. Please try again.');
     }
   };
 
@@ -93,15 +94,16 @@ const Profile = () => {
               onChange={handleInputChange}
             />
             <Input
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            <Input
               name="avatar_url"
               placeholder="Avatar URL"
               value={formData.avatar_url}
-              onChange={handleInputChange}
-            />
-            <Textarea
-              name="bio"
-              placeholder="Bio"
-              value={formData.bio}
               onChange={handleInputChange}
             />
             <Button type="submit" className="w-full">
