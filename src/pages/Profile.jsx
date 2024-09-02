@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { Link } from 'react-router-dom';
-import { supabase } from '@/lib/supabase';
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
@@ -39,26 +38,10 @@ const Profile = () => {
       bio: formData.get('bio'),
     };
 
-    try {
-      if (profile) {
-        await updateProfile.mutateAsync(profileData);
-      } else {
-        await createProfile.mutateAsync(profileData);
-      }
-      
-      // Update public profile
-      await supabase.rpc('update_profile', {
-        user_id: session.user.id,
-        new_first_name: profileData.first_name,
-        new_last_name: profileData.last_name,
-        new_avatar_url: profileData.avatar_url,
-        new_bio: profileData.bio
-      });
-
-      alert('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+    if (profile) {
+      await updateProfile.mutateAsync(profileData);
+    } else {
+      await createProfile.mutateAsync(profileData);
     }
   };
 

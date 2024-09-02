@@ -1,88 +1,67 @@
-# rUv - Social Media Platform
+# Welcome to your GPT Engineer project
 
-rUv is a cutting-edge social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests.
+## Project info
 
-## Table of Contents
+**Project**: amu-memoria
 
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+**URL**: https://run.gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve
 
-## Features
+## How can I edit this code?
 
-- User authentication and profile management
-- Image uploading and sharing
-- Social networking capabilities
-- Real-time chat with AI-powered responses
-- Customizable user settings
-- Subscription plans
+There are several ways of editing your application.
 
-## Getting Started
+**Use GPT Engineer**
 
-### Prerequisites
+Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and start prompting.
 
-- Node.js (v14 or later)
-- npm or yarn
-- Supabase account and project
+Changes made via gptengineer.app will be committed automatically to this repo.
 
-### Installation
+**Use your preferred IDE**
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/your-username/ruv.git
-   cd ruv
-   ```
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-3. Set up environment variables:
-   Create a `.env` file in the root directory and add the following:
-   ```
-   VITE_SUPABASE_PROJECT_URL=your_supabase_project_url
-   VITE_SUPABASE_API_KEY=your_supabase_api_key
-   ```
+Follow these steps:
 
-4. Initialize Supabase:
-   - Create a new Supabase project
-   - Run the SQL commands from `./sql/init.sql` in the Supabase SQL editor
+```sh
+git clone https://github.com/GPT-Engineer-App/amu-memoria.git
+cd amu-memoria
+npm i
 
-5. Start the development server:
-   ```
-   npm run dev
-   ```
+# This will run a dev server with auto reloading and an instant preview.
+npm run dev
+```
 
-## Configuration
+**Edit a file directly in GitHub**
 
-### Supabase Setup
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-1. Create a new Supabase project
-2. Copy the project URL and API key to your `.env` file
-3. Run the SQL commands from `./sql/init.sql` in the Supabase SQL editor to set up the necessary tables and functions
+**Use GitHub Codespaces**
 
-### Theme Configuration
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-The project uses `next-themes` for theme management. You can customize the theme in `tailwind.config.js`.
+## What technologies are used for this project?
 
-### API Integration
+This project is built with .
 
-The project uses Supabase for backend services. Ensure that your Supabase project is properly configured and the connection details are correctly set in the `.env` file.
+- Vite
+- React
+- shadcn-ui
+- Tailwind CSS
 
-## Usage
+## How can I deploy this project?
 
-After starting the development server, you can access the application at `http://localhost:5173` (or the port specified by Vite).
+All GPT Engineer projects can be deployed directly via the GPT Engineer app.
 
-## Contributing
+Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and click on Share -> Publish.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## I want to use a custom domain - is that possible?
 
-## License
-
-This project is licensed under the MIT License.
+We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify or GitHub pages. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
