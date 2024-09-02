@@ -102,23 +102,8 @@ const Profile = () => {
         </CardContent>
       </Card>
 
-      {/* Chat Interface */}
-      <Card className="md:col-span-2">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            Chat
-            <Link to="/chat">
-              <Button variant="outline" size="sm">Open Full Chat</Button>
-            </Link>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChatInterface />
-        </CardContent>
-      </Card>
-
       {/* Analytics Card */}
-      <Card className="md:col-span-3">
+      <Card className="md:col-span-2">
         <CardHeader>
           <CardTitle>Analytics</CardTitle>
         </CardHeader>
@@ -132,6 +117,21 @@ const Profile = () => {
               <Bar dataKey="views" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Chat Interface */}
+      <Card className="md:col-span-3">
+        <CardHeader>
+          <CardTitle className="flex justify-between items-center">
+            Chat
+            <Link to="/chat">
+              <Button variant="outline" size="sm">Open Full Chat</Button>
+            </Link>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChatInterface />
         </CardContent>
       </Card>
     </div>
