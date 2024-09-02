@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-100 dark:bg-gray-900">
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
         <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -98,10 +98,8 @@ const Layout = ({ children }) => {
       )}
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8">
-          {children}
-        </div>
+      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
+        {children}
       </main>
     </div>
   );
