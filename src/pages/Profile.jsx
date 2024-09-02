@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Input } from "@/components/ui/input";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
+import VoiceInput from '@/components/VoiceInput';
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
