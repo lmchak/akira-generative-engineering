@@ -3,10 +3,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Search } from 'lucide-react';
 
 const FAQ = () => {
   const [userQuestion, setUserQuestion] = useState('');
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const faqItems = [
     { 
@@ -37,11 +39,26 @@ const FAQ = () => {
     setUserQuestion('');
   };
 
+  const filteredFAQs = faqItems.filter(item => 
+    item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.answer.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold mb-4">Frequently Asked Questions</h1>
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Search FAQs..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10"
+        />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      </div>
       <Accordion type="single" collapsible className="w-full">
-        {faqItems.map((item, index) => (
+        {filteredFAQs.map((item, index) => (
           <AccordionItem key={index} value={`item-${index}`}>
             <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>

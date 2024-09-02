@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
 import { Check } from 'lucide-react';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const Subscription = () => {
   const { session } = useSupabaseAuth();
@@ -42,7 +44,19 @@ const Subscription = () => {
     <div>
       <h1 className="text-2xl font-bold mb-4">Subscription Plans</h1>
       {profile && (
-        <p className="mb-4">Current Plan: <span className="font-semibold">{profile.subscription_plan || 'Free'}</span></p>
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Current Subscription</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Current Plan: <span className="font-semibold">{profile.subscription_plan || 'Free'}</span></p>
+            <p>Next billing date: {profile.next_billing_date || 'N/A'}</p>
+            <div className="mt-4">
+              <Switch id="auto-renew" />
+              <Label htmlFor="auto-renew" className="ml-2">Auto-renew subscription</Label>
+            </div>
+          </CardContent>
+        </Card>
       )}
       <div className="grid gap-6 md:grid-cols-3">
         {plans.map((plan, index) => (
