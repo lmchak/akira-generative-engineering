@@ -1,12 +1,23 @@
 import React from 'react'
 import LoginForm from '@/components/LoginForm'
 import { Button } from "@/components/ui/button"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import { FaApple } from 'react-icons/fa'
 import { ArrowLeft } from 'lucide-react'
+import { useSupabaseAuth } from '@/integrations/supabase'
+import { useEffect } from 'react'
 
 const Login = () => {
+  const navigate = useNavigate()
+  const { session } = useSupabaseAuth()
+
+  useEffect(() => {
+    if (session) {
+      navigate('/profile')
+    }
+  }, [session, navigate])
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1c1c28] text-white p-4 relative">
       <Link to="/" className="absolute top-4 right-4">

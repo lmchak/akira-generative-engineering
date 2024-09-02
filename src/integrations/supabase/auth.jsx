@@ -27,11 +27,17 @@ export const SupabaseAuthProviderInner = ({ children }) => {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setLoading(false);
+      if (session) {
+        navigate('/profile');
+      }
     };
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
       queryClient.invalidateQueries('user');
+      if (event === 'SIGNED_IN') {
+        navigate('/profile');
+      }
     });
 
     getSession();
@@ -40,7 +46,7 @@ export const SupabaseAuthProviderInner = ({ children }) => {
       authListener.subscription.unsubscribe();
       setLoading(false);
     };
-  }, [queryClient]);
+  }, [queryClient, navigate]);
 
   const logout = async () => {
     await supabase.auth.signOut();
