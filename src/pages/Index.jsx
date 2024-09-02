@@ -8,9 +8,9 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-4 sm:p-8">
       <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8">
-        <span className="text-purple-600 font-bold text-xl">rUv</span>
+        <span className="text-purple-600 font-bold text-xl">LOGO</span>
       </div>
-      <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to rUv</h1>
+      <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">Welcome to AMU</h1>
       <p className="text-xl sm:text-2xl mb-8 text-center">Capturing Moments, Creating Memories</p>
       <div className="flex flex-col space-y-4 w-full max-w-md mb-6">
         <Button asChild size="lg" className="w-full bg-white text-purple-600 hover:bg-gray-100 hover:text-purple-700">
@@ -26,7 +26,7 @@ const Index = () => {
             <div className="w-full border-t border-white/20"></div>
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-transparent px-2 text-white/60">Or Login/Register with:</span>
+            <span className="bg-transparent px-2 text-white/60">Or Login/Register with</span>
           </div>
         </div>
         <div className="flex flex-col space-y-4">
