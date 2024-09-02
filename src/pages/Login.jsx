@@ -2,40 +2,39 @@ import React from 'react'
 import LoginForm from '@/components/LoginForm'
 import { Button } from "@/components/ui/button"
 import { Link } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
-import { FaApple } from 'react-icons/fa'
-import { ArrowLeft } from 'lucide-react'
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#1c1c28] text-white p-4 relative">
-      <Link to="/" className="absolute top-4 right-4">
-        <Button variant="ghost" size="icon">
-          <ArrowLeft className="h-6 w-6" />
+    <div className="min-h-screen flex flex-col md:flex-row">
+      <div className="w-full md:w-1/2 bg-gradient-to-br from-purple-600 to-indigo-700 flex flex-col justify-center items-center text-white p-8 md:p-12">
+        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8">
+          <span className="text-purple-600 font-bold">LOGO</span>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">Welcome Back</h1>
+        <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-center">to Your Memories</h2>
+        <div className="w-full h-48 md:h-64 bg-white/20 rounded-lg flex items-center justify-center">
+          <span className="text-white text-xl md:text-2xl">Image Placeholder</span>
+        </div>
+      </div>
+      <div className="w-full md:w-1/2 bg-white flex flex-col justify-center items-center p-8 md:p-12">
+        <Button asChild className="mb-8 md:absolute md:top-4 md:right-4 text-gray-800 bg-white hover:bg-gray-100">
+          <Link to="/">Back to website</Link>
         </Button>
-      </Link>
-      <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Log in to your <span className="brand-text"><span>rUv</span><span className="js">.js</span></span> account</h1>
-        <p className="text-sm text-gray-400 mb-8 text-center">
-          Don't have an account? <Link to="/register" className="text-purple-500 hover:underline">Sign up</Link>
-        </p>
-        <LoginForm />
-        <div className="mt-8">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-[#1c1c28] text-gray-400">Or log in with</span>
-            </div>
-          </div>
-          <div className="mt-6 grid grid-cols-2 gap-3">
-            <Button variant="outline" className="bg-transparent border-gray-600 text-white hover:bg-gray-700" onClick={() => alert('Google sign-in not implemented')}>
-              <FcGoogle className="mr-2 h-4 w-4" />
+        <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">Log in to your account</h2>
+        <div className="w-full max-w-sm">
+          <LoginForm />
+          <Link to="/forgot-password" className="mt-4 block text-center text-purple-600 hover:underline">Forgot Password?</Link>
+          <p className="mt-4 text-center">
+            Don't have an account? <Link to="/register" className="text-purple-600 hover:underline">Sign up</Link>
+          </p>
+        </div>
+        <div className="mt-8 w-full max-w-sm">
+          <p className="text-center mb-4">Or log in with</p>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+            <Button className="w-full text-gray-800 bg-white hover:bg-gray-100" variant="outline" onClick={() => alert('Google sign-in not implemented')}>
               Google
             </Button>
-            <Button variant="outline" className="bg-transparent border-gray-600 text-white hover:bg-gray-700" onClick={() => alert('Apple sign-in not implemented')}>
-              <FaApple className="mr-2 h-4 w-4" />
+            <Button className="w-full text-gray-800 bg-white hover:bg-gray-100" variant="outline" onClick={() => alert('Apple sign-in not implemented')}>
               Apple
             </Button>
           </div>
