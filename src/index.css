@@ -81,11 +81,13 @@
   font-family: 'Mr Dafoe', cursive;
   font-size: 1.5em;
   line-height: 1;
+  display: inline-flex;
+  align-items: flex-end;
 }
 
 .brand-text .js {
   font-family: 'Raleway', sans-serif;
   font-weight: 300;
   font-size: 0.5em;
-  vertical-align: super;
+  margin-left: 0.1em;
 }
