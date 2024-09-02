@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePublicProfiles } from '@/integrations/supabase/hooks/public_profiles';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +23,7 @@ const Search = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Search</h1>
+      <h1 className="text-2xl font-bold mb-4">Search Users</h1>
       <form onSubmit={handleSearch} className="mb-6">
         <div className="flex gap-2">
           <Input
@@ -42,15 +43,24 @@ const Search = () => {
           {searchResults.map((profile) => (
             <Card key={profile.id}>
               <CardHeader>
-                <CardTitle>{profile.first_name} {profile.last_name}</CardTitle>
+                <CardTitle className="flex items-center space-x-2">
+                  <Avatar>
+                    <AvatarImage src={profile.avatar_url} alt={`${profile.first_name}'s avatar`} />
+                    <AvatarFallback>{profile.first_name[0]}{profile.last_name[0]}</AvatarFallback>
+                  </Avatar>
+                  <span>{profile.first_name} {profile.last_name}</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <img src={profile.avatar_url} alt={`${profile.first_name}'s avatar`} className="w-20 h-20 rounded-full mb-2" />
-                <p>{profile.bio}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{profile.bio || 'No bio available'}</p>
+                <Button className="mt-4" variant="outline">View Profile</Button>
               </CardContent>
             </Card>
           ))}
         </div>
+      )}
+      {searchResults.length === 0 && searchQuery && (
+        <p className="text-center text-gray-600 dark:text-gray-400">No users found. Try a different search term.</p>
       )}
     </div>
   );

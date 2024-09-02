@@ -9,6 +9,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
@@ -104,7 +105,12 @@ const Profile = () => {
       {/* Chat Interface */}
       <Card className="md:col-span-2">
         <CardHeader>
-          <CardTitle>Chat</CardTitle>
+          <CardTitle className="flex justify-between items-center">
+            Chat
+            <Link to="/chat">
+              <Button variant="outline" size="sm">Open Full Chat</Button>
+            </Link>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <ChatInterface />

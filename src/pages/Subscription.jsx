@@ -1,17 +1,33 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
+import { Check } from 'lucide-react';
 
 const Subscription = () => {
   const { session } = useSupabaseAuth();
   const { data: profile, isLoading } = useProfile(session?.user?.id);
 
   const plans = [
-    { name: 'Basic', price: '$9.99/month', features: ['Feature 1', 'Feature 2', 'Feature 3'] },
-    { name: 'Pro', price: '$19.99/month', features: ['All Basic features', 'Feature 4', 'Feature 5'] },
-    { name: 'Enterprise', price: '$49.99/month', features: ['All Pro features', 'Feature 6', 'Feature 7'] },
+    {
+      name: 'Basic',
+      price: '$9.99/month',
+      features: ['Up to 100 posts per month', 'Basic analytics', 'Standard support'],
+      color: 'bg-blue-100 dark:bg-blue-900',
+    },
+    {
+      name: 'Pro',
+      price: '$19.99/month',
+      features: ['Unlimited posts', 'Advanced analytics', 'Priority support', 'Custom themes'],
+      color: 'bg-purple-100 dark:bg-purple-900',
+    },
+    {
+      name: 'Enterprise',
+      price: '$49.99/month',
+      features: ['All Pro features', 'Dedicated account manager', 'API access', 'Custom integrations'],
+      color: 'bg-green-100 dark:bg-green-900',
+    },
   ];
 
   const handleSubscribe = (planName) => {
@@ -26,22 +42,29 @@ const Subscription = () => {
     <div>
       <h1 className="text-2xl font-bold mb-4">Subscription Plans</h1>
       {profile && (
-        <p className="mb-4">Current Plan: {profile.subscription_plan || 'Free'}</p>
+        <p className="mb-4">Current Plan: <span className="font-semibold">{profile.subscription_plan || 'Free'}</span></p>
       )}
       <div className="grid gap-6 md:grid-cols-3">
         {plans.map((plan, index) => (
-          <Card key={index}>
+          <Card key={index} className={`${plan.color} border-0`}>
             <CardHeader>
-              <CardTitle>{plan.name}</CardTitle>
+              <CardTitle className="text-2xl">{plan.name}</CardTitle>
+              <CardDescription className="text-3xl font-bold">{plan.price}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold mb-4">{plan.price}</p>
-              <ul className="list-disc list-inside mb-4">
+              <ul className="space-y-2 mb-4">
                 {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex}>{feature}</li>
+                  <li key={featureIndex} className="flex items-center">
+                    <Check className="h-5 w-5 mr-2 text-green-500" />
+                    {feature}
+                  </li>
                 ))}
               </ul>
-              <Button className="w-full" onClick={() => handleSubscribe(plan.name)}>
+              <Button 
+                className="w-full" 
+                variant={profile && profile.subscription_plan === plan.name ? "outline" : "default"}
+                onClick={() => handleSubscribe(plan.name)}
+              >
                 {profile && profile.subscription_plan === plan.name ? 'Current Plan' : 'Subscribe'}
               </Button>
             </CardContent>
