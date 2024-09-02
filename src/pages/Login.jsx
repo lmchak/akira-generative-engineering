@@ -15,7 +15,7 @@ const Login = () => {
         </Button>
       </Link>
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Log in to your account</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Log in to your rUv.js account</h1>
         <p className="text-sm text-gray-400 mb-8 text-center">
           Don't have an account? <Link to="/register" className="text-purple-500 hover:underline">Sign up</Link>
         </p>
