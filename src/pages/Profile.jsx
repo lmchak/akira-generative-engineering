@@ -22,6 +22,10 @@ const Profile = () => {
     { name: 'Jul', views: 3490 },
   ];
 
+  if (!session) {
+    return <Layout><div>Please log in to view your profile.</div></Layout>;
+  }
+
   if (isLoading) return <Layout><div>Loading...</div></Layout>;
 
   return (
