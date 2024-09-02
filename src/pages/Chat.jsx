@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,20 +6,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
 import { Send, Mic, PaperclipIcon, MoreVertical, Search, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const messagesEndRef = useRef(null);
   const { session } = useSupabaseAuth();
   const { data: profile } = useProfile(session?.user?.id);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Scroll to bottom of messages
-    const messagesContainer = document.getElementById('messages-container');
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const handleSend = () => {
@@ -49,7 +46,7 @@ const Chat = () => {
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* Sidebar */}
-      <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:block md:w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}>
+      <div className="hidden md:flex md:flex-col md:w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold">Chats</h2>
         </div>
@@ -58,9 +55,10 @@ const Chat = () => {
             type="text"
             placeholder="Search chats..."
             className="w-full"
+            prefix={<Search className="h-4 w-4 text-gray-400" />}
           />
         </div>
-        <div className="overflow-y-auto h-[calc(100vh-120px)]">
+        <div className="flex-1 overflow-y-auto">
           {/* Add chat history or contacts here */}
         </div>
       </div>
@@ -70,9 +68,6 @@ const Chat = () => {
         {/* Chat Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <Button variant="ghost" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-              {isMobileMenuOpen ? <MoreVertical className="h-6 w-6" /> : <Search className="h-6 w-6" />}
-            </Button>
             <Avatar>
               <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
               <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
@@ -89,11 +84,14 @@ const Chat = () => {
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5" />
             </Button>
+            <Button variant="ghost" size="icon">
+              <MoreVertical className="h-5 w-5" />
+            </Button>
           </div>
         </div>
 
         {/* Messages */}
-        <div id="messages-container" className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex items-start space-x-2 max-w-[70%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
@@ -125,6 +123,7 @@ const Chat = () => {
               </div>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Area */}
