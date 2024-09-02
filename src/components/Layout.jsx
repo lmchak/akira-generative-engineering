@@ -52,7 +52,7 @@ const Layout = () => {
             <Link
               key={index}
               to={item.path}
-              className={`flex items-center p-2 rounded-lg ${
+              className={`flex items-center p-2 rounded-lg mb-1 ${
                 location.pathname === item.path
                   ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -101,7 +101,7 @@ const Layout = () => {
                   <Link
                     key={index}
                     to={item.path}
-                    className={`flex items-center p-2 rounded-lg ${
+                    className={`flex items-center p-2 rounded-lg mb-1 ${
                       location.pathname === item.path
                         ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
