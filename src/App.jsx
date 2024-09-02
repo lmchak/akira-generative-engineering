@@ -23,13 +23,13 @@ const ProtectedRoute = ({ children }) => {
   const auth = useSupabaseAuth();
   
   if (!auth) {
-    return <div>Loading...</div>;
+    return <div>Loading auth...</div>;
   }
 
   const { session, loading } = auth;
   
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading session...</div>;
   }
   
   if (!session) {
@@ -53,12 +53,13 @@ const App = () => (
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/subscription" element={<Subscription />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat />} />
+                <Route index element={<Profile />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="search" element={<Search />} />
+                <Route path="subscription" element={<Subscription />} />
+                <Route path="faq" element={<FAQ />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="chat" element={<Chat />} />
               </Route>
             </Routes>
           </TooltipProvider>
