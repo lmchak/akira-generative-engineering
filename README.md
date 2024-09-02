@@ -1,67 +1,81 @@
-# Welcome to your GPT Engineer project
+# rUv - Capturing Moments, Creating Memories
 
-## Project info
+rUv is a social media application that allows users to capture and share moments, create memories, and interact with an AI-powered chat interface.
 
-**Project**: amu-memoria
+## Features
 
-**URL**: https://run.gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve
+- User authentication (sign up, log in, log out)
+- Profile management
+- AI-powered chat interface
+- Image upload and sharing
+- Analytics dashboard
 
-## How can I edit this code?
+## Technologies Used
 
-There are several ways of editing your application.
-
-**Use GPT Engineer**
-
-Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and start prompting.
-
-Changes made via gptengineer.app will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-git clone https://github.com/GPT-Engineer-App/amu-memoria.git
-cd amu-memoria
-npm i
-
-# This will run a dev server with auto reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
 - React
-- shadcn-ui
+- Vite
 - Tailwind CSS
+- Supabase (for backend and authentication)
+- Tanstack Query (for data fetching and state management)
+- Recharts (for analytics visualization)
 
-## How can I deploy this project?
+## Getting Started
 
-All GPT Engineer projects can be deployed directly via the GPT Engineer app.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up Supabase:
+   - Create a new Supabase project
+   - Run the SQL commands in `./sql/init.sql` in the Supabase SQL editor
+   - Copy the Supabase project URL and API key
+4. Create a `.env` file in the root directory with the following content:
+   ```
+   VITE_SUPABASE_PROJECT_URL=your_supabase_project_url
+   VITE_SUPABASE_API_KEY=your_supabase_api_key
+   ```
+5. Start the development server: `npm run dev`
 
-Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and click on Share -> Publish.
+## Configuration Options
 
-## I want to use a custom domain - is that possible?
+The application uses various configuration options stored in Supabase tables:
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify or GitHub pages. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
+### LLM Settings
+
+These settings are stored in the `llm_settings` table and can be customized per user:
+
+- `model`: The AI model to use (default: 'gpt-3.5-turbo')
+- `temperature`: Controls randomness in responses (default: 0.7)
+- `max_tokens`: Maximum number of tokens in the response (default: 150)
+- `top_p`: Controls diversity of responses (default: 1)
+- `frequency_penalty`: Reduces repetition of similar phrases (default: 0)
+- `presence_penalty`: Encourages the model to talk about new topics (default: 0)
+
+### Profile Settings
+
+User profiles are stored in the `profiles` and `public_profiles` tables. Users can update their:
+
+- First name
+- Last name
+- Avatar URL
+
+### Chat Settings
+
+Chat conversations can be saved and managed using the `saved_chats` table. Users can:
+
+- Save chat conversations
+- Rename saved chats
+- Delete saved chats
+
+## Deployment
+
+To deploy the application:
+
+1. Build the project: `npm run build`
+2. Deploy the contents of the `dist` folder to your preferred hosting service (e.g., Vercel, Netlify, or GitHub Pages)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
