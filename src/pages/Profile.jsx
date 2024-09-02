@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 const Profile = () => {
   const { session } = useSupabaseAuth();
   const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
-  const updateProfile = useUpdateProfile();
+  const updateProfileMutation = useUpdateProfile();
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -61,11 +61,11 @@ const Profile = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateProfile.mutateAsync({
+      await updateProfileMutation.mutateAsync({
         id: session.user.id,
         ...formData,
       });
-      await refetch(); // Refetch the profile data after update
+      await refetch();
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
