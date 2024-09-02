@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
-const Layout = () => {
+const Layout = ({ children }) => {
   const { logout } = useSupabaseAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -24,7 +23,6 @@ const Layout = () => {
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
-    { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
   ];
 
   const toggleTheme = () => {
@@ -68,8 +66,8 @@ const Layout = () => {
         </div>
       </aside>
 
+      {/* Mobile Header */}
       <div className="flex flex-col flex-1">
-        {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <Menu className="h-6 w-6" />
@@ -116,7 +114,7 @@ const Layout = () => {
 
         {/* Main content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
-          <Outlet />
+          {children}
         </main>
 
         {/* Footer */}
