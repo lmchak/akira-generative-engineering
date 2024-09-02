@@ -4,24 +4,21 @@ import { Input } from "@/components/ui/input"
 import { supabase } from '@/lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useSupabaseAuth } from '@/integrations/supabase'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-  const { setSession } = useSupabaseAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { user, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
       if (error) throw error
-      setSession(data.session)
       navigate('/profile')
     } catch (error) {
       alert(error.message)
