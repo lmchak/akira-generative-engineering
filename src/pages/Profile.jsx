@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
+import React from 'react';
+import { useProfile } from '@/integrations/supabase/hooks/profiles';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -7,58 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from '@/components/ChatInterface';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useCreateProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { Link } from 'react-router-dom';
-import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
-  const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
-  const updateProfileMutation = useUpdateProfile();
-
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    avatar_url: '',
-    email: '',
-    privacy_level: 'public',
-  });
-
-  useEffect(() => {
-    if (profile) {
-      setFormData({
-        first_name: profile.first_name || '',
-        last_name: profile.last_name || '',
-        avatar_url: profile.avatar_url || '',
-        email: profile.email || '',
-        privacy_level: profile.privacy_level || 'public',
-      });
-    }
-  }, [profile]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleProfileUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await updateProfileMutation.mutateAsync({
-        id: session.user.id,
-        ...formData,
-      });
-      await refetch();
-      toast.success('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast.error('Failed to update profile. Please try again.');
-    }
-  };
+  const { data: profile, isLoading } = useProfile(session?.user?.id);
+  const createProfile = useCreateProfile();
+  const updateProfile = useUpdateProfile();
 
   const dummyData = [
     { name: 'Jan', views: 4000 },
@@ -70,6 +27,24 @@ const Profile = () => {
     { name: 'Jul', views: 3490 },
   ];
 
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const profileData = {
+      id: session.user.id,
+      first_name: formData.get('first_name'),
+      last_name: formData.get('last_name'),
+      avatar_url: formData.get('avatar_url'),
+      bio: formData.get('bio'),
+    };
+
+    if (profile) {
+      await updateProfile.mutateAsync(profileData);
+    } else {
+      await createProfile.mutateAsync(profileData);
+    }
+  };
+
   if (!session) {
     return <div>Please log in to view your profile.</div>;
   }
@@ -78,12 +53,13 @@ const Profile = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Profile Card */}
       <Card className="md:col-span-1">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Profile</CardTitle>
           <Avatar className="h-12 w-12">
-            <AvatarImage src={formData.avatar_url} alt={formData.first_name} />
-            <AvatarFallback>{formData.first_name?.[0]}{formData.last_name?.[0]}</AvatarFallback>
+            <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
+            <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
           </Avatar>
         </CardHeader>
         <CardContent>
@@ -91,44 +67,25 @@ const Profile = () => {
             <Input
               name="first_name"
               placeholder="First Name"
-              value={formData.first_name}
-              onChange={handleInputChange}
+              defaultValue={profile?.first_name || ''}
             />
             <Input
               name="last_name"
               placeholder="Last Name"
-              value={formData.last_name}
-              onChange={handleInputChange}
-            />
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleInputChange}
+              defaultValue={profile?.last_name || ''}
             />
             <Input
               name="avatar_url"
               placeholder="Avatar URL"
-              value={formData.avatar_url}
-              onChange={handleInputChange}
+              defaultValue={profile?.avatar_url || ''}
             />
-            <Select
-              name="privacy_level"
-              value={formData.privacy_level}
-              onValueChange={(value) => handleSelectChange('privacy_level', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Privacy Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="public">Public</SelectItem>
-                <SelectItem value="private">Private</SelectItem>
-                <SelectItem value="friends">Friends Only</SelectItem>
-              </SelectContent>
-            </Select>
+            <Textarea
+              name="bio"
+              placeholder="Bio"
+              defaultValue={profile?.bio || ''}
+            />
             <Button type="submit" className="w-full">
-              Update Profile
+              {profile ? 'Update Profile' : 'Create Profile'}
             </Button>
           </form>
           <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
@@ -145,6 +102,7 @@ const Profile = () => {
         </CardContent>
       </Card>
 
+      {/* Analytics Card */}
       <Card className="md:col-span-2">
         <CardHeader>
           <CardTitle>Analytics</CardTitle>
@@ -162,6 +120,7 @@ const Profile = () => {
         </CardContent>
       </Card>
 
+      {/* Chat Interface */}
       <Card className="md:col-span-3">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">

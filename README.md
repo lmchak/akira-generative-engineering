@@ -1,58 +1,67 @@
-# rUv - Social Media Application
+# Welcome to your GPT Engineer project
 
-rUv is a modern social media application built with React and integrated with Supabase for backend services.
+## Project info
 
-## Configuration
+**Project**: amu-memoria
 
-### Environment Variables
+**URL**: https://run.gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve
 
-Create a `.env` file in the root directory with the following variables:
+## How can I edit this code?
 
+There are several ways of editing your application.
+
+**Use GPT Engineer**
+
+Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and start prompting.
+
+Changes made via gptengineer.app will be committed automatically to this repo.
+
+**Use your preferred IDE**
+
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
+
+```sh
+git clone https://github.com/GPT-Engineer-App/amu-memoria.git
+cd amu-memoria
+npm i
+
+# This will run a dev server with auto reloading and an instant preview.
+npm run dev
 ```
-VITE_SUPABASE_PROJECT_URL=your_supabase_project_url
-VITE_SUPABASE_API_KEY=your_supabase_api_key
-```
 
-Replace `your_supabase_project_url` and `your_supabase_api_key` with your actual Supabase project URL and API key.
+**Edit a file directly in GitHub**
 
-### Supabase Setup
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-1. Create a new Supabase project.
-2. Run the SQL script in `./sql/init.sql` in your Supabase SQL editor to set up the necessary tables, views, and functions.
+**Use GitHub Codespaces**
 
-## Installation
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-1. Clone the repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Start the development server:
-   ```
-   npm run dev
-   ```
+## What technologies are used for this project?
 
-## Features
+This project is built with .
 
-- User authentication (signup, login, logout)
-- Profile management
-- Chat functionality
-- Settings management
-- Dark/Light mode toggle
-
-## Tech Stack
-
-- React
 - Vite
-- Supabase
+- React
+- shadcn-ui
 - Tailwind CSS
-- React Router
-- React Query
 
-## Contributing
+## How can I deploy this project?
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+All GPT Engineer projects can be deployed directly via the GPT Engineer app.
 
-## License
+Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and click on Share -> Publish.
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+## I want to use a custom domain - is that possible?
+
+We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify or GitHub pages. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
