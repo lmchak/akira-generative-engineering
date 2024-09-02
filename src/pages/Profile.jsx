@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from '@/components/ChatInterface';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,7 +22,6 @@ const Profile = () => {
     first_name: '',
     last_name: '',
     avatar_url: '',
-    bio: '',
     email: '',
     notifications: true,
     language: 'en',
@@ -36,7 +34,6 @@ const Profile = () => {
         first_name: profile.first_name || '',
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
-        bio: profile.bio || '',
         email: profile.email || '',
         notifications: profile.notifications !== undefined ? profile.notifications : true,
         language: profile.language || 'en',
@@ -124,12 +121,6 @@ const Profile = () => {
               name="avatar_url"
               placeholder="Avatar URL"
               value={formData.avatar_url}
-              onChange={handleInputChange}
-            />
-            <Textarea
-              name="bio"
-              placeholder="Bio"
-              value={formData.bio}
               onChange={handleInputChange}
             />
             <div className="flex items-center space-x-2">
