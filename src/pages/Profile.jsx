@@ -9,7 +9,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
-import { toast } from "sonner";
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
@@ -21,10 +20,6 @@ const Profile = () => {
     last_name: '',
     avatar_url: '',
     bio: '',
-    email: '',
-    notifications: true,
-    language: 'en',
-    privacy_level: 'public',
   });
 
   useEffect(() => {
@@ -34,10 +29,6 @@ const Profile = () => {
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
         bio: profile.bio || '',
-        email: profile.email || '',
-        notifications: profile.notifications !== undefined ? profile.notifications : true,
-        language: profile.language || 'en',
-        privacy_level: profile.privacy_level || 'public',
       });
     }
   }, [profile]);
@@ -54,10 +45,10 @@ const Profile = () => {
         id: session.user.id,
         ...formData,
       });
-      toast.success('Profile updated successfully!');
+      alert('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile. Please try again.');
+      alert('Failed to update profile. Please try again.');
     }
   };
 
@@ -99,13 +90,6 @@ const Profile = () => {
               name="last_name"
               placeholder="Last Name"
               value={formData.last_name}
-              onChange={handleInputChange}
-            />
-            <Input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={formData.email}
               onChange={handleInputChange}
             />
             <Input
