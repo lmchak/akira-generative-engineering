@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import Footer from './Footer';
 
 const Layout = ({ children }) => {
   const { logout } = useSupabaseAuth();
@@ -33,7 +34,7 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
         <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
@@ -114,6 +115,9 @@ const Layout = ({ children }) => {
       <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4 md:p-8">
         {children}
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
