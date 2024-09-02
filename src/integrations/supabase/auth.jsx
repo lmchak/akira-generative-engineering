@@ -43,11 +43,14 @@ export const SupabaseAuthProviderInner = ({ children }) => {
   }, [queryClient]);
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setSession(null);
-    queryClient.invalidateQueries('user');
-    setLoading(false);
-    navigate('/');
+    try {
+      await supabase.auth.signOut();
+      setSession(null);
+      queryClient.clear();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (
