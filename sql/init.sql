@@ -1,6 +1,10 @@
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
+
 -- Create policies
 CREATE POLICY "Users can view their own profile" ON profiles
   FOR SELECT USING (auth.uid() = id);
@@ -8,10 +12,16 @@ CREATE POLICY "Users can view their own profile" ON profiles
 CREATE POLICY "Users can update their own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);
 
+-- Drop existing view if it exists
+DROP VIEW IF EXISTS public_profiles;
+
 -- Create public_profiles view
 CREATE VIEW public_profiles AS
   SELECT id, first_name, last_name, avatar_url
   FROM profiles;
+
+-- Drop existing function if it exists
+DROP FUNCTION IF EXISTS update_profile;
 
 -- Create or replace function to update profile
 CREATE OR REPLACE FUNCTION update_profile(
