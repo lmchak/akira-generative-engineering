@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const { logout } = useSupabaseAuth();
