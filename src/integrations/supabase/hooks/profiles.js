@@ -1,20 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 
-/*
-### profiles
-
-| name       | type                     | format | required |
-|------------|--------------------------|--------|----------|
-| id         | uuid                     | uuid   | true     |
-| first_name | text                     | string | false    |
-| last_name  | text                     | string | false    |
-| email      | text                     | string | false    |
-| avatar_url | text                     | string | false    |
-| updated_at | timestamp with time zone | string | false    |
-
-*/
-
 const getProfiles = async () => {
   const { data, error } = await supabase.from('profiles').select('*');
   if (error) throw error;
@@ -34,7 +20,14 @@ const createProfile = async (profile) => {
 };
 
 const updateProfile = async ({ id, ...profile }) => {
-  const { data, error } = await supabase.from('profiles').update(profile).eq('id', id).select().single();
+  const { data, error } = await supabase.rpc('update_profile', {
+    user_id: id,
+    new_first_name: profile.first_name,
+    new_last_name: profile.last_name,
+    new_avatar_url: profile.avatar_url,
+    new_email: profile.email,
+    new_privacy_level: profile.privacy_level
+  });
   if (error) throw error;
   return data;
 };
@@ -66,9 +59,9 @@ export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateProfile,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['profiles'] });
-      queryClient.invalidateQueries({ queryKey: ['profiles', data.id] });
+      queryClient.invalidateQueries({ queryKey: ['profiles', variables.id] });
     },
   });
 };
