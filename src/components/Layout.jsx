@@ -18,7 +18,19 @@ const Layout = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex flex-col h-screen bg-gray-100 dark:bg-gray-900">
+      {/* Mobile Header */}
+      <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow">
+        <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <Menu className="h-6 w-6" />
+        </Button>
+        <Link to="/profile" className="text-2xl font-bold text-blue-600 dark:text-blue-400">rUv</Link>
+        <Button variant="ghost" size="icon" onClick={() => document.documentElement.classList.toggle('dark')}>
+          <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        </Button>
+      </header>
+
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
@@ -50,18 +62,6 @@ const Layout = ({ children }) => {
           </Button>
         </div>
       </aside>
-
-      {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between w-full p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          <Menu className="h-6 w-6" />
-        </Button>
-        <Link to="/profile" className="text-2xl font-bold text-blue-600 dark:text-blue-400">rUv</Link>
-        <Button variant="ghost" size="icon" onClick={() => document.documentElement.classList.toggle('dark')}>
-          <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        </Button>
-      </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
@@ -98,7 +98,7 @@ const Layout = ({ children }) => {
       )}
 
       {/* Main content */}
-      <main className="flex-1 overflow-x-hidden overflow-y-auto">
+      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
         <div className="container mx-auto px-4 py-8">
           {children}
         </div>

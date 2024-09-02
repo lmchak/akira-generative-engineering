@@ -7,6 +7,10 @@ import Index from './pages/Index'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import Search from './pages/Search'
+import Subscription from './pages/Subscription'
+import FAQ from './pages/FAQ'
+import Settings from './pages/Settings'
 
 const queryClient = new QueryClient()
 
@@ -21,6 +25,10 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/subscription" element={<Subscription />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </Router>
       </TooltipProvider>
