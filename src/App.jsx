@@ -20,7 +20,13 @@ import Chat from './pages/Chat'
 const queryClient = new QueryClient()
 
 const ProtectedRoute = ({ children }) => {
-  const { session, loading } = useSupabaseAuth();
+  const auth = useSupabaseAuth();
+  
+  if (!auth) {
+    return <div>Loading...</div>;
+  }
+
+  const { session, loading } = auth;
   
   if (loading) {
     return <div>Loading...</div>;
