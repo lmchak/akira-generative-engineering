@@ -9,6 +9,7 @@ import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/prof
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from '@/lib/supabase';
 
 const Settings = () => {
   const { theme, setTheme } = useTheme();
@@ -42,6 +43,15 @@ const Settings = () => {
         language,
         privacy_level: privacyLevel,
       });
+
+      // Update profile using RPC function
+      await supabase.rpc('update_profile', {
+        user_id: session.user.id,
+        new_notifications: notifications,
+        new_language: language,
+        new_privacy_level: privacyLevel
+      });
+
       alert('Settings saved successfully!');
     } catch (error) {
       console.error('Error saving settings:', error);
