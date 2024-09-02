@@ -19,11 +19,11 @@ const queryClient = new QueryClient()
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <SupabaseAuthProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <TooltipProvider>
-          <Toaster />
-          <Router>
+    <Router>
+      <SupabaseAuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <TooltipProvider>
+            <Toaster />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/register" element={<Register />} />
@@ -36,10 +36,10 @@ const App = () => (
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
             </Routes>
-          </Router>
-        </TooltipProvider>
-      </ThemeProvider>
-    </SupabaseAuthProvider>
+          </TooltipProvider>
+        </ThemeProvider>
+      </SupabaseAuthProvider>
+    </Router>
   </QueryClientProvider>
 )
 
