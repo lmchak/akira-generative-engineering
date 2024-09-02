@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
 const Layout = () => {
-  const { logout } = useSupabaseAuth();
+  const { logout, session } = useSupabaseAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -29,6 +29,11 @@ const Layout = () => {
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
   };
 
   if (!mounted) {
@@ -64,7 +69,7 @@ const Layout = () => {
           ))}
         </nav>
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <Button onClick={logout} variant="outline" className="w-full">
+          <Button onClick={handleLogout} variant="outline" className="w-full">
             Log out
           </Button>
         </div>
@@ -113,7 +118,7 @@ const Layout = () => {
                   </Link>
                 ))}
               </nav>
-              <Button onClick={logout} variant="outline" className="w-full mt-4">
+              <Button onClick={handleLogout} variant="outline" className="w-full mt-4">
                 Log out
               </Button>
             </div>

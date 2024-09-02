@@ -29,9 +29,16 @@ export const SupabaseAuthProviderInner = ({ children }) => {
       setLoading(false);
     };
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       queryClient.invalidateQueries('user');
+      if (event === 'SIGNED_OUT') {
+        // Clear any local storage items related to authentication
+        localStorage.removeItem('supabase.auth.token');
+        setSession(null);
+        queryClient.clear();
+        navigate('/login');
+      }
     });
 
     getSession();
@@ -40,14 +47,12 @@ export const SupabaseAuthProviderInner = ({ children }) => {
       authListener.subscription.unsubscribe();
       setLoading(false);
     };
-  }, [queryClient]);
+  }, [queryClient, navigate]);
 
   const logout = async () => {
     try {
       await supabase.auth.signOut();
-      setSession(null);
-      queryClient.clear();
-      navigate('/login');
+      // The onAuthStateChange listener will handle the rest
     } catch (error) {
       console.error('Error during logout:', error);
     }
