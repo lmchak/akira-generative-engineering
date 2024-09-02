@@ -10,7 +10,7 @@ const Index = () => {
       <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8">
         <span className="text-purple-600 font-bold text-xl">rUv</span>
       </div>
-      <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">Welcome to rUv</h1>
+      <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to rUv</h1>
       <p className="text-xl sm:text-2xl mb-8 text-center">Capturing Moments, Creating Memories</p>
       <div className="flex flex-col space-y-4 w-full max-w-md mb-6">
         <Button asChild size="lg" className="w-full bg-white text-purple-600 hover:bg-gray-100 hover:text-purple-700">
