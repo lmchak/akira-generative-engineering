@@ -1,67 +1,75 @@
-# Welcome to your GPT Engineer project
+# rUv - Capturing Moments, Creating Memories
 
-## Project info
+rUv is a social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests.
 
-**Project**: amu-memoria
+## Getting Started
 
-**URL**: https://run.gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve
+### Prerequisites
 
-## How can I edit this code?
+- Node.js (v14 or later)
+- npm or yarn
+- Supabase account
 
-There are several ways of editing your application.
+### Installation
 
-**Use GPT Engineer**
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/ruv.git
+   cd ruv
+   ```
 
-Simply visit the GPT Engineer project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and start prompting.
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-Changes made via gptengineer.app will be committed automatically to this repo.
+3. Set up environment variables:
+   Create a `.env` file in the root directory and add the following:
+   ```
+   VITE_SUPABASE_PROJECT_URL=your_supabase_project_url
+   VITE_SUPABASE_API_KEY=your_supabase_api_key
+   ```
 
-**Use your preferred IDE**
+4. Set up Supabase:
+   - Create a new project in Supabase
+   - Run the SQL commands from `./sql/init.sql` in the Supabase SQL editor
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in the GPT Engineer UI.
+5. Start the development server:
+   ```
+   npm run dev
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Features
 
-Follow these steps:
+- User authentication (signup, login, logout)
+- Profile management
+- Image uploading and sharing
+- Chat functionality
+- Dark/Light mode toggle
+- Subscription plans
 
-```sh
-git clone https://github.com/GPT-Engineer-App/amu-memoria.git
-cd amu-memoria
-npm i
+## Configuration Options
 
-# This will run a dev server with auto reloading and an instant preview.
-npm run dev
-```
+- Theme: Users can toggle between dark and light mode in the settings.
+- Language: Users can select their preferred language (English, Spanish, French).
+- Privacy: Users can set their profile privacy level (Public, Friends Only, Private).
+- Notifications: Users can enable or disable notifications.
 
-**Edit a file directly in GitHub**
+## Tech Stack
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
 - React
-- shadcn-ui
+- Vite
 - Tailwind CSS
+- Supabase (Backend and Authentication)
+- React Router
+- Tanstack Query (React Query)
+- Lucide React (Icons)
+- Recharts (for analytics graphs)
 
-## How can I deploy this project?
+## Contributing
 
-All GPT Engineer projects can be deployed directly via the GPT Engineer app.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-Simply visit your project at [GPT Engineer](https://gptengineer.app/projects/3d823dec-c997-46b4-8b0e-53cb75335d20/improve) and click on Share -> Publish.
+## License
 
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify or GitHub pages. Visit our docs for more details: [Custom domains](https://docs.gptengineer.app/tips-tricks/custom-domain/)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
