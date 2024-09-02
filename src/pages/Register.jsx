@@ -7,10 +7,14 @@ const Register = () => {
   return (
     <div className="min-h-screen flex">
       <div className="w-1/2 bg-gradient-to-br from-purple-600 to-indigo-700 flex flex-col justify-center items-center text-white p-12">
-        <img src="/amu-logo.svg" alt="AMU Logo" className="w-24 mb-8" />
+        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8">
+          <span className="text-purple-600 font-bold">LOGO</span>
+        </div>
         <h1 className="text-4xl font-bold mb-4">Capturing Moments,</h1>
         <h2 className="text-3xl font-semibold mb-8">Creating Memories</h2>
-        <img src="/sand-dunes.jpg" alt="Sand Dunes" className="w-full rounded-lg shadow-lg" />
+        <div className="w-full h-64 bg-white/20 rounded-lg flex items-center justify-center">
+          <span className="text-white text-2xl">Image Placeholder</span>
+        </div>
       </div>
       <div className="w-1/2 bg-white flex flex-col justify-center items-center p-12">
         <Button asChild className="absolute top-4 right-4">
