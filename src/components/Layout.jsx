@@ -40,7 +40,9 @@ const Layout = () => {
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <Link to="/profile" className="text-3xl font-mrdafoe text-blue-600 dark:text-blue-400">rUv</Link>
+          <Link to="/profile" className="text-3xl brand-text text-blue-600 dark:text-blue-400">
+            <span>rUv</span><span className="js">.js</span>
+          </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
@@ -50,7 +52,7 @@ const Layout = () => {
             <Link
               key={index}
               to={item.path}
-              className={`flex items-center p-2 rounded-lg ${
+              className={`flex items-center p-2 rounded-lg mb-1 ${
                 location.pathname === item.path
                   ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
@@ -74,7 +76,9 @@ const Layout = () => {
           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <Menu className="h-6 w-6" />
           </Button>
-          <Link to="/profile" className="text-2xl font-mrdafoe text-blue-600 dark:text-blue-400">rUv</Link>
+          <Link to="/profile" className="text-2xl brand-text text-blue-600 dark:text-blue-400">
+            <span>rUv</span><span className="js">.js</span>
+          </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
@@ -85,7 +89,9 @@ const Layout = () => {
           <div className="md:hidden fixed inset-0 z-50 bg-gray-800 bg-opacity-75">
             <div className="flex flex-col h-full bg-white dark:bg-gray-800 p-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-mrdafoe">rUv</h2>
+                <h2 className="text-xl brand-text">
+                  <span>rUv</span><span className="js">.js</span>
+                </h2>
                 <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
                   <X className="h-6 w-6" />
                 </Button>
@@ -95,7 +101,7 @@ const Layout = () => {
                   <Link
                     key={index}
                     to={item.path}
-                    className={`flex items-center p-2 rounded-lg ${
+                    className={`flex items-center p-2 rounded-lg mb-1 ${
                       location.pathname === item.path
                         ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'

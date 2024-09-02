@@ -5,13 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
-import { Send, Mic, PaperclipIcon, MoreVertical, Settings, Trash2, Edit2 } from 'lucide-react';
+import { Send, PaperclipIcon, MoreVertical, Settings, Trash2, Edit2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { supabase } from '@/lib/supabase';
+import VoiceInput from '@/components/VoiceInput';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -159,6 +159,10 @@ const Chat = () => {
     } catch (error) {
       console.error('Error loading chat:', error);
     }
+  };
+
+  const handleVoiceInput = (transcript) => {
+    setInput(transcript);
   };
 
   return (
@@ -342,9 +346,7 @@ const Chat = () => {
             <Button onClick={handleSend} size="icon">
               <Send className="h-5 w-5" />
             </Button>
-            <Button variant="outline" size="icon">
-              <Mic className="h-5 w-5" />
-            </Button>
+            <VoiceInput onTranscript={handleVoiceInput} />
           </div>
         </div>
       </div>

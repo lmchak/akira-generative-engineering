@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,27 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ChatInterface from '@/components/ChatInterface';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Link } from 'react-router-dom';
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import VoiceInput from '@/components/VoiceInput';
 
 const Profile = () => {
   const { session } = useSupabaseAuth();
   const { data: profile, isLoading, refetch } = useProfile(session?.user?.id);
-  const updateProfile = useUpdateProfile();
+  const updateProfileMutation = useUpdateProfile();
 
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
     avatar_url: '',
-    bio: '',
     email: '',
-    notifications: true,
-    language: 'en',
-    privacy_level: 'public',
   });
 
   useEffect(() => {
@@ -36,11 +29,7 @@ const Profile = () => {
         first_name: profile.first_name || '',
         last_name: profile.last_name || '',
         avatar_url: profile.avatar_url || '',
-        bio: profile.bio || '',
         email: profile.email || '',
-        notifications: profile.notifications !== undefined ? profile.notifications : true,
-        language: profile.language || 'en',
-        privacy_level: profile.privacy_level || 'public',
       });
     }
   }, [profile]);
@@ -50,22 +39,14 @@ const Profile = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSwitchChange = (name) => {
-    setFormData(prev => ({ ...prev, [name]: !prev[name] }));
-  };
-
-  const handleSelectChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateProfile.mutateAsync({
+      await updateProfileMutation.mutateAsync({
         id: session.user.id,
         ...formData,
       });
-      await refetch(); // Refetch the profile data after update
+      await refetch();
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -126,48 +107,6 @@ const Profile = () => {
               value={formData.avatar_url}
               onChange={handleInputChange}
             />
-            <Textarea
-              name="bio"
-              placeholder="Bio"
-              value={formData.bio}
-              onChange={handleInputChange}
-            />
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="notifications"
-                checked={formData.notifications}
-                onCheckedChange={() => handleSwitchChange('notifications')}
-              />
-              <Label htmlFor="notifications">Enable Notifications</Label>
-            </div>
-            <Select
-              name="language"
-              value={formData.language}
-              onValueChange={(value) => handleSelectChange('language', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Spanish</SelectItem>
-                <SelectItem value="fr">French</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select
-              name="privacy_level"
-              value={formData.privacy_level}
-              onValueChange={(value) => handleSelectChange('privacy_level', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Privacy Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="public">Public</SelectItem>
-                <SelectItem value="private">Private</SelectItem>
-                <SelectItem value="friends">Friends Only</SelectItem>
-              </SelectContent>
-            </Select>
             <Button type="submit" className="w-full">
               Update Profile
             </Button>
