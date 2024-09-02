@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile, useUpdateProfile } from '@/integrations/supabase/hooks/profiles';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Settings = () => {
@@ -19,6 +20,8 @@ const Settings = () => {
   const [formData, setFormData] = useState({
     email: '',
     notifications: true,
+    language: 'en',
+    privacy_level: 'public',
   });
 
   useEffect(() => {
@@ -27,6 +30,8 @@ const Settings = () => {
       setFormData({
         email: profile.email || '',
         notifications: profile.notifications !== undefined ? profile.notifications : true,
+        language: profile.language || 'en',
+        privacy_level: profile.privacy_level || 'public',
       });
     }
   }, [profile]);
@@ -60,6 +65,7 @@ const Settings = () => {
         <TabsList className="mb-4">
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="preferences">Preferences</TabsTrigger>
+          <TabsTrigger value="privacy">Privacy</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <form onSubmit={handleSave}>
@@ -78,6 +84,19 @@ const Settings = () => {
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     className="mt-1"
                   />
+                </div>
+                <div>
+                  <Label htmlFor="language">Language</Label>
+                  <Select value={formData.language} onValueChange={(value) => handleInputChange('language', value)}>
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Español</SelectItem>
+                      <SelectItem value="fr">Français</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <Button type="submit">Save Account Settings</Button>
               </CardContent>
@@ -98,6 +117,29 @@ const Settings = () => {
                   />
                 </div>
                 <Button type="submit">Save Preferences</Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="privacy">
+            <Card>
+              <CardHeader>
+                <CardTitle>Privacy Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="privacyLevel">Privacy Level</Label>
+                  <Select value={formData.privacy_level} onValueChange={(value) => handleInputChange('privacy_level', value)}>
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Select Privacy Level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">Public</SelectItem>
+                      <SelectItem value="friends">Friends Only</SelectItem>
+                      <SelectItem value="private">Private</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button type="submit">Save Privacy Settings</Button>
               </CardContent>
             </Card>
           </TabsContent>
