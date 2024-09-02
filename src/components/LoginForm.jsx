@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { supabase } from '@/lib/supabase'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -15,7 +17,7 @@ const LoginForm = () => {
         password,
       })
       if (error) throw error
-      // Redirect to user profile or dashboard
+      navigate('/profile')
     } catch (error) {
       alert(error.message)
     }
