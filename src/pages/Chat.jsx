@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from '@/lib/supabase';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -57,34 +59,77 @@ const Chat = () => {
     }
   };
 
-  const handleSend = async () => {
-    if (input.trim()) {
-      const newMessage = { text: input, sender: 'user', timestamp: new Date().toISOString() };
-      const updatedMessages = [...messages, newMessage];
-      setMessages(updatedMessages);
-      setInput('');
-      
-      // Simulate AI response
-      setTimeout(async () => {
-        const aiResponse = { text: generateAIResponse(input), sender: 'ai', timestamp: new Date().toISOString() };
+
+const handleSend = async () => {
+  if (input.trim()) {
+    const userInput = input;  // Store input locally to avoid clearing issues
+    const newMessage = { text: userInput, sender: 'user', timestamp: new Date().toISOString() };
+    
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);  // Update messages with user input
+    setInput('');  // Clear input field
+
+    console.log("Messages after user input:", updatedMessages);
+
+    // Simulate AI response with a delay
+    setTimeout(async () => {
+      try {
+        // Await the AI response with stored userInput
+        const aiResponseText = await generateAIResponse(userInput);
+        
+        console.log("AI Response Text:", aiResponseText);
+
+        // Create AI message
+        const aiResponse = { text: aiResponseText, sender: 'ai', timestamp: new Date().toISOString() };
+        
+        // Update messages with AI response
         const finalMessages = [...updatedMessages, aiResponse];
         setMessages(finalMessages);
-        
-        // Save the updated chat to Supabase
-        await saveChat(finalMessages);
-      }, 1000);
-    }
-  };
 
-  const generateAIResponse = (userInput) => {
-    const responses = [
-      `I understood your message: "${userInput}". How can I assist you further?`,
-      `You said: "${userInput}". That's interesting! Can you tell me more?`,
-      `I see you mentioned "${userInput}". Let's explore that topic together.`,
-      `"${userInput}" - That's a great point! What else would you like to discuss?`
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
+        console.log("Messages after AI response:", finalMessages);
+
+        // Save the updated chat to Supabase (or other storage)
+        await saveChat(finalMessages);
+      } catch (error) {
+        console.error("Error generating AI response:", error);
+      }
+    }, 1000);  // Delay added for simulation effect
+  }
+};
+
+
+// Function to generate AI response via API call
+async function generateAIResponse(userInput) {
+    const data = { question: userInput };
+
+    try {
+        const response = await fetch(
+            "http://127.0.0.1:3000/api/v1/prediction/57d56bfe-28ab-408b-914d-1b25967b136f",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+        );
+        
+        // Log the response for debugging
+        const result = await response.json();
+        console.log("API Response:", result);
+        
+        // Return the 'text' field from the result
+        if (result && result.text) {
+            return result.text;
+        } else {
+            throw new Error("Unexpected API response format");
+        }
+    } catch (error) {
+        console.error("Error fetching AI response:", error);
+        return "Sorry, something went wrong. Please try again later.";
+    }
+}
+
 
   const saveChat = async (chatMessages) => {
     try {
@@ -290,40 +335,43 @@ const Chat = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-start space-x-2 max-w-[70%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                <Avatar className="h-8 w-8">
-                  {message.sender === 'user' ? (
-                    <>
-                      <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
-                      <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
-                    </>
-                  ) : (
-                    <>
-                      <AvatarImage src="/ai-avatar.png" alt="AI" />
-                      <AvatarFallback>AI</AvatarFallback>
-                    </>
-                  )}
-                </Avatar>
-                <Card className={`${
-                  message.sender === 'user' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
-                }`}>
-                  <CardContent className="p-3">
-                    <p>{message.text}</p>
-                    <span className="text-xs opacity-70 mt-1 block">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </span>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
+
+<div className="flex-1 overflow-y-auto p-4 space-y-4">
+  {messages.map((message, index) => (
+    <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+      <div className={`flex items-start space-x-2 max-w-[70%] ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
+        <Avatar className="h-8 w-8">
+          {message.sender === 'user' ? (
+            <>
+              <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
+              <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
+            </>
+          ) : (
+            <>
+              <AvatarImage src="/ai-avatar.png" alt="AI" />
+              <AvatarFallback>AI</AvatarFallback>
+            </>
+          )}
+        </Avatar>
+        <Card className={`${
+          message.sender === 'user' 
+            ? 'bg-blue-500 text-white' 
+            : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
+        }`}>
+          <CardContent className="p-3">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {message.text}
+            </ReactMarkdown>
+            <span className="text-xs opacity-70 mt-1 block">
+              {new Date(message.timestamp).toLocaleTimeString()}
+            </span>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  ))}
+  <div ref={messagesEndRef} />
+</div>
 
         {/* Input Area */}
         <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
