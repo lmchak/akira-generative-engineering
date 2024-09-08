@@ -25,6 +25,10 @@ const Layout = () => {
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Generative Engineering', path: '/chat' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Concept Design', path: '/design' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'MEP', path: '/mep' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Construction', path: '/construction' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
   ];
 
   const toggleTheme = () => {
