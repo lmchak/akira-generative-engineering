@@ -166,12 +166,12 @@ const Chat = () => {
       {/* Sidebar */}
       <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col`}>
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold">Chats</h2>
+          <h2 className="text-lg font-semibold">Generative Engineering and Design</h2>
         </div>
         <div className="p-2">
           <Input
             type="text"
-            placeholder="Search chats..."
+            placeholder="Search Design..."
             className="w-full"
           />
         </div>

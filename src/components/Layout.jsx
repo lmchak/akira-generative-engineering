@@ -24,7 +24,7 @@ const Layout = () => {
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
-    { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Generative Engineering', path: '/chat' },
   ];
 
   const toggleTheme = () => {
