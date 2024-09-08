@@ -20,11 +20,11 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-yellow-600 to-indigo-700 text-white">
       <div className="flex-grow flex flex-col items-center justify-center p-4 sm:p-8">
         <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mb-8">
-          <span className="text-yellow-600 brand-text text-4xl">
-            <span>rUv</span><span className="js">.js</span>
+          <span className="text-yellow-600 text-4xl">
+            <span>GE</span><span className="js"></span>
           </span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to <span className="brand-text"><span>RuJGenEng</span><span className="js">.js</span></span></h1>
+        <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to <span>Generative Engineering</span><span className="js"></span></h1>
         <p className="text-xl sm:text-2xl mb-8 text-center">Quick and easy AI UI Framework</p>
         <div className="flex flex-col space-y-4 w-full max-w-md mb-6">
           <Button asChild size="lg" className="w-full bg-white text-yellow-600 hover:bg-gray-100 hover:text-yellow-700">

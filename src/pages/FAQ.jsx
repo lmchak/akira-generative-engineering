@@ -12,16 +12,16 @@ const FAQ = () => {
 
   const faqItems = [
     { 
-      question: 'What is rUv?', 
-      answer: 'rUv is a cutting-edge social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests.'
+      question: 'What is Generative Engineering?', 
+      answer: 'Generative Engineering is a cutting-edge social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests.'
     },
     { 
       question: 'How do I create an account?', 
       answer: 'To create an account, click on the "Sign Up" button on the homepage. You\'ll be asked to provide your email address, create a password, and fill in some basic profile information. Once you\'ve completed these steps, you\'ll receive a confirmation email to verify your account.'
     },
     { 
-      question: 'Is rUv free to use?', 
-      answer: 'rUv offers both free and paid subscription plans. The basic features, including posting images and connecting with friends, are free. Advanced features such as analytics, custom themes, and priority support are available with our paid subscription plans.'
+      question: 'Is Generative Engineering free to use?', 
+      answer: 'Generative Engineering offers both free and paid subscription plans. The basic features, including posting images and connecting with friends, are free. Advanced features such as analytics, custom themes, and priority support are available with our paid subscription plans.'
     },
     { 
       question: 'How can I reset my password?', 
