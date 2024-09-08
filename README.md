@@ -1,6 +1,6 @@
 # Generative Engineering
 
-Generative Engineering is a cutting-edge social media platform designed to help users capture and share their most memorable moments through images and connect with others who share similar interests. Powered by Supabase, Generative Engineering offers a seamless and secure experience for users to create, share, and explore content.
+Generative Engineering is a cutting-edge generative engineering platform designed to help users create and share their most innovative engineering design through GenAI and connect with others who share similar interests. Powered by Supabase, Generative Engineering offers a seamless and secure experience for users to create, share, and explore content.
 
 ## Features
 
