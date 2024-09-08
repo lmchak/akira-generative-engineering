@@ -56,7 +56,7 @@ const LoginForm = () => {
           )}
         </button>
       </div>
-      <Button type="submit" className="w-full bg-purple-500 hover:bg-purple-600 text-white">Log in</Button>
+      <Button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">Log in</Button>
     </form>
   )
 }

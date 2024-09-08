@@ -94,13 +94,13 @@ const RegistrationForm = () => {
           id="terms"
           checked={agreeTerms}
           onCheckedChange={setAgreeTerms}
-          className="border-gray-600 text-purple-500"
+          className="border-gray-600 text-yellow-500"
         />
         <label htmlFor="terms" className="text-sm text-gray-400">
           I agree to the Terms & Conditions
         </label>
       </div>
-      <Button type="submit" className="w-full bg-purple-500 hover:bg-purple-600 text-white">Create account</Button>
+      <Button type="submit" className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">Create account</Button>
     </form>
   )
 }

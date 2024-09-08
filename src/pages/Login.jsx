@@ -17,7 +17,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold mb-6 text-center">Log in to your <span className="brand-text"><span>rUv</span><span className="js">.js</span></span> account</h1>
         <p className="text-sm text-gray-400 mb-8 text-center">
-          Don't have an account? <Link to="/register" className="text-purple-500 hover:underline">Sign up</Link>
+          Don't have an account? <Link to="/register" className="text-yellow-500 hover:underline">Sign up</Link>
         </p>
         <LoginForm />
         <div className="mt-8">
