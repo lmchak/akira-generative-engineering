@@ -22,7 +22,7 @@ const Subscription = () => {
       name: 'Pro',
       price: '$19.99/month',
       features: ['Unlimited posts', 'Advanced analytics', 'Priority support', 'Custom themes'],
-      color: 'bg-yellow-100 dark:bg-yellow-900',
+      color: 'bg-blue-100 dark:bg-blue-900',
     },
     {
       name: 'Enterprise',

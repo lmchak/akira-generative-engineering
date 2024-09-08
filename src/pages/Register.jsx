@@ -15,9 +15,9 @@ const Register = () => {
         </Button>
       </Link>
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">Create a <span className="brand-text"><span>Generative Engineering</span><span className="js"></span></span> account</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Create a <span className="brand-text text-blue-500"><span>Generative Engineering</span><span className="js"></span></span> account</h1>
         <p className="text-sm text-gray-400 mb-8 text-center">
-          Already have an account? <Link to="/login" className="text-yellow-500 hover:underline">Log in</Link>
+          Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Log in</Link>
         </p>
         <RegistrationForm />
         <div className="mt-8">
