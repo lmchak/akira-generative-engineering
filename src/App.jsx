@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
@@ -16,11 +17,7 @@ import Settings from './pages/Settings'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Chat from './pages/Chat'
-import Mep from './pages/Mep'
-import Construction from './pages/Construction'
-import Commissioning from './pages/Commissioning'
-import Design from './pages/Design'
-import Geneng from './pages/Geneng'
+import GenerativeEngineering from './pages/GenerativeEngineering'
 
 const queryClient = new QueryClient()
 
@@ -56,11 +53,7 @@ const App = () => (
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/chat" element={<Chat />} />
-                <Route path="/mep" element={<Mep />} />
-                <Route path="/construction" element={<Construction />} />
-                <Route path="/commissioning" element={<Commissioning />} />
-                <Route path="/design" element={<Design />} />
-                <Route path="/geneng" element={<Geneng />} />
+                <Route path="/generative-engineering" element={<GenerativeEngineering />} />
               </Route>
             </Routes>
           </TooltipProvider>
