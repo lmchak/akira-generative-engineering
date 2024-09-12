@@ -21,11 +21,9 @@ const GenerativeEngineering = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Design parameters submitted:', designParams);
-    // Here you would typically send the design parameters to your backend
     alert('Design submitted. AI is generating solutions...');
   };
 
-  // Mock data for demonstration
   const projectStatus = [
     { name: 'Concept', completed: 80 },
     { name: 'MEP', completed: 60 },

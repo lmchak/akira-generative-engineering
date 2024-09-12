@@ -18,6 +18,10 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Chat from './pages/Chat'
 import GenerativeEngineering from './pages/GenerativeEngineering'
+import Design from './pages/Design'
+import Mep from './pages/Mep'
+import Construction from './pages/Construction'
+import Commissioning from './pages/Commissioning'
 
 const queryClient = new QueryClient()
 
@@ -54,6 +58,10 @@ const App = () => (
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/generative-engineering" element={<GenerativeEngineering />} />
+                <Route path="/design" element={<Design />} />
+                <Route path="/mep" element={<Mep />} />
+                <Route path="/construction" element={<Construction />} />
+                <Route path="/commissioning" element={<Commissioning />} />
               </Route>
             </Routes>
           </TooltipProvider>

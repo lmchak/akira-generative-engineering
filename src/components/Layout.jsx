@@ -24,7 +24,7 @@ const Layout = () => {
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
-    { icon: <MessageCircle className="w-5 h-5" />, label: 'Generative Engineering', path: '/geneng' },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Generative Engineering', path: '/generative-engineering' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Concept Design', path: '/design' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'MEP', path: '/mep' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Construction', path: '/construction' },
