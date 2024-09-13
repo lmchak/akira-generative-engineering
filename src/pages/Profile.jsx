@@ -63,6 +63,12 @@ const Profile = () => {
     { name: 'Jul', views: 3490 },
   ];
 
+  const projects = [
+    { id: 1, name: 'Data Center A', progress: 75 },
+    { id: 2, name: 'Server Farm B', progress: 30 },
+    { id: 3, name: 'Cloud Center C', progress: 90 },
+  ];
+
   if (!session) {
     return <div>Please log in to view your profile.</div>;
   }
@@ -110,17 +116,6 @@ const Profile = () => {
               Update Profile
             </Button>
           </form>
-          <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="font-medium">312</p>
-              <p className="text-muted-foreground">Posts</p>
-            </div>
-            <div>
-              <p className="font-medium">12</p>
-              <p className="text-muted-foreground">Followed bots</p>
-            </div>
-          </div>
-          <Button className="w-full mt-4">Add a post</Button>
         </CardContent>
       </Card>
 
@@ -138,6 +133,28 @@ const Profile = () => {
               <Bar dataKey="views" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      <Card className="md:col-span-3">
+        <CardHeader>
+          <CardTitle>Project Dashboard</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {projects.map(project => (
+              <div key={project.id} className="flex items-center justify-between">
+                <span>{project.name}</span>
+                <div className="w-64 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                  <div 
+                    className="bg-blue-600 h-2.5 rounded-full" 
+                    style={{ width: `${project.progress}%` }}
+                  ></div>
+                </div>
+                <span>{project.progress}%</span>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
