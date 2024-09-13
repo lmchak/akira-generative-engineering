@@ -1,3 +1,6 @@
+
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +18,7 @@ import { supabase } from '@/lib/supabase';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-const Chat = () => {
+const ConceptDesignChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -210,9 +213,7 @@ async function generateAIResponse(userInput) {
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:block w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col`}>
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold">Generative Engineering and Design</h2>
-        </div>
+
         <div className="p-2">
           <Input
             type="text"
@@ -250,10 +251,12 @@ async function generateAIResponse(userInput) {
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <Dialog>
             <DialogTrigger asChild>
+ 
               <Button variant="outline" className="w-full">
                 <Settings className="mr-2 h-4 w-4" />
                 LLM Settings
               </Button>
+
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -318,14 +321,7 @@ async function generateAIResponse(userInput) {
             <Button variant="ghost" className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               <MoreVertical className="h-6 w-6" />
             </Button>
-            <Avatar>
-              <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
-              <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
-            </Avatar>
-            <div>
-              <h2 className="font-semibold">{profile?.first_name} {profile?.last_name}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Online</p>
-            </div>
+
           </div>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm" onClick={() => saveChat(messages)}>
@@ -399,5 +395,4 @@ async function generateAIResponse(userInput) {
     </div>
   );
 };
-
-export default Chat;
+export default ConceptDesignChatInterface;

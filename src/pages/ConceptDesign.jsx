@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ChatInterface from '@/components/ChatInterface';
+import ConceptDesignChatInterface from '@/components/ConceptDesignChatInterface';
 import ConceptDesignForm from '@/components/ConceptDesignForm';
 import GeneratedDesigns from '@/components/GeneratedDesigns';
 import CriticalPaths from '@/components/CriticalPaths';
@@ -55,7 +55,7 @@ const ConceptDesign = () => {
               <CardTitle>Concept Design Chat Assistant</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChatInterface />
+              <ConceptDesignChatInterface />
             </CardContent>
           </Card>
         </TabsContent>
