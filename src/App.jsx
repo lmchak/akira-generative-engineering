@@ -24,6 +24,7 @@ import Construction from './pages/Construction'
 import Commissioning from './pages/Commissioning'
 import ConceptDesign from './pages/ConceptDesign'
 import KnowledgeManagement from './pages/KnowledgeManagement'
+import FacilityManagement from './pages/FacilityManagement'
 
 const queryClient = new QueryClient()
 
@@ -66,6 +67,7 @@ const App = () => (
                 <Route path="/commissioning" element={<Commissioning />} />
                 <Route path="/concept-design" element={<ConceptDesign />} />
                 <Route path="/knowledge-management" element={<KnowledgeManagement />} />
+                <Route path="/facility-management" element={<FacilityManagement />} />
               </Route>
             </Routes>
           </TooltipProvider>

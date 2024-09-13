@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
@@ -32,6 +32,7 @@ const Layout = () => {
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
+    { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
   ];
 
   const toggleTheme = () => {
@@ -48,7 +49,7 @@ const Layout = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
