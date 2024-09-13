@@ -23,6 +23,7 @@ import Mep from './pages/Mep'
 import Construction from './pages/Construction'
 import Commissioning from './pages/Commissioning'
 import ConceptDesign from './pages/ConceptDesign'
+import KnowledgeManagement from './pages/KnowledgeManagement'
 
 const queryClient = new QueryClient()
 
@@ -64,6 +65,7 @@ const App = () => (
                 <Route path="/construction" element={<Construction />} />
                 <Route path="/commissioning" element={<Commissioning />} />
                 <Route path="/concept-design" element={<ConceptDesign />} />
+                <Route path="/knowledge-management" element={<KnowledgeManagement />} />
               </Route>
             </Routes>
           </TooltipProvider>

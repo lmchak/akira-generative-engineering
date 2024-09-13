@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
@@ -31,6 +31,7 @@ const Layout = () => {
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Construction', path: '/construction' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
+    { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
   ];
 
   const toggleTheme = () => {
