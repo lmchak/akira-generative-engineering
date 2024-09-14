@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DesignCoordinationModule from './DesignCoordinationModule';
 import MilestoneManagement from './MilestoneManagement';
 import ResourceManagement from './ResourceManagement';

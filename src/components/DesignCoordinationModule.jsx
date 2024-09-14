@@ -6,12 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Upload, CheckCircle, XCircle } from 'lucide-react';
+import DesignAnalysis from './DesignAnalysis';
 
 const DesignCoordinationModule = () => {
   const [file, setFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [collaborationSuggestion, setCollaborationSuggestion] = useState('');
   const [riskAssessment, setRiskAssessment] = useState(null);
+  const [workflowStatus, setWorkflowStatus] = useState('');
 
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]);
@@ -27,9 +29,9 @@ const DesignCoordinationModule = () => {
     }, 2000);
   };
 
-  const requestApproval = () => {
-    // Simulating approval workflow
-    alert('Approval request sent to the project manager.');
+  const automateWorkflow = () => {
+    // Simulating workflow automation
+    setWorkflowStatus('Document submitted for approval. Version 1.0 tracked.');
   };
 
   const suggestImprovements = () => {
@@ -51,6 +53,8 @@ const DesignCoordinationModule = () => {
         <CardTitle>Design Coordination Module</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <DesignAnalysis file={file} onAnalysis={setAnalysisResult} />
+        
         <div>
           <Label htmlFor="design-doc">Upload Design Document</Label>
           <Input id="design-doc" type="file" onChange={handleFileUpload} />
@@ -68,9 +72,17 @@ const DesignCoordinationModule = () => {
           </Alert>
         )}
 
-        <Button onClick={requestApproval} disabled={!analysisResult || analysisResult.status !== 'success'}>
-          Request Approval
+        <Button onClick={automateWorkflow} disabled={!analysisResult || analysisResult.status !== 'success'}>
+          Submit for Approval
         </Button>
+
+        {workflowStatus && (
+          <Alert>
+            <CheckCircle className="h-4 w-4" />
+            <AlertTitle>Workflow Status</AlertTitle>
+            <AlertDescription>{workflowStatus}</AlertDescription>
+          </Alert>
+        )}
 
         <div>
           <Button onClick={suggestImprovements}>Suggest Improvements</Button>
