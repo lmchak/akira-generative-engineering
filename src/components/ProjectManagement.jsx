@@ -5,6 +5,7 @@ import MilestoneManagement from './MilestoneManagement';
 import ResourceManagement from './ResourceManagement';
 import TimelineOptimization from './TimelineOptimization';
 import BudgetManagement from './BudgetManagement';
+import CommunicationReporting from './CommunicationReporting';
 
 const ProjectManagement = () => {
   const [activeTab, setActiveTab] = useState('design');
@@ -20,6 +21,7 @@ const ProjectManagement = () => {
           <TabsTrigger value="resources">Resources</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="budget">Budget</TabsTrigger>
+          <TabsTrigger value="communication">Communication</TabsTrigger>
         </TabsList>
 
         <TabsContent value="design">
@@ -40,6 +42,10 @@ const ProjectManagement = () => {
 
         <TabsContent value="budget">
           <BudgetManagement />
+        </TabsContent>
+
+        <TabsContent value="communication">
+          <CommunicationReporting />
         </TabsContent>
       </Tabs>
     </div>
