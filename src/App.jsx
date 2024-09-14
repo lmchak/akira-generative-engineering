@@ -27,6 +27,13 @@ import KnowledgeManagement from './pages/KnowledgeManagement'
 import FacilityManagement from './pages/FacilityManagement'
 import OmniChannelCollaboration from './components/OmniChannelCollaboration'
 import ProjectManagement from './components/ProjectManagement'
+import Map from './components/Map'
+import Insights from './components/Insights'
+import Analytics from "./components/Analytics"
+import SiteSelector from "./components/SiteSelector"
+import News from "./components/News"
+import About from "./components/About"
+
 
 const queryClient = new QueryClient()
 
@@ -72,6 +79,12 @@ const App = () => (
                 <Route path="/facility-management" element={<FacilityManagement />} />
                 <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                 <Route path="/project-management" element={<ProjectManagement />} />
+                <Route path="/map" element={<Map />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/insights" element={<Insights />} />
+                <Route path="/site-selector" element={<SiteSelector />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/about" element={<About />} />
               </Route>
             </Routes>
           </TooltipProvider>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
@@ -31,6 +31,12 @@ const Layout = () => {
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
     { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
     { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
+    { icon: <MapIcon className="w-5 h-5" />, label: 'Map', path: '/map' },
+    { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics' },
+    { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
+    { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
+    { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
+    { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },    
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
