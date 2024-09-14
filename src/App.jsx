@@ -26,6 +26,7 @@ import ConceptDesign from './pages/ConceptDesign'
 import KnowledgeManagement from './pages/KnowledgeManagement'
 import FacilityManagement from './pages/FacilityManagement'
 import OmniChannelCollaboration from './components/OmniChannelCollaboration'
+import ProjectManagement from './components/ProjectManagement'
 
 const queryClient = new QueryClient()
 
@@ -70,6 +71,7 @@ const App = () => (
                 <Route path="/knowledge-management" element={<KnowledgeManagement />} />
                 <Route path="/facility-management" element={<FacilityManagement />} />
                 <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
+                <Route path="/project-management" element={<ProjectManagement />} />
               </Route>
             </Routes>
           </TooltipProvider>

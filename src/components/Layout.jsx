@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users } from 'lucide-react';
+import { Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 
@@ -33,6 +33,7 @@ const Layout = () => {
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
     { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
+    { icon: <Briefcase className="w-5 h-5" />, label: 'Project Management', path: '/project-management' },
   ];
 
   const toggleTheme = () => {
