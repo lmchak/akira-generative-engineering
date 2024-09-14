@@ -20,10 +20,6 @@ const Layout = () => {
 
   const navItems = [
     { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
-    { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
-    { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
-    { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
-    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Generative Engineering', path: '/generative-engineering' },
     { icon: <Briefcase className="w-5 h-5" />, label: 'Project Management', path: '/project-management' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Concept Design', path: '/concept-design' },
@@ -34,6 +30,10 @@ const Layout = () => {
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
     { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
+    { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
+    { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
+    { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
+    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
   ];
 
   const toggleTheme = () => {
