@@ -70,7 +70,7 @@ const ConceptDesignChatInterface = () => {
     const data = { question: userInput };
     try {
       const response = await fetch(
-        "http://223.25.78.212:3000/api/v1/prediction/fb77b02d-9e3c-42ed-8d16-cb772cfd8c26",
+        "http://127.0.0.1/api/v1/prediction/fb77b02d-9e3c-42ed-8d16-cb772cfd8c26",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
