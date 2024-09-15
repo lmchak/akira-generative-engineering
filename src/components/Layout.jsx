@@ -14,7 +14,7 @@ const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [realEstateOpen, setRealEstateOpen] = useState(false);
+  const [openSections, setOpenSections] = useState({});
 
   useEffect(() => {
     setMounted(true);
@@ -24,10 +24,16 @@ const Layout = () => {
     { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
     { icon: <Bot className="w-5 h-5" />, label: 'Generative Engineering', path: '/generative-engineering' },
     { icon: <Briefcase className="w-5 h-5" />, label: 'Project Management', path: '/project-management' },
-    { icon: <Brush className="w-5 h-5" />, label: 'Concept Design', path: '/concept-design' },
-    { icon: <Cable className="w-5 h-5" />, label: 'MEP', path: '/mep' },
-    { icon: <Construction className="w-5 h-5" />, label: 'Construction', path: '/construction' },
-    { icon: <Component className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
+    {
+      icon: <Component className="w-5 h-5" />,
+      label: 'Engineering',
+      children: [
+        { icon: <Brush className="w-5 h-5" />, label: 'Concept Design', path: '/concept-design' },
+        { icon: <Cable className="w-5 h-5" />, label: 'MEP', path: '/mep' },
+        { icon: <Construction className="w-5 h-5" />, label: 'Construction', path: '/construction' },
+        { icon: <Component className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
+      ],
+    },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
@@ -63,19 +69,23 @@ const Layout = () => {
     return null;
   }
 
+  const toggleSection = (label) => {
+    setOpenSections(prev => ({ ...prev, [label]: !prev[label] }));
+  };
+
   const renderNavItem = (item, index) => {
     if (item.children) {
       return (
         <Collapsible
           key={index}
-          open={realEstateOpen}
-          onOpenChange={setRealEstateOpen}
+          open={openSections[item.label]}
+          onOpenChange={() => toggleSection(item.label)}
           className="w-full"
         >
           <CollapsibleTrigger className="flex items-center w-full p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
             {item.icon}
             <span className="ml-3">{item.label}</span>
-            {realEstateOpen ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+            {openSections[item.label] ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
           </CollapsibleTrigger>
           <CollapsibleContent className="pl-4">
             {item.children.map((child, childIndex) => (
@@ -141,7 +151,7 @@ const Layout = () => {
             <Menu className="h-6 w-6" />
           </Button>
           <Link to="/profile" className="text-2xl  text-blue-600 dark:text-blue-400">
-            <span>Generative Engineering</span><span className="js">.js</span>
+            <span>Generative Engineering</span>
           </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -154,7 +164,7 @@ const Layout = () => {
             <div className="flex flex-col h-full bg-white dark:bg-gray-800 p-4">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl">
-                  <span>Generative Engineering</span><span className="js">.js</span>
+                  <span>Generative Engineering</span>
                 </h2>
                 <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
                   <X className="h-6 w-6" />
