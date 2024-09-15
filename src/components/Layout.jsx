@@ -7,6 +7,53 @@ import { useTheme } from 'next-themes';
 import Footer from './Footer';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
+const NavItem = ({ item, location, closeMobileMenu }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (item.children) {
+    return (
+      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+        <CollapsibleTrigger className="flex items-center w-full p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+          {item.icon}
+          <span className="ml-3">{item.label}</span>
+          {isOpen ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+        </CollapsibleTrigger>
+        <CollapsibleContent className="pl-4">
+          {item.children.map((child, childIndex) => (
+            <Link
+              key={childIndex}
+              to={child.path}
+              className={`flex items-center p-2 rounded-lg mb-1 ${
+                location.pathname === child.path
+                  ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              onClick={closeMobileMenu}
+            >
+              {child.icon}
+              <span className="ml-3">{child.label}</span>
+            </Link>
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
+    );
+  }
+  return (
+    <Link
+      to={item.path}
+      className={`flex items-center p-2 rounded-lg mb-1 ${
+        location.pathname === item.path
+          ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+      }`}
+      onClick={closeMobileMenu}
+    >
+      {item.icon}
+      <span className="ml-3">{item.label}</span>
+    </Link>
+  );
+};
+
 const Layout = () => {
   const { logout, session } = useSupabaseAuth();
   const location = useLocation();
@@ -14,7 +61,6 @@ const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [openSections, setOpenSections] = useState({});
 
   useEffect(() => {
     setMounted(true);
@@ -65,62 +111,13 @@ const Layout = () => {
     navigate('/login');
   };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   if (!mounted) {
     return null;
   }
-
-  const toggleSection = (label) => {
-    setOpenSections(prev => ({ ...prev, [label]: !prev[label] }));
-  };
-
-  const renderNavItem = (item, index) => {
-    if (item.children) {
-      return (
-        <Collapsible
-          key={index}
-          open={openSections[item.label]}
-          onOpenChange={() => toggleSection(item.label)}
-          className="w-full"
-        >
-          <CollapsibleTrigger className="flex items-center w-full p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-            {item.icon}
-            <span className="ml-3">{item.label}</span>
-            {openSections[item.label] ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pl-4">
-            {item.children.map((child, childIndex) => (
-              <Link
-                key={childIndex}
-                to={child.path}
-                className={`flex items-center p-2 rounded-lg mb-1 ${
-                  location.pathname === child.path
-                    ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
-              >
-                {child.icon}
-                <span className="ml-3">{child.label}</span>
-              </Link>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-      );
-    }
-    return (
-      <Link
-        key={index}
-        to={item.path}
-        className={`flex items-center p-2 rounded-lg mb-1 ${
-          location.pathname === item.path
-            ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-        }`}
-      >
-        {item.icon}
-        <span className="ml-3">{item.label}</span>
-      </Link>
-    );
-  };
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
@@ -135,7 +132,9 @@ const Layout = () => {
           </Button>
         </div>
         <nav className="flex-1 p-4 overflow-y-auto">
-          {navItems.map(renderNavItem)}
+          {navItems.map((item, index) => (
+            <NavItem key={index} item={item} location={location} closeMobileMenu={closeMobileMenu} />
+          ))}
         </nav>
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <Button onClick={handleLogout} variant="outline" className="w-full">
@@ -166,12 +165,14 @@ const Layout = () => {
                 <h2 className="text-xl">
                   <span>Generative Engineering</span>
                 </h2>
-                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button variant="ghost" size="icon" onClick={closeMobileMenu}>
                   <X className="h-6 w-6" />
                 </Button>
               </div>
               <nav className="flex-1">
-                {navItems.map(renderNavItem)}
+                {navItems.map((item, index) => (
+                  <NavItem key={index} item={item} location={location} closeMobileMenu={closeMobileMenu} />
+                ))}
               </nav>
               <Button onClick={handleLogout} variant="outline" className="w-full mt-4">
                 Log out
