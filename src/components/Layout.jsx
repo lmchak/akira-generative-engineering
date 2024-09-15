@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, ChevronDown, ChevronRight } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const Layout = () => {
   const { logout, session } = useSupabaseAuth();
@@ -13,6 +14,7 @@ const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [realEstateOpen, setRealEstateOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -30,16 +32,22 @@ const Layout = () => {
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
     { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
+    {
+      icon: <Building className="w-5 h-5" />,
+      label: 'Real Estate',
+      children: [
+        { icon: <MapIcon className="w-5 h-5" />, label: 'Map', path: '/map' },
+        { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics' },
+        { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
+        { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
+      ],
+    },
     { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
-    { icon: <MapIcon className="w-5 h-5" />, label: 'Map', path: '/map' },
-    { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics' },
-    { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
-    { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
-    { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
-    { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },    
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
+    { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
+    { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },
   ];
 
   const toggleTheme = () => {
@@ -55,6 +63,55 @@ const Layout = () => {
     return null;
   }
 
+  const renderNavItem = (item, index) => {
+    if (item.children) {
+      return (
+        <Collapsible
+          key={index}
+          open={realEstateOpen}
+          onOpenChange={setRealEstateOpen}
+          className="w-full"
+        >
+          <CollapsibleTrigger className="flex items-center w-full p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+            {item.icon}
+            <span className="ml-3">{item.label}</span>
+            {realEstateOpen ? <ChevronDown className="w-4 h-4 ml-auto" /> : <ChevronRight className="w-4 h-4 ml-auto" />}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pl-4">
+            {item.children.map((child, childIndex) => (
+              <Link
+                key={childIndex}
+                to={child.path}
+                className={`flex items-center p-2 rounded-lg mb-1 ${
+                  location.pathname === child.path
+                    ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+              >
+                {child.icon}
+                <span className="ml-3">{child.label}</span>
+              </Link>
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+      );
+    }
+    return (
+      <Link
+        key={index}
+        to={item.path}
+        className={`flex items-center p-2 rounded-lg mb-1 ${
+          location.pathname === item.path
+            ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+        }`}
+      >
+        {item.icon}
+        <span className="ml-3">{item.label}</span>
+      </Link>
+    );
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Desktop Sidebar */}
@@ -68,20 +125,7 @@ const Layout = () => {
           </Button>
         </div>
         <nav className="flex-1 p-4 overflow-y-auto">
-          {navItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              className={`flex items-center p-2 rounded-lg mb-1 ${
-                location.pathname === item.path
-                  ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-            >
-              {item.icon}
-              <span className="ml-3">{item.label}</span>
-            </Link>
-          ))}
+          {navItems.map(renderNavItem)}
         </nav>
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <Button onClick={handleLogout} variant="outline" className="w-full">
@@ -117,21 +161,7 @@ const Layout = () => {
                 </Button>
               </div>
               <nav className="flex-1">
-                {navItems.map((item, index) => (
-                  <Link
-                    key={index}
-                    to={item.path}
-                    className={`flex items-center p-2 rounded-lg mb-1 ${
-                      location.pathname === item.path
-                        ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.icon}
-                    <span className="ml-3">{item.label}</span>
-                  </Link>
-                ))}
+                {navItems.map(renderNavItem)}
               </nav>
               <Button onClick={handleLogout} variant="outline" className="w-full mt-4">
                 Log out
