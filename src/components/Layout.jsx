@@ -42,6 +42,7 @@ const Layout = () => {
         { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics' },
         { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
         { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
+        { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
       ],
     },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
@@ -51,7 +52,6 @@ const Layout = () => {
     { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
-    { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
     { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
   ];
