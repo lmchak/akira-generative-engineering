@@ -15,9 +15,12 @@ import SavedChats from './SavedChats';
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [recording, setRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
   const { session } = useSupabaseAuth();
   const { data: profile } = useProfile(session?.user?.id);
   const messagesEndRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
   const { data: savedChats } = useChats();
   const createChat = useCreateChat();
   const updateChat = useUpdateChat();
@@ -67,7 +70,7 @@ const ChatInterface = () => {
     const data = { question: userInput };
     try {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/prediction/fb77b02d-9e3c-42ed-8d16-cb772cfd8c26",
+        "http://127.0.0.1:3000/api/v1/prediction/57d56bfe-28ab-408b-914d-1b25967b136f",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -94,42 +97,107 @@ const ChatInterface = () => {
     }
   };
 
+  const handleRecordClick = async () => {
+    if (recording) {
+      // Stop recording
+      mediaRecorderRef.current.stop();
+      setRecording(false);
+    } else {
+      // Start recording
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          setAudioBlob(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.start();
+      setRecording(true);
+    }
+  };
+
+  const handleAudio = async () => {
+    if (audioBlob) {
+      try {
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'audio.m4a');
+        formData.append('model', 'distil-whisper-large-v3-en');
+        formData.append('response_format', 'verbose_json');
+
+        const response = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer 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`,
+          },
+        });
+
+        console.log('Response Status:', response.status);
+        console.log('Response Headers:', response.headers);
+        const result = await response.json();
+        console.log('Response JSON:', result);
+
+        if (result.text) {
+          const aiResponseText = await generateAIResponse(result.text);
+          const aiMessage = { text: aiResponseText, sender: 'ai', timestamp: new Date().toISOString() };
+          const updatedMessages = [...messages, { text: result.text, sender: 'user', timestamp: new Date().toISOString() }, aiMessage];
+          setMessages(updatedMessages);
+          saveChatHistory(updatedMessages);
+          await saveChat(updatedMessages);
+        } else {
+          console.error('No text found in transcription result:', result);
+        }
+      } catch (error) {
+        console.error("Error processing audio:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (audioBlob) {
+      handleAudio();
+    }
+  }, [audioBlob]);
+
   return (
     <div className="flex h-[calc(100vh-200px)] bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <SavedChats savedChats={savedChats} loadChat={setMessages} />
       <div className="flex-1 flex flex-col">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-start space-x-2 max-w-xs ${message.sender === 'user' ? 'flex-row-reverse' : ''}`}>
-                <Avatar className="h-8 w-8">
-                  {message.sender === 'user' ? (
-                    <>
-                      <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
-                      <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
-                    </>
-                  ) : (
-                    <>
-                      <AvatarImage src="/ai-avatar.png" alt="AI" />
-                      <AvatarFallback>AI</AvatarFallback>
-                    </>
-                  )}
-                </Avatar>
-                <Card className={`${
-                  message.sender === 'user' 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white'
-                }`}>
-                  <CardContent className="p-3">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </span>
-                  </CardContent>
-                </Card>
-              </div>
+        {messages.map((message, index) => (
+          <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`flex items-start space-x-2 ${message.sender === 'user' ? 'flex-row-reverse max-w-5xl' : 'max-w-full'}`}>
+              <Avatar className="h-8 w-8">
+                {message.sender === 'user' ? (
+                  <>
+                    <AvatarImage src={profile?.avatar_url} alt={profile?.first_name} />
+                    <AvatarFallback>{profile?.first_name?.[0]}{profile?.last_name?.[0]}</AvatarFallback>
+                  </>
+                ) : (
+                  <>
+                    <AvatarImage src="/ai-avatar.png" alt="AI" />
+                    <AvatarFallback>AI</AvatarFallback>
+                  </>
+                )}
+              </Avatar>
+              <Card className={`${
+                message.sender === 'user' 
+                  ? 'bg-blue-500 text-white max-w-5xl' 
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white max-w-full'
+              }`}>
+                <CardContent className="p-3">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">
+                    {new Date(message.timestamp).toLocaleTimeString()}
+                  </span>
+                </CardContent>
+              </Card>
             </div>
-          ))}
+          </div>
+        ))}
+
           <div ref={messagesEndRef} />
         </div>
         <div className="border-t border-gray-200 dark:border-gray-700 p-4">
@@ -148,8 +216,12 @@ const ChatInterface = () => {
             <Button onClick={handleSend} size="icon">
               <Send className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon">
-              <Mic className="h-4 w-4" />
+            <Button
+              variant={recording ? "destructive" : "outline"}
+              size="icon"
+              onClick={handleRecordClick}
+            >
+              <Mic className={`h-4 w-4 ${recording ? 'text-red-500' : 'text-gray-500'}`} />
             </Button>
           </div>
         </div>
