@@ -44,16 +44,16 @@ const Layout = () => {
         { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
       ],
     },
+    { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
     { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
-    { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
     { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
     { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
     { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
-    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
     { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
     { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },
+    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
   ];
 
   const toggleTheme = () => {
