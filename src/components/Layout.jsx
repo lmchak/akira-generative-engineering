@@ -89,6 +89,7 @@ const Layout = () => {
         { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
         { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
         { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
+        { icon: <Brain className="w-5 h-5" />, label: 'AI Consultant', path: '/ai-consultant' },
       ],
     },
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
