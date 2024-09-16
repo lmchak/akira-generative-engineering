@@ -22,6 +22,12 @@ const ChatInterface = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    if (session?.user?.id) {
+      refetchChats();
+    }
+  }, [session?.user?.id, refetchChats]);
+
   const handleSend = async () => {
     if (input.trim()) {
       const userMessage = { text: input, sender: 'user', timestamp: new Date().toISOString() };
@@ -59,6 +65,7 @@ const ChatInterface = () => {
   };
 
   const saveChat = async () => {
+    if (messages.length === 0) return;
     try {
       await createChat.mutateAsync({
         user_id: session.user.id,
