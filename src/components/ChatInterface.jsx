@@ -80,7 +80,7 @@ const ChatInterface = () => {
     }
   };
 
-  const deleteCurrentChat = async () => {
+  const deleteCurrentChat = () => {
     setMessages([]);
   };
 
@@ -100,15 +100,9 @@ const ChatInterface = () => {
           input={input}
           setInput={setInput}
           handleSend={handleSend}
+          saveChat={saveChat}
+          deleteChat={deleteCurrentChat}
         />
-        <div className="p-2 border-t border-gray-200 dark:border-gray-700">
-          <Button onClick={saveChat} variant="outline" size="sm" className="mr-2">
-            Save Chat
-          </Button>
-          <Button onClick={deleteCurrentChat} variant="outline" size="sm">
-            Delete Chat
-          </Button>
-        </div>
       </div>
     </div>
   );
