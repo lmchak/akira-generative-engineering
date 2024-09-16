@@ -66,7 +66,7 @@ const ChatInterface = () => {
         name: `Chat ${savedChats?.length + 1 || 1}`,
         messages: messages,
       });
-      refetchChats();
+      await refetchChats();
     } catch (error) {
       console.error('Error saving chat:', error);
     }
