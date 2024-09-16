@@ -32,8 +32,7 @@ const ChatInterface = () => {
       try {
         const aiResponseText = await generateAIResponse(input);
         const aiMessage = { text: aiResponseText, sender: 'ai', timestamp: new Date().toISOString() };
-        const finalMessages = [...updatedMessages, aiMessage];
-        setMessages(finalMessages);
+        setMessages([...updatedMessages, aiMessage]);
       } catch (error) {
         console.error("Error generating AI response:", error);
       }
@@ -63,7 +62,7 @@ const ChatInterface = () => {
     try {
       await createChat.mutateAsync({
         user_id: session.user.id,
-        name: `Chat ${savedChats?.length + 1 || 1}`,
+        name: `Chat ${(savedChats?.length || 0) + 1}`,
         messages: messages,
       });
       await refetchChats();
