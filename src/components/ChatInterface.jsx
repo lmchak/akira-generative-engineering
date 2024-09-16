@@ -6,9 +6,10 @@ import SavedChats from './SavedChats';
 import ChatSettings from './ChatSettings';
 import MessageList from './MessageList';
 import InputArea from './InputArea';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const ChatInterface = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useLocalStorage('chatMessages', []);
   const [input, setInput] = useState('');
   const { session } = useSupabaseAuth();
   const { data: profile } = useProfile(session?.user?.id);
@@ -94,7 +95,7 @@ const ChatInterface = () => {
         <ChatSettings />
       </div>
       <div className="flex-1 flex flex-col">
-        <MessageList messages={messages} profile={profile} />
+        <MessageList messages={messages} profile={profile} messagesEndRef={messagesEndRef} />
         <InputArea
           input={input}
           setInput={setInput}
