@@ -6,7 +6,6 @@ import SavedChats from './SavedChats';
 import ChatSettings from './ChatSettings';
 import MessageList from './MessageList';
 import InputArea from './InputArea';
-import { Button } from "@/components/ui/button";
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([]);
