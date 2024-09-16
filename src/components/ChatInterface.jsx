@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useProfile } from '@/integrations/supabase/hooks/profiles';
-import { Send, Mic, PaperclipIcon } from 'lucide-react';
 import { useChats, useCreateChat, useUpdateChat, useDeleteChat } from '@/integrations/supabase/hooks/chats';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import SavedChats from './SavedChats';
 import ChatSettings from './ChatSettings';
 import MessageList from './MessageList';
@@ -20,37 +13,20 @@ const ChatInterface = () => {
   const { session } = useSupabaseAuth();
   const { data: profile } = useProfile(session?.user?.id);
   const messagesEndRef = useRef(null);
-  const { data: savedChats } = useChats();
+  const { data: savedChats, refetch: refetchChats } = useChats();
   const createChat = useCreateChat();
   const updateChat = useUpdateChat();
   const deleteChat = useDeleteChat();
 
   useEffect(() => {
-    loadChatHistory();
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
-  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  const loadChatHistory = () => {
-    const savedMessages = localStorage.getItem('chatHistory');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    }
-  };
-
-  const saveChatHistory = (updatedMessages) => {
-    localStorage.setItem('chatHistory', JSON.stringify(updatedMessages));
-  };
 
   const handleSend = async () => {
     if (input.trim()) {
       const userMessage = { text: input, sender: 'user', timestamp: new Date().toISOString() };
       const updatedMessages = [...messages, userMessage];
       setMessages(updatedMessages);
-      saveChatHistory(updatedMessages);
       setInput('');
 
       try {
@@ -58,7 +34,6 @@ const ChatInterface = () => {
         const aiMessage = { text: aiResponseText, sender: 'ai', timestamp: new Date().toISOString() };
         const finalMessages = [...updatedMessages, aiMessage];
         setMessages(finalMessages);
-        saveChatHistory(finalMessages);
       } catch (error) {
         console.error("Error generating AI response:", error);
       }
@@ -91,6 +66,7 @@ const ChatInterface = () => {
         name: `Chat ${savedChats?.length + 1 || 1}`,
         messages: messages,
       });
+      refetchChats();
     } catch (error) {
       console.error('Error saving chat:', error);
     }
@@ -98,13 +74,16 @@ const ChatInterface = () => {
 
   const deleteCurrentChat = async () => {
     setMessages([]);
-    saveChatHistory([]);
+  };
+
+  const loadChat = (chatMessages) => {
+    setMessages(chatMessages);
   };
 
   return (
     <div className="flex h-[calc(100vh-200px)] bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="w-64 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-        <SavedChats savedChats={savedChats} loadChat={setMessages} />
+        <SavedChats savedChats={savedChats} loadChat={loadChat} deleteChat={deleteChat.mutateAsync} />
         <ChatSettings />
       </div>
       <div className="flex-1 flex flex-col">
