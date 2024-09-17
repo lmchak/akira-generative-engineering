@@ -1,20 +1,44 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
+
+const supabase = getSupabase();
 
 const getUserRoles = async (userId) => {
-  const { data, error } = await supabase.rpc('get_user_roles', { p_user_id: userId });
+  const { data, error } = await supabase
+    .from('user_roles')
+    .select('roles(name)')
+    .eq('user_id', userId);
   if (error) throw error;
-  return data;
+  return data.map(item => item.roles.name);
 };
 
 const assignRoleToUser = async ({ userId, roleName }) => {
-  const { data, error } = await supabase.rpc('assign_role_to_user', { p_user_id: userId, p_role_name: roleName });
+  const { data: roleData, error: roleError } = await supabase
+    .from('roles')
+    .select('id')
+    .eq('name', roleName)
+    .single();
+  if (roleError) throw roleError;
+
+  const { data, error } = await supabase
+    .from('user_roles')
+    .insert({ user_id: userId, role_id: roleData.id });
   if (error) throw error;
   return data;
 };
 
 const removeRoleFromUser = async ({ userId, roleName }) => {
-  const { data, error } = await supabase.rpc('remove_role_from_user', { p_user_id: userId, p_role_name: roleName });
+  const { data: roleData, error: roleError } = await supabase
+    .from('roles')
+    .select('id')
+    .eq('name', roleName)
+    .single();
+  if (roleError) throw roleError;
+
+  const { data, error } = await supabase
+    .from('user_roles')
+    .delete()
+    .match({ user_id: userId, role_id: roleData.id });
   if (error) throw error;
   return data;
 };
