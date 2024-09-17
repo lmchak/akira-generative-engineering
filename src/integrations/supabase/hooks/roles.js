@@ -6,10 +6,19 @@ const supabase = getSupabase();
 const getUserRoles = async (userId) => {
   const { data, error } = await supabase
     .from('user_roles')
-    .select('roles(name)')
+    .select('role_id')
     .eq('user_id', userId);
   if (error) throw error;
-  return data.map(item => item.roles.name);
+  
+  const roleIds = data.map(item => item.role_id);
+  
+  const { data: roles, error: rolesError } = await supabase
+    .from('roles')
+    .select('name')
+    .in('id', roleIds);
+  if (rolesError) throw rolesError;
+  
+  return roles.map(role => role.name);
 };
 
 const assignRoleToUser = async ({ userId, roleName }) => {

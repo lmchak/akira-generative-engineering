@@ -23,24 +23,25 @@ const Layout = () => {
 
   useEffect(() => {
     console.log("Session or loading state changed:", { session, loading });
-  }, [session, loading]);
+    if (!loading && !session) {
+      navigate('/login');
+    }
+  }, [session, loading, navigate]);
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>;
-  }
-
   if (!mounted) {
     return null;
   }
 
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   if (!session) {
-    console.log("No session, redirecting to login");
-    navigate('/login');
     return null;
   }
 

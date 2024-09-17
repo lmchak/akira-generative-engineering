@@ -69,6 +69,11 @@ BEGIN
         NEW.raw_user_meta_data->>'avatar_url',
         NOW()
     );
+    
+    -- Assign default 'user' role to new users
+    INSERT INTO public.user_roles (user_id, role_id)
+    SELECT NEW.id, id FROM public.roles WHERE name = 'user';
+    
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -87,3 +92,16 @@ GRANT ALL ON public.profiles TO authenticated;
 GRANT ALL ON public.roles TO authenticated;
 GRANT ALL ON public.user_roles TO authenticated;
 GRANT ALL ON public.chats TO authenticated;
+
+-- Enable RLS on the user_roles table
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for the user_roles table
+CREATE POLICY "Users can view their own roles" ON public.user_roles FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Admins can manage user roles" ON public.user_roles USING (
+    EXISTS (
+        SELECT 1 FROM public.user_roles ur
+        JOIN public.roles r ON ur.role_id = r.id
+        WHERE ur.user_id = auth.uid() AND r.name = 'admin'
+    )
+);
