@@ -1,65 +1,59 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 
-/*
-### chats
+const supabase = getSupabase();
 
-| name       | type                     | format  | required |
-|------------|--------------------------|---------|----------|
-| id         | uuid                     | uuid    | true     |
-| user_id    | uuid                     | uuid    | false    |
-| name       | text                     | string  | true     |
-| messages   | jsonb                    | json    | true     |
-| created_at | timestamp with time zone | string  | false    |
-| updated_at | timestamp with time zone | string  | false    |
-
-Foreign Key Relationships:
-- user_id references profiles.id
-*/
-
-const getChats = async () => {
-  const { data, error } = await supabase.from('chats').select('*');
+const getChats = async (userId) => {
+  const { data, error } = await supabase
+    .from('documents')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
   if (error) throw error;
   return data;
 };
 
-const getChatById = async (id) => {
-  const { data, error } = await supabase.from('chats').select('*').eq('id', id).single();
+const createChat = async ({ userId, name, messages }) => {
+  const { data, error } = await supabase
+    .from('documents')
+    .insert({ user_id: userId, name, content: JSON.stringify(messages) })
+    .select()
+    .single();
   if (error) throw error;
   return data;
 };
 
-const createChat = async (chat) => {
-  const { data, error } = await supabase.from('chats').insert(chat).select().single();
-  if (error) throw error;
-  return data;
-};
-
-const updateChat = async ({ id, ...chat }) => {
-  const { data, error } = await supabase.from('chats').update(chat).eq('id', id).select().single();
+const updateChat = async ({ id, name, messages }) => {
+  const { data, error } = await supabase
+    .from('documents')
+    .update({ name, content: JSON.stringify(messages) })
+    .eq('id', id)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 };
 
 const deleteChat = async (id) => {
-  const { error } = await supabase.from('chats').delete().eq('id', id);
+  const { error } = await supabase
+    .from('documents')
+    .delete()
+    .eq('id', id);
   if (error) throw error;
 };
 
-export const useChats = () => useQuery({ queryKey: ['chats'], queryFn: getChats });
-
-export const useChat = (id) => useQuery({ 
-  queryKey: ['chats', id], 
-  queryFn: () => getChatById(id),
-  enabled: !!id
+export const useChats = (userId) => useQuery({
+  queryKey: ['chats', userId],
+  queryFn: () => getChats(userId),
+  enabled: !!userId,
 });
 
 export const useCreateChat = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createChat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries(['chats', variables.userId]);
     },
   });
 };
@@ -69,8 +63,7 @@ export const useUpdateChat = () => {
   return useMutation({
     mutationFn: updateChat,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
-      queryClient.invalidateQueries({ queryKey: ['chats', data.id] });
+      queryClient.invalidateQueries(['chats', data.user_id]);
     },
   });
 };
@@ -79,8 +72,8 @@ export const useDeleteChat = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteChat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chats'] });
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries(['chats']);
     },
   });
 };
