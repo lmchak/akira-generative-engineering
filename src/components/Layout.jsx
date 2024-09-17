@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, ChevronDown, ChevronRight } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, ChevronDown, ChevronRight, Shield } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { RoleBasedAccess, useHasRole } from './RoleBasedAccess';
 
 const NavItem = ({ item, location, closeMobileMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,37 +21,40 @@ const NavItem = ({ item, location, closeMobileMenu }) => {
         </CollapsibleTrigger>
         <CollapsibleContent className="pl-4">
           {item.children.map((child, childIndex) => (
-            <Link
-              key={childIndex}
-              to={child.path}
-              className={`flex items-center p-2 rounded-lg mb-1 ${
-                location.pathname === child.path
-                  ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-              onClick={closeMobileMenu}
-            >
-              {child.icon}
-              <span className="ml-3">{child.label}</span>
-            </Link>
+            <RoleBasedAccess key={childIndex} allowedRoles={child.roles || ['user']}>
+              <Link
+                to={child.path}
+                className={`flex items-center p-2 rounded-lg mb-1 ${
+                  location.pathname === child.path
+                    ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                onClick={closeMobileMenu}
+              >
+                {child.icon}
+                <span className="ml-3">{child.label}</span>
+              </Link>
+            </RoleBasedAccess>
           ))}
         </CollapsibleContent>
       </Collapsible>
     );
   }
   return (
-    <Link
-      to={item.path}
-      className={`flex items-center p-2 rounded-lg mb-1 ${
-        location.pathname === item.path
-          ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
-          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-      }`}
-      onClick={closeMobileMenu}
-    >
-      {item.icon}
-      <span className="ml-3">{item.label}</span>
-    </Link>
+    <RoleBasedAccess allowedRoles={item.roles || ['user']}>
+      <Link
+        to={item.path}
+        className={`flex items-center p-2 rounded-lg mb-1 ${
+          location.pathname === item.path
+            ? 'bg-gray-200 dark:bg-gray-700 text-blue-600 dark:text-blue-400'
+            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+        }`}
+        onClick={closeMobileMenu}
+      >
+        {item.icon}
+        <span className="ml-3">{item.label}</span>
+      </Link>
+    </RoleBasedAccess>
   );
 };
 
@@ -61,46 +65,50 @@ const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const isAdmin = useHasRole('admin');
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const navItems = [
-    { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
-    { icon: <Bot className="w-5 h-5" />, label: 'Generative Engineering', path: '/generative-engineering' },
-    { icon: <Briefcase className="w-5 h-5" />, label: 'Project Management', path: '/project-management' },
+    { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile', roles: ['user'] },
+    { icon: <Bot className="w-5 h-5" />, label: 'Generative Engineering', path: '/generative-engineering', roles: ['engineer', 'admin'] },
+    { icon: <Briefcase className="w-5 h-5" />, label: 'Project Management', path: '/project-management', roles: ['project_manager', 'admin'] },
     {
       icon: <Component className="w-5 h-5" />,
       label: 'Engineering',
+      roles: ['engineer', 'admin'],
       children: [
-        { icon: <Brush className="w-5 h-5" />, label: 'Concept Design', path: '/concept-design' },
-        { icon: <Cable className="w-5 h-5" />, label: 'MEP', path: '/mep' },
-        { icon: <Construction className="w-5 h-5" />, label: 'Construction', path: '/construction' },
-        { icon: <Component className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
+        { icon: <Brush className="w-5 h-5" />, label: 'Concept Design', path: '/concept-design', roles: ['engineer', 'admin'] },
+        { icon: <Cable className="w-5 h-5" />, label: 'MEP', path: '/mep', roles: ['engineer', 'admin'] },
+        { icon: <Construction className="w-5 h-5" />, label: 'Construction', path: '/construction', roles: ['engineer', 'admin'] },
+        { icon: <Component className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning', roles: ['engineer', 'admin'] },
       ],
     },
     {
       icon: <Building className="w-5 h-5" />,
       label: 'Real Estate',
+      roles: ['user', 'admin'],
       children: [
-        { icon: <MapIcon className="w-5 h-5" />, label: 'Map', path: '/map' },
-        { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics' },
-        { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights' },
-        { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector' },
-        { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
-        { icon: <Brain className="w-5 h-5" />, label: 'AI Consultant', path: '/ai-consultant' },
+        { icon: <MapIcon className="w-5 h-5" />, label: 'Map', path: '/map', roles: ['user', 'admin'] },
+        { icon: <BarChartIcon className="w-5 h-5" />, label: 'Analytics', path: '/analytics', roles: ['user', 'admin'] },
+        { icon: <TrendingUpIcon className="w-5 h-5" />, label: 'Insights', path: '/insights', roles: ['user', 'admin'] },
+        { icon: <CompassIcon className="w-5 h-5" />, label: 'Site Selector', path: '/site-selector', roles: ['user', 'admin'] },
+        { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news', roles: ['user', 'admin'] },
+        { icon: <Brain className="w-5 h-5" />, label: 'AI Consultant', path: '/ai-consultant', roles: ['user', 'admin'] },
       ],
     },
-    { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
-    { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
-    { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
-    { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
-    { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search' },
-    { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription' },
-    { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq' },
-    { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about' },
-    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings' },
+    { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management', roles: ['user', 'admin'] },
+    { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration', roles: ['user', 'admin'] },
+    { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management', roles: ['user', 'admin'] },
+    { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat', roles: ['user', 'admin'] },
+    { icon: <Search className="w-5 h-5" />, label: 'Search', path: '/search', roles: ['user', 'admin'] },
+    { icon: <CreditCard className="w-5 h-5" />, label: 'Subscription', path: '/subscription', roles: ['user', 'admin'] },
+    { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQ', path: '/faq', roles: ['user', 'admin'] },
+    { icon: <InfoIcon className="w-5 h-5" />, label: 'About', path: '/about', roles: ['user', 'admin'] },
+    { icon: <Settings className="w-5 h-5" />, label: 'Settings', path: '/settings', roles: ['user', 'admin'] },
+    { icon: <Shield className="w-5 h-5" />, label: 'User Management', path: '/user-management', roles: ['admin'] },
   ];
 
   const toggleTheme = () => {

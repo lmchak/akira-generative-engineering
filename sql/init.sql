@@ -1,4 +1,3 @@
-
 -- Create the profiles table in the public schema
 CREATE TABLE public.profiles (
     id UUID REFERENCES auth.users ON DELETE CASCADE,
@@ -170,3 +169,77 @@ GRANT USAGE ON SCHEMA public TO authenticated;
 GRANT ALL ON profiles TO authenticated;
 GRANT SELECT ON public_profiles TO authenticated;
 GRANT EXECUTE ON FUNCTION update_profile TO authenticated;
+
+-- Create roles table
+CREATE TABLE public.roles (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    description TEXT
+);
+
+-- Create user_roles junction table
+CREATE TABLE public.user_roles (
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    role_id UUID REFERENCES public.roles(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
+);
+
+-- Create some default roles
+INSERT INTO public.roles (name, description) VALUES
+    ('admin', 'Administrator with full access'),
+    ('engineer', 'Engineer with access to engineering features'),
+    ('project_manager', 'Project manager with access to project management features'),
+    ('user', 'Regular user with limited access');
+
+-- Function to get user roles
+CREATE OR REPLACE FUNCTION get_user_roles(p_user_id UUID)
+RETURNS TABLE (role_name TEXT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT r.name
+    FROM public.user_roles ur
+    JOIN public.roles r ON ur.role_id = r.id
+    WHERE ur.user_id = p_user_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to assign role to user
+CREATE OR REPLACE FUNCTION assign_role_to_user(p_user_id UUID, p_role_name TEXT)
+RETURNS VOID AS $$
+DECLARE
+    v_role_id UUID;
+BEGIN
+    SELECT id INTO v_role_id FROM public.roles WHERE name = p_role_name;
+    IF v_role_id IS NULL THEN
+        RAISE EXCEPTION 'Role % does not exist', p_role_name;
+    END IF;
+
+    INSERT INTO public.user_roles (user_id, role_id)
+    VALUES (p_user_id, v_role_id)
+    ON CONFLICT DO NOTHING;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to remove role from user
+CREATE OR REPLACE FUNCTION remove_role_from_user(p_user_id UUID, p_role_name TEXT)
+RETURNS VOID AS $$
+DECLARE
+    v_role_id UUID;
+BEGIN
+    SELECT id INTO v_role_id FROM public.roles WHERE name = p_role_name;
+    IF v_role_id IS NULL THEN
+        RAISE EXCEPTION 'Role % does not exist', p_role_name;
+    END IF;
+
+    DELETE FROM public.user_roles
+    WHERE user_id = p_user_id AND role_id = v_role_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Grant necessary permissions
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT ALL ON public.roles TO authenticated;
+GRANT ALL ON public.user_roles TO authenticated;
+GRANT EXECUTE ON FUNCTION get_user_roles TO authenticated;
+GRANT EXECUTE ON FUNCTION assign_role_to_user TO authenticated;
+GRANT EXECUTE ON FUNCTION remove_role_from_user TO authenticated;
