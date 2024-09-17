@@ -9,7 +9,7 @@ import MobileHeader from './MobileHeader';
 import { RoleBasedAccess } from './RoleBasedAccess';
 
 const Layout = () => {
-  const { logout, session } = useSupabaseAuth();
+  const { logout, session, loading } = useSupabaseAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,14 +18,29 @@ const Layout = () => {
 
   useEffect(() => {
     setMounted(true);
+    console.log("Layout mounted, session:", session);
   }, []);
+
+  useEffect(() => {
+    console.log("Session or loading state changed:", { session, loading });
+  }, [session, loading]);
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
 
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   if (!mounted) {
+    return null;
+  }
+
+  if (!session) {
+    console.log("No session, redirecting to login");
+    navigate('/login');
     return null;
   }
 
