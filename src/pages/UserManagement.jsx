@@ -1,26 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSupabaseAuth } from '@/integrations/supabase';
 import { useUserRoles, useAssignRole, useRemoveRole } from '@/integrations/supabase/hooks/roles';
+import { useProfiles } from '@/integrations/supabase/hooks/profiles';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useProfile } from '@/integrations/supabase/hooks/profiles';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const UserManagement = () => {
   const { session } = useSupabaseAuth();
-  const { data: profile } = useProfile(session?.user?.id);
-  const { data: userRoles, isLoading } = useUserRoles(session?.user?.id);
+  const { data: profiles, isLoading: profilesLoading } = useProfiles();
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { data: userRoles, isLoading: rolesLoading } = useUserRoles(selectedUser);
   const assignRole = useAssignRole();
   const removeRole = useRemoveRole();
 
-  const handleAssignRole = (roleName) => {
-    assignRole.mutate({ userId: session.user.id, roleName });
+  const handleAssignRole = async (roleName) => {
+    if (selectedUser) {
+      await assignRole.mutateAsync({ userId: selectedUser, roleName });
+    }
   };
 
-  const handleRemoveRole = (roleName) => {
-    removeRole.mutate({ userId: session.user.id, roleName });
+  const handleRemoveRole = async (roleName) => {
+    if (selectedUser) {
+      await removeRole.mutateAsync({ userId: selectedUser, roleName });
+    }
   };
 
-  if (isLoading) {
+  if (profilesLoading || rolesLoading) {
     return <div>Loading...</div>;
   }
 
@@ -32,51 +39,50 @@ const UserManagement = () => {
           <CardTitle>User Roles</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold">Current Roles</h2>
-              {userRoles && userRoles.length > 0 ? (
-                <ul className="list-disc list-inside">
-                  {userRoles.map((role, index) => (
-                    <li key={index}>{role.role_name}</li>
+          <Select onValueChange={(value) => setSelectedUser(value)}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select a user" />
+            </SelectTrigger>
+            <SelectContent>
+              {profiles.map((profile) => (
+                <SelectItem key={profile.id} value={profile.id}>
+                  {profile.first_name} {profile.last_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {selectedUser && (
+            <div className="mt-4">
+              <h2 className="text-xl font-semibold mb-2">Current Roles</h2>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {userRoles.map((role) => (
+                    <TableRow key={role.role_name}>
+                      <TableCell>{role.role_name}</TableCell>
+                      <TableCell>
+                        <Button onClick={() => handleRemoveRole(role.role_name)} variant="destructive" size="sm">
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </ul>
-              ) : (
-                <p>No roles assigned</p>
-              )}
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">Manage Roles</h2>
-              <div className="flex space-x-2 mt-2">
-                <Button onClick={() => handleAssignRole('admin')} variant="outline">
-                  Assign Admin
-                </Button>
-                <Button onClick={() => handleAssignRole('engineer')} variant="outline">
-                  Assign Engineer
-                </Button>
-                <Button onClick={() => handleAssignRole('project_manager')} variant="outline">
-                  Assign Project Manager
-                </Button>
-                <Button onClick={() => handleAssignRole('user')} variant="outline">
-                  Assign User
-                </Button>
-              </div>
-              <div className="flex space-x-2 mt-2">
-                <Button onClick={() => handleRemoveRole('admin')} variant="outline">
-                  Remove Admin
-                </Button>
-                <Button onClick={() => handleRemoveRole('engineer')} variant="outline">
-                  Remove Engineer
-                </Button>
-                <Button onClick={() => handleRemoveRole('project_manager')} variant="outline">
-                  Remove Project Manager
-                </Button>
-                <Button onClick={() => handleRemoveRole('user')} variant="outline">
-                  Remove User
-                </Button>
+                </TableBody>
+              </Table>
+              <h2 className="text-xl font-semibold mt-4 mb-2">Assign Role</h2>
+              <div className="flex space-x-2">
+                <Button onClick={() => handleAssignRole('admin')} variant="outline">Assign Admin</Button>
+                <Button onClick={() => handleAssignRole('engineer')} variant="outline">Assign Engineer</Button>
+                <Button onClick={() => handleAssignRole('project_manager')} variant="outline">Assign Project Manager</Button>
+                <Button onClick={() => handleAssignRole('user')} variant="outline">Assign User</Button>
               </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>

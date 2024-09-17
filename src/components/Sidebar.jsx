@@ -34,6 +34,22 @@ const Sidebar = ({ isMobileMenuOpen, closeMobileMenu, handleLogout, theme, setTh
             </Link>
           </RoleBasedAccess>
         ))}
+        <RoleBasedAccess allowedRoles={['admin']}>
+          <Link
+            to="/user-management"
+            className="flex items-center p-2 rounded-lg mb-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            onClick={closeMobileMenu}
+          >
+            <span className="ml-3">User Management</span>
+          </Link>
+          <Link
+            to="/role-management"
+            className="flex items-center p-2 rounded-lg mb-1 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            onClick={closeMobileMenu}
+          >
+            <span className="ml-3">Role Management</span>
+          </Link>
+        </RoleBasedAccess>
       </nav>
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <Button onClick={handleLogout} variant="outline" className="w-full">

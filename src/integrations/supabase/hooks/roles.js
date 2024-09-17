@@ -19,6 +19,29 @@ const removeRoleFromUser = async ({ userId, roleName }) => {
   return data;
 };
 
+const getRoles = async () => {
+  const { data, error } = await supabase.from('roles').select('*');
+  if (error) throw error;
+  return data;
+};
+
+const createRole = async ({ name, description }) => {
+  const { data, error } = await supabase.from('roles').insert({ name, description }).select().single();
+  if (error) throw error;
+  return data;
+};
+
+const updateRole = async ({ id, name, description }) => {
+  const { data, error } = await supabase.from('roles').update({ name, description }).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+};
+
+const deleteRole = async (id) => {
+  const { error } = await supabase.from('roles').delete().eq('id', id);
+  if (error) throw error;
+};
+
 export const useUserRoles = (userId) => useQuery({
   queryKey: ['userRoles', userId],
   queryFn: () => getUserRoles(userId),
@@ -41,6 +64,38 @@ export const useRemoveRole = () => {
     mutationFn: removeRoleFromUser,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries(['userRoles', variables.userId]);
+    },
+  });
+};
+
+export const useRoles = () => useQuery({ queryKey: ['roles'], queryFn: getRoles });
+
+export const useCreateRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createRole,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['roles']);
+    },
+  });
+};
+
+export const useUpdateRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateRole,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['roles']);
+    },
+  });
+};
+
+export const useDeleteRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteRole,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['roles']);
     },
   });
 };
