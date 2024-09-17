@@ -13,6 +13,16 @@ const getChats = async (userId) => {
   return data;
 };
 
+const getChatById = async (id) => {
+  const { data, error } = await supabase
+    .from('documents')
+    .select('*')
+    .eq('id', id)
+    .single();
+  if (error) throw error;
+  return data;
+};
+
 const createChat = async ({ userId, name, messages }) => {
   const { data, error } = await supabase
     .from('documents')
@@ -48,6 +58,12 @@ export const useChats = (userId) => useQuery({
   enabled: !!userId,
 });
 
+export const useChat = (id) => useQuery({
+  queryKey: ['chat', id],
+  queryFn: () => getChatById(id),
+  enabled: !!id,
+});
+
 export const useCreateChat = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -64,6 +80,7 @@ export const useUpdateChat = () => {
     mutationFn: updateChat,
     onSuccess: (data) => {
       queryClient.invalidateQueries(['chats', data.user_id]);
+      queryClient.invalidateQueries(['chat', data.id]);
     },
   });
 };
@@ -74,6 +91,7 @@ export const useDeleteChat = () => {
     mutationFn: deleteChat,
     onSuccess: (_, id) => {
       queryClient.invalidateQueries(['chats']);
+      queryClient.invalidateQueries(['chat', id]);
     },
   });
 };
