@@ -80,8 +80,8 @@ const Map = () => {
 
   const dataCenterIcon = {
     url: '/data-center-marker.svg',
-    scaledSize: isLoaded ? new window.google.maps.Size(40, 60) : null,
-    anchor: isLoaded ? new window.google.maps.Point(20, 60) : null,
+    scaledSize: isLoaded ? new window.google.maps.Size(20, 30) : null,
+    anchor: isLoaded ? new window.google.maps.Point(10, 30) : null,
   };
 
   return (
