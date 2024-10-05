@@ -1,12 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { supabase } from '@/lib/supabase';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import MapControls from "./MapControls";
 import DataCenterModal from "./DataCenterModal";
 
@@ -83,8 +79,9 @@ const Map = () => {
   }
 
   const dataCenterIcon = {
-    url: '/data-center-icon.svg',
-    scaledSize: isLoaded ? new window.google.maps.Size(30, 30) : null,
+    url: '/data-center-marker.svg',
+    scaledSize: isLoaded ? new window.google.maps.Size(40, 60) : null,
+    anchor: isLoaded ? new window.google.maps.Point(20, 60) : null,
   };
 
   return (
