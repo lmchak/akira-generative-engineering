@@ -30,8 +30,8 @@ const DataCenterTable = () => {
   };
 
   const filteredDataCenters = dataCenters.filter(dc =>
-    dc.DC.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dc.OPERATOR.toLowerCase().includes(searchTerm.toLowerCase())
+    (dc.DC?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+    (dc.OPERATOR?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
   );
 
   return (
@@ -59,10 +59,10 @@ const DataCenterTable = () => {
           <TableBody>
             {filteredDataCenters.map((dc, index) => (
               <TableRow key={index}>
-                <TableCell>{dc.DC}</TableCell>
-                <TableCell>{dc.OPERATOR}</TableCell>
-                <TableCell>{dc.LAT}</TableCell>
-                <TableCell>{dc.LONG}</TableCell>
+                <TableCell>{dc.DC ?? 'N/A'}</TableCell>
+                <TableCell>{dc.OPERATOR ?? 'N/A'}</TableCell>
+                <TableCell>{dc.LAT ?? 'N/A'}</TableCell>
+                <TableCell>{dc.LONG ?? 'N/A'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
