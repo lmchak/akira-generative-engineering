@@ -78,23 +78,12 @@ const Map = () => {
     );
   }
 
-  const dataCenterIcon = useCallback((index) => ({
-    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">
-        <path d="M15 0C6.75 0 0 6.75 0 15c0 10.0425 15 25 15 25s15-14.9575 15-25c0-8.25-6.75-15-15-15z" fill="#4285F4"/>
-        <circle cx="15" cy="15" r="7.5" fill="white"/>
-        <text x="15" y="19" font-family="Arial" font-size="12" fill="#4285F4" text-anchor="middle">${index + 1}</text>
-        <g transform="translate(9.75, 9.75) scale(0.525)">
-          <rect x="2" y="2" width="20" height="8" rx="2" ry="2" fill="none" stroke="#4285F4" stroke-width="2"/>
-          <rect x="2" y="14" width="20" height="8" rx="2" ry="2" fill="none" stroke="#4285F4" stroke-width="2"/>
-          <line x1="6" y1="6" x2="6.01" y2="6" stroke="#4285F4" stroke-width="2"/>
-          <line x1="6" y1="18" x2="6.01" y2="18" stroke="#4285F4" stroke-width="2"/>
-        </g>
-      </svg>
-    `)}`,
-    scaledSize: isLoaded ? new window.google.maps.Size(30, 40) : null,
-    anchor: isLoaded ? new window.google.maps.Point(15, 40) : null,
-  }), [isLoaded]);
+  const createMarkerLabel = (index) => ({
+    text: `${index + 1}`,
+    color: '#FFFFFF',
+    fontSize: '14px',
+    fontWeight: 'bold'
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -127,7 +116,7 @@ const Map = () => {
               position={{ lat: marker.lat, lng: marker.lng }}
               title={marker.info.DC}
               onClick={() => setSelectedMarker(marker)}
-              icon={dataCenterIcon(index)}
+              label={createMarkerLabel(index)}
             />
           ))}
         </GoogleMap>
