@@ -1,10 +1,11 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { supabase } from '@/lib/supabase';
 
 const mapContainerStyle = {
   width: "100%",
@@ -12,8 +13,8 @@ const mapContainerStyle = {
 };
 
 const center = {
-  lat: 40.7128,
-  lng: -74.0060,
+  lat: 1.4927,
+  lng: 103.7414,
 };
 
 const libraries = ["places"];
@@ -28,6 +29,7 @@ const Map = () => {
     earlyStage: false,
   });
   const [error, setError] = useState(null);
+  const [dataCenters, setDataCenters] = useState([]);
 
   const apiKey = useMemo(() => import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "", []);
 
@@ -48,6 +50,29 @@ const Map = () => {
     setMap(null);
   }, []);
 
+  useEffect(() => {
+    fetchDataCenters();
+  }, []);
+
+  const fetchDataCenters = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('johor_dc')
+        .select('*');
+
+      if (error) throw error;
+      setDataCenters(data);
+      setMarkers(data.map(dc => ({
+        lat: parseFloat(dc.LAT),
+        lng: parseFloat(dc.LONG),
+        info: dc
+      })));
+    } catch (error) {
+      console.error('Error fetching data centers:', error);
+      setError('Failed to fetch data centers. Please try again later.');
+    }
+  };
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery || !isLoaded) return;
@@ -58,7 +83,6 @@ const Map = () => {
       if (status === "OK" && results[0]) {
         const { lat, lng } = results[0].geometry.location;
         setMapCenter({ lat: lat(), lng: lng() });
-        setMarkers([{ lat: lat(), lng: lng() }]);
         map?.panTo({ lat: lat(), lng: lng() });
         map?.setZoom(12);
       } else {
@@ -84,16 +108,6 @@ const Map = () => {
             Failed to load Google Maps. Please check your API key and try again.
           </AlertDescription>
         </Alert>
-        <div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">How to set up Google Maps API:</h2>
-          <ol className="list-decimal list-inside">
-            <li>Go to the Google Cloud Console</li>
-            <li>Create a new project or select an existing one</li>
-            <li>Enable the Maps JavaScript API and Geocoding API for your project</li>
-            <li>Create an API key with appropriate restrictions</li>
-            <li>Add the API key to your .env file as VITE_GOOGLE_MAPS_API_KEY</li>
-          </ol>
-        </div>
       </div>
     );
   }
@@ -149,7 +163,15 @@ const Map = () => {
           onUnmount={onUnmount}
         >
           {markers.map((marker, index) => (
-            <Marker key={index} position={marker} />
+            <Marker
+              key={index}
+              position={{ lat: marker.lat, lng: marker.lng }}
+              title={marker.info.DC}
+              onClick={() => {
+                // You can implement a modal or info window here to show more details
+                console.log(marker.info);
+              }}
+            />
           ))}
         </GoogleMap>
       ) : (
