@@ -13,9 +13,14 @@ const Analytics = () => {
   const [activeTab, setActiveTab] = useState("market");
   const [selectedRegion, setSelectedRegion] = useState("EMEA");
   const [selectedSegment, setSelectedSegment] = useState("colocation");
+  const [showDataCenterTable, setShowDataCenterTable] = useState(false);
 
   const handleGenerateReport = () => {
     console.log("Generating report...");
+  };
+
+  const toggleDataCenterTable = () => {
+    setShowDataCenterTable(!showDataCenterTable);
   };
 
   return (
@@ -60,7 +65,12 @@ const Analytics = () => {
           <SupplierAnalytics />
         </TabsContent>
         <TabsContent value="datacenters">
-          <DataCenterTable />
+          <div className="mb-4">
+            <Button onClick={toggleDataCenterTable}>
+              {showDataCenterTable ? "Hide Data Center Table" : "Show Data Center Table"}
+            </Button>
+          </div>
+          {showDataCenterTable && <DataCenterTable />}
         </TabsContent>
       </Tabs>
     </div>
