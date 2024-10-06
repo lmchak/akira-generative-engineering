@@ -56,7 +56,11 @@ const Analytics = () => {
             </Select>
             <Button onClick={handleGenerateReport}>Generate Report</Button>
           </div>
-          <MarketAnalytics region={selectedRegion} segment={selectedSegment} />
+          <MarketAnalytics 
+            region={selectedRegion} 
+            segment={selectedSegment} 
+            onGenerateReport={handleGenerateReport}
+          />
         </TabsContent>
         <TabsContent value="company">
           <CompanyAnalytics />

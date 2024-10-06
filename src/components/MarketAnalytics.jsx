@@ -1,23 +1,75 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 
-const MarketAnalytics = ({ region, segment }) => {
-  // Dummy data for demonstration
-  const marketData = [
-    { date: '2023 Q1', supplyMW: 100, takeupMW: 80 },
-    { date: '2023 Q2', supplyMW: 120, takeupMW: 90 },
-    { date: '2023 Q3', supplyMW: 140, takeupMW: 110 },
-    { date: '2023 Q4', supplyMW: 160, takeupMW: 130 },
-  ];
+const MarketAnalytics = ({ region, segment, onGenerateReport }) => {
+  const [marketData, setMarketData] = useState([]);
+  const [companyData, setCompanyData] = useState([]);
 
-  const companyData = [
-    { name: 'Company A', totalMW: 500 },
-    { name: 'Company B', totalMW: 400 },
-    { name: 'Company C', totalMW: 300 },
-    { name: 'Company D', totalMW: 200 },
-    { name: 'Others', totalMW: 600 },
-  ];
+  const apiUrl = 'https://msqkuenfolzzjqtupste.supabase.co/rest/v1/johor_dc';
+  const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcWt1ZW5mb2x6empxdHVwc3RlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU3ODA5OTksImV4cCI6MjA0MTM1Njk5OX0.txZ1kSx8l2V-kp1RHgH-LlSoSmDTouIxoYMnIwsiBEM';
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(apiUrl, {
+        headers: {
+          'apikey': apiKey,
+          'Authorization': `Bearer ${apiKey}`,
+        },
+      });
+      const data = await response.json();
+      processData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const processData = (data) => {
+    // Process market data
+    const marketDataProcessed = data.reduce((acc, item) => {
+      const year = new Date(item.date).getFullYear();
+      const existingYear = acc.find(d => d.date === year);
+      if (existingYear) {
+        existingYear.supplyMW += item.supply_mw || 0;
+        existingYear.takeupMW += item.takeup_mw || 0;
+      } else {
+        acc.push({
+          date: year,
+          supplyMW: item.supply_mw || 0,
+          takeupMW: item.takeup_mw || 0,
+        });
+      }
+      return acc;
+    }, []);
+
+    setMarketData(marketDataProcessed);
+
+    // Process company data
+    const companyDataProcessed = data.reduce((acc, item) => {
+      const existingCompany = acc.find(d => d.name === item.company);
+      if (existingCompany) {
+        existingCompany.totalMW += item.supply_mw || 0;
+      } else {
+        acc.push({
+          name: item.company,
+          totalMW: item.supply_mw || 0,
+        });
+      }
+      return acc;
+    }, []);
+
+    setCompanyData(companyDataProcessed);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (onGenerateReport) {
+      onGenerateReport(fetchData);
+    }
+  }, [onGenerateReport]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
