@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#8DD1E1', '#A4DE6C', '#D0ED57'];
 
 const MarketAnalytics = ({ refreshTrigger }) => {
   const [operatorData, setOperatorData] = useState([]);
@@ -56,27 +58,61 @@ const MarketAnalytics = ({ refreshTrigger }) => {
   }, [refreshTrigger]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Data Center Operators - Total Live Capacity (MW)</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {operatorData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={operatorData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis dataKey="operator" type="category" width={150} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="capacity" fill="#8884d8" name="Total Live Capacity (MW)" />
-            </BarChart>
-          </ResponsiveContainer>
-        ) : (
-          <p>No operator data available</p>
-        )}
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Data Center Operators - Total Live Capacity (MW)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {operatorData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={operatorData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis dataKey="operator" type="category" width={150} />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="capacity" fill="#8884d8" name="Total Live Capacity (MW)" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p>No operator data available</p>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Market Share by Operator</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {operatorData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={400}>
+              <PieChart>
+                <Pie
+                  data={operatorData}
+                  dataKey="capacity"
+                  nameKey="operator"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={150}
+                  fill="#8884d8"
+                  label={(entry) => entry.operator}
+                >
+                  {operatorData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <p>No operator data available</p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
