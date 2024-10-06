@@ -16,6 +16,7 @@ const Analytics = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleGenerateReport = () => {
+    console.log('Generating report...');
     setRefreshTrigger(prev => prev + 1);
   };
 

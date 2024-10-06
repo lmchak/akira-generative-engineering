@@ -18,6 +18,7 @@ const MarketAnalytics = ({ refreshTrigger }) => {
         },
       });
       const data = await response.json();
+      console.log('Fetched data:', data);
       processData(data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -56,11 +57,15 @@ const MarketAnalytics = ({ refreshTrigger }) => {
       return acc;
     }, []);
 
+    console.log('Processed market data:', marketDataProcessed);
+    console.log('Processed company data:', companyDataProcessed);
+
     setMarketData(marketDataProcessed.sort((a, b) => a.date - b.date));
     setCompanyData(companyDataProcessed.filter(item => item.value > 0));
   };
 
   useEffect(() => {
+    console.log('Fetching data...');
     fetchData();
   }, [refreshTrigger]);
 
@@ -73,17 +78,21 @@ const MarketAnalytics = ({ refreshTrigger }) => {
           <CardTitle>Supply and Take-up</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={marketData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="supplyMW" stroke="#8884d8" name="Supply (MW)" />
-              <Line type="monotone" dataKey="takeupMW" stroke="#82ca9d" name="Take-up (MW)" />
-            </LineChart>
-          </ResponsiveContainer>
+          {marketData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={marketData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="supplyMW" stroke="#8884d8" name="Supply (MW)" />
+                <Line type="monotone" dataKey="takeupMW" stroke="#82ca9d" name="Take-up (MW)" />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <p>No market data available</p>
+          )}
         </CardContent>
       </Card>
 
@@ -92,26 +101,30 @@ const MarketAnalytics = ({ refreshTrigger }) => {
           <CardTitle>Market Share</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={companyData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                label
-              >
-                {companyData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+          {companyData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={companyData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  label
+                >
+                  {companyData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <p>No company data available</p>
+          )}
         </CardContent>
       </Card>
     </div>
