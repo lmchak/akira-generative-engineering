@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import DataCenterTable from './DataCenterTable';
 import MarketAnalytics from './MarketAnalytics';
 import CompanyAnalytics from './CompanyAnalytics';
@@ -14,9 +13,10 @@ const Analytics = () => {
   const [selectedRegion, setSelectedRegion] = useState("EMEA");
   const [selectedSegment, setSelectedSegment] = useState("colocation");
   const [showDataCenterTable, setShowDataCenterTable] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleGenerateReport = () => {
-    console.log("Generating report...");
+    setRefreshTrigger(prev => prev + 1);
   };
 
   const toggleDataCenterTable = () => {
@@ -59,7 +59,7 @@ const Analytics = () => {
           <MarketAnalytics 
             region={selectedRegion} 
             segment={selectedSegment} 
-            onGenerateReport={handleGenerateReport}
+            refreshTrigger={refreshTrigger}
           />
         </TabsContent>
         <TabsContent value="company">
