@@ -26,15 +26,18 @@ const MarketAnalytics = ({ refreshTrigger }) => {
 
   const processData = (data) => {
     const processedData = data.reduce((acc, item) => {
-      if (item.OPERATOR && item['TOTAL IT LOAD (MW)']) {
-        const existingOperator = acc.find(d => d.operator === item.OPERATOR);
-        if (existingOperator) {
-          existingOperator.capacity += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
-        } else {
-          acc.push({
-            operator: item.OPERATOR,
-            capacity: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
-          });
+      if (item.OPERATOR && item['TOTAL LIVE CAPACITY (MW)']) {
+        const capacity = parseFloat(item['TOTAL LIVE CAPACITY (MW)']);
+        if (!isNaN(capacity)) {
+          const existingOperator = acc.find(d => d.operator === item.OPERATOR);
+          if (existingOperator) {
+            existingOperator.capacity += capacity;
+          } else {
+            acc.push({
+              operator: item.OPERATOR,
+              capacity: capacity,
+            });
+          }
         }
       }
       return acc;
