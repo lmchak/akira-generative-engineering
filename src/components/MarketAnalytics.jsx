@@ -27,16 +27,16 @@ const MarketAnalytics = ({ refreshTrigger }) => {
 
   const processData = (data) => {
     const marketDataProcessed = data.reduce((acc, item) => {
-      const year = new Date(item.date).getFullYear();
+      const year = new Date().getFullYear(); // Use current year as placeholder
       const existingYear = acc.find(d => d.date === year);
       if (existingYear) {
-        existingYear.supplyMW += parseFloat(item.supply_mw) || 0;
-        existingYear.takeupMW += parseFloat(item.takeup_mw) || 0;
+        existingYear.supplyMW += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
+        existingYear.takeupMW += parseFloat(item['TOTAL IT LOAD (MW)']) * 0.7 || 0; // Assuming 70% takeup
       } else {
         acc.push({
           date: year,
-          supplyMW: parseFloat(item.supply_mw) || 0,
-          takeupMW: parseFloat(item.takeup_mw) || 0,
+          supplyMW: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
+          takeupMW: parseFloat(item['TOTAL IT LOAD (MW)']) * 0.7 || 0,
         });
       }
       return acc;
@@ -46,11 +46,11 @@ const MarketAnalytics = ({ refreshTrigger }) => {
       if (item.OPERATOR) {
         const existingCompany = acc.find(d => d.name === item.OPERATOR);
         if (existingCompany) {
-          existingCompany.value += parseFloat(item.supply_mw) || 0;
+          existingCompany.value += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
         } else {
           acc.push({
             name: item.OPERATOR,
-            value: parseFloat(item.supply_mw) || 0,
+            value: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
           });
         }
       }
@@ -60,7 +60,7 @@ const MarketAnalytics = ({ refreshTrigger }) => {
     console.log('Processed market data:', marketDataProcessed);
     console.log('Processed company data:', companyDataProcessed);
 
-    setMarketData(marketDataProcessed.sort((a, b) => a.date - b.date));
+    setMarketData(marketDataProcessed);
     setCompanyData(companyDataProcessed.filter(item => item.value > 0));
   };
 
