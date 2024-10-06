@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const MarketAnalytics = ({ refreshTrigger }) => {
-  const [marketData, setMarketData] = useState([]);
-  const [companyData, setCompanyData] = useState([]);
+  const [operatorData, setOperatorData] = useState([]);
 
   const fetchData = async () => {
     const apiUrl = 'https://msqkuenfolzzjqtupste.supabase.co/rest/v1/johor_dc';
@@ -26,42 +25,26 @@ const MarketAnalytics = ({ refreshTrigger }) => {
   };
 
   const processData = (data) => {
-    const marketDataProcessed = data.reduce((acc, item) => {
-      const year = new Date().getFullYear(); // Use current year as placeholder
-      const existingYear = acc.find(d => d.date === year);
-      if (existingYear) {
-        existingYear.supplyMW += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
-        existingYear.takeupMW += parseFloat(item['TOTAL IT LOAD (MW)']) * 0.7 || 0; // Assuming 70% takeup
-      } else {
-        acc.push({
-          date: year,
-          supplyMW: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
-          takeupMW: parseFloat(item['TOTAL IT LOAD (MW)']) * 0.7 || 0,
-        });
-      }
-      return acc;
-    }, []);
-
-    const companyDataProcessed = data.reduce((acc, item) => {
-      if (item.OPERATOR) {
-        const existingCompany = acc.find(d => d.name === item.OPERATOR);
-        if (existingCompany) {
-          existingCompany.value += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
+    const processedData = data.reduce((acc, item) => {
+      if (item.OPERATOR && item['TOTAL IT LOAD (MW)']) {
+        const existingOperator = acc.find(d => d.operator === item.OPERATOR);
+        if (existingOperator) {
+          existingOperator.capacity += parseFloat(item['TOTAL IT LOAD (MW)']) || 0;
         } else {
           acc.push({
-            name: item.OPERATOR,
-            value: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
+            operator: item.OPERATOR,
+            capacity: parseFloat(item['TOTAL IT LOAD (MW)']) || 0,
           });
         }
       }
       return acc;
     }, []);
 
-    console.log('Processed market data:', marketDataProcessed);
-    console.log('Processed company data:', companyDataProcessed);
+    // Sort by capacity in descending order
+    processedData.sort((a, b) => b.capacity - a.capacity);
 
-    setMarketData(marketDataProcessed);
-    setCompanyData(companyDataProcessed.filter(item => item.value > 0));
+    console.log('Processed operator data:', processedData);
+    setOperatorData(processedData);
   };
 
   useEffect(() => {
@@ -69,65 +52,28 @@ const MarketAnalytics = ({ refreshTrigger }) => {
     fetchData();
   }, [refreshTrigger]);
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Supply and Take-up</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {marketData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={marketData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="supplyMW" stroke="#8884d8" name="Supply (MW)" />
-                <Line type="monotone" dataKey="takeupMW" stroke="#82ca9d" name="Take-up (MW)" />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <p>No market data available</p>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Market Share</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {companyData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={companyData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#8884d8"
-                  label
-                >
-                  {companyData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <p>No company data available</p>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Data Center Operators - Total Live Capacity (MW)</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {operatorData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={operatorData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="operator" type="category" width={150} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="capacity" fill="#8884d8" name="Total Live Capacity (MW)" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>No operator data available</p>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
