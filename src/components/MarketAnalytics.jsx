@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const MarketAnalytics = ({ onGenerateReport }) => {
+const MarketAnalytics = ({ refreshTrigger }) => {
   const [marketData, setMarketData] = useState([]);
   const [companyData, setCompanyData] = useState([]);
 
@@ -42,31 +42,29 @@ const MarketAnalytics = ({ onGenerateReport }) => {
     }, []);
 
     const companyDataProcessed = data.reduce((acc, item) => {
-      const existingCompany = acc.find(d => d.name === item.OPERATOR);
-      if (existingCompany) {
-        existingCompany.totalMW += parseFloat(item.supply_mw) || 0;
-      } else if (item.OPERATOR) {
-        acc.push({
-          name: item.OPERATOR,
-          totalMW: parseFloat(item.supply_mw) || 0,
-        });
+      if (item.OPERATOR) {
+        const existingCompany = acc.find(d => d.name === item.OPERATOR);
+        if (existingCompany) {
+          existingCompany.value += parseFloat(item.supply_mw) || 0;
+        } else {
+          acc.push({
+            name: item.OPERATOR,
+            value: parseFloat(item.supply_mw) || 0,
+          });
+        }
       }
       return acc;
     }, []);
 
-    setMarketData(marketDataProcessed);
-    setCompanyData(companyDataProcessed);
+    setMarketData(marketDataProcessed.sort((a, b) => a.date - b.date));
+    setCompanyData(companyDataProcessed.filter(item => item.value > 0));
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [refreshTrigger]);
 
-  useEffect(() => {
-    if (onGenerateReport) {
-      onGenerateReport(fetchData);
-    }
-  }, [onGenerateReport]);
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,7 +96,7 @@ const MarketAnalytics = ({ onGenerateReport }) => {
             <PieChart>
               <Pie
                 data={companyData}
-                dataKey="totalMW"
+                dataKey="value"
                 nameKey="name"
                 cx="50%"
                 cy="50%"
@@ -107,7 +105,7 @@ const MarketAnalytics = ({ onGenerateReport }) => {
                 label
               >
                 {companyData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={`#${Math.floor(Math.random()*16777215).toString(16)}`} />
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
