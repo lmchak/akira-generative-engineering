@@ -17,22 +17,19 @@ const KnowledgeManagement = () => {
   const [cleaningStatus, setCleaningStatus] = useState(null);
   const [labelingStatus, setLabelingStatus] = useState(null);
   const [featureEngineeringStatus, setFeatureEngineeringStatus] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
 
-  // Mock data for demonstration
-  const mockProjects = [
-    { id: 1, name: 'Data Center A', location: 'New York', coolingSystem: 'Liquid Cooling', efficiency: '95%' },
-    { id: 2, name: 'Server Farm B', location: 'Texas', coolingSystem: 'Air Cooling', efficiency: '88%' },
-    { id: 3, name: 'Cloud Center C', location: 'California', coolingSystem: 'Hybrid Cooling', efficiency: '92%' },
-  ];
-
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    const filteredResults = mockProjects.filter(project =>
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.coolingSystem.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setSearchResults(filteredResults);
+    setIsSearching(true);
+    try {
+      const response = await query({ "question": searchQuery });
+      setSearchResults(response.text ? [{ result: response.text }] : []);
+    } catch (error) {
+      console.error('Error searching knowledge repository:', error);
+      setSearchResults([{ result: 'An error occurred while searching. Please try again.' }]);
+    }
+    setIsSearching(false);
   };
 
   const handleFileChange = (e) => {
@@ -61,6 +58,7 @@ const KnowledgeManagement = () => {
   };
 
   const simulateProcessStep = (setStatus, duration) => {
+  const simulateProcessStep = (setStatus, duration) => {
     return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
@@ -74,7 +72,9 @@ const KnowledgeManagement = () => {
       }, duration / 10);
     });
   };
+  };
 
+  const handleDataIngestion = async () => {
   const handleDataIngestion = async () => {
     if (!file) {
       setIngestionStatus({ type: 'error', message: 'Please select a file to ingest.' });
@@ -109,7 +109,9 @@ const KnowledgeManagement = () => {
       setIngestionStatus({ type: 'error', message: 'An error occurred during data ingestion.' });
     }
   };
+  };
 
+  const renderStatusAlert = (status) => {
   const renderStatusAlert = (status) => {
     if (!status) return null;
     return (
@@ -121,6 +123,22 @@ const KnowledgeManagement = () => {
       </Alert>
     );
   };
+  };
+
+  async function query(data) {
+    const response = await fetch(
+      "http://127.0.0.1:3000/api/v1/prediction/77a1c598-a28e-4a9b-9a26-e4e31ecf3ab6",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }
+    );
+    const result = await response.json();
+    return result;
+  }
 
   return (
     <div className="space-y-6">
@@ -143,7 +161,9 @@ const KnowledgeManagement = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <Button type="submit">Search</Button>
+                <Button type="submit" disabled={isSearching}>
+                  {isSearching ? 'Searching...' : 'Search'}
+                </Button>
               </form>
             </CardContent>
           </Card>
@@ -154,26 +174,13 @@ const KnowledgeManagement = () => {
                 <CardTitle>Search Results</CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Project Name</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Cooling System</TableHead>
-                      <TableHead>Efficiency</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {searchResults.map((project) => (
-                      <TableRow key={project.id}>
-                        <TableCell>{project.name}</TableCell>
-                        <TableCell>{project.location}</TableCell>
-                        <TableCell>{project.coolingSystem}</TableCell>
-                        <TableCell>{project.efficiency}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                <div className="space-y-4">
+                  {searchResults.map((result, index) => (
+                    <div key={index} className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+                      <p>{result.result}</p>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           )}
