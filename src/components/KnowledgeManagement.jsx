@@ -27,7 +27,6 @@ const KnowledgeManagement = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // In a real application, this would query the backend
     const filteredResults = mockProjects.filter(project =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,6 +37,27 @@ const KnowledgeManagement = () => {
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+  };
+
+  const uploadFile = async (file) => {
+    let formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:3000/api/v1/vector/upsert/77a1c598-a28e-4a9b-9a26-e4e31ecf3ab6",
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+      const result = await response.json();
+      console.log("File upload result:", result);
+      return result;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
   };
 
   const simulateProcessStep = (setStatus, duration) => {
@@ -64,8 +84,12 @@ const KnowledgeManagement = () => {
     setIngestionStatus({ type: 'info', message: 'Starting data ingestion process...', progress: 0 });
 
     try {
-      // Simulating the ingestion process
-      await simulateProcessStep(setIngestionStatus, 3000);
+      // File upload
+      await uploadFile(file);
+      setIngestionStatus({ type: 'success', message: 'File uploaded successfully!', progress: 25 });
+
+      // Simulating the rest of the ingestion process
+      await simulateProcessStep(setIngestionStatus, 2000);
 
       // Data Cleaning
       setCleaningStatus({ type: 'info', message: 'Starting data cleaning...', progress: 0 });
@@ -73,11 +97,11 @@ const KnowledgeManagement = () => {
 
       // Knowledge Repository (Labeling)
       setLabelingStatus({ type: 'info', message: 'Labeling data...', progress: 0 });
-      await simulateProcessStep(setLabelingStatus, 2500);
+      await simulateProcessStep(setLabelingStatus, 2000);
 
       // Feature Engineering
       setFeatureEngineeringStatus({ type: 'info', message: 'Performing feature engineering...', progress: 0 });
-      await simulateProcessStep(setFeatureEngineeringStatus, 3000);
+      await simulateProcessStep(setFeatureEngineeringStatus, 2000);
 
       setIngestionStatus({ type: 'success', message: 'Data ingestion and processing completed successfully!', progress: 100 });
     } catch (error) {
