@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,7 +10,7 @@ import FacilityOperationsInputs from './FacilityOperationsInputs';
 import ITOperationsInputs from './ITOperationsInputs';
 import ConstraintsInputs from './ConstraintsInputs';
 
-const ConceptDesignForm = ({ onGenerateDesigns }) => {
+const ConceptDesignForm = ({ onGenerateDesigns, onSave, savedState }) => {
   const [designConstraints, setDesignConstraints] = useState({
     facilityOperations: {
       redundancyPower: false,
@@ -46,6 +46,13 @@ const ConceptDesignForm = ({ onGenerateDesigns }) => {
   const [aiResponse, setAiResponse] = useState(null);
   const { session } = useSupabaseAuth();
   const { data: profile } = useProfile(session?.user?.id);
+
+  useEffect(() => {
+    if (savedState) {
+      setDesignConstraints(savedState.designConstraints);
+      setAiResponse(savedState.aiResponse);
+    }
+  }, [savedState]);
 
   const handleInputChange = (category, field, value) => {
     setDesignConstraints(prev => ({
@@ -116,6 +123,10 @@ Please provide a detailed data center design that optimizes for energy efficienc
     onGenerateDesigns(designConstraints);
   };
 
+  const handleSave = () => {
+    onSave({ designConstraints, aiResponse });
+  };
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -131,7 +142,10 @@ Please provide a detailed data center design that optimizes for energy efficienc
           inputs={designConstraints.constraints}
           onChange={(field, value) => handleInputChange('constraints', field, value)}
         />
-        <Button type="submit">Generate Designs</Button>
+        <div className="flex space-x-4">
+          <Button type="submit">Generate Designs</Button>
+          <Button type="button" onClick={handleSave}>Save Design</Button>
+        </div>
       </form>
 
       {aiResponse && (

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import ConceptDesignChatInterface from '@/components/ConceptDesignChatInterface';
 import ConceptDesignForm from '@/components/ConceptDesignForm';
 import GeneratedDesigns from '@/components/GeneratedDesigns';
@@ -9,10 +10,16 @@ import CriticalPaths from '@/components/CriticalPaths';
 const ConceptDesign = () => {
   const [generatedDesigns, setGeneratedDesigns] = useState([]);
   const [criticalPaths, setCriticalPaths] = useState([]);
+  const [savedState, setSavedState] = useState(null);
+
+  useEffect(() => {
+    const loadedState = localStorage.getItem('conceptDesignState');
+    if (loadedState) {
+      setSavedState(JSON.parse(loadedState));
+    }
+  }, []);
 
   const handleGenerateDesigns = (designConstraints) => {
-    // This function can be expanded to process the AI-generated design
-    // and update the generatedDesigns and criticalPaths states
     console.log("Design constraints:", designConstraints);
     
     // For now, we'll just set some dummy data
@@ -26,6 +33,18 @@ const ConceptDesign = () => {
     ]);
   };
 
+  const handleSave = (state) => {
+    localStorage.setItem('conceptDesignState', JSON.stringify(state));
+    setSavedState(state);
+  };
+
+  const handleLoad = () => {
+    const loadedState = localStorage.getItem('conceptDesignState');
+    if (loadedState) {
+      setSavedState(JSON.parse(loadedState));
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Concept Design</h1>
@@ -37,7 +56,14 @@ const ConceptDesign = () => {
         </TabsList>
 
         <TabsContent value="design">
-          <ConceptDesignForm onGenerateDesigns={handleGenerateDesigns} />
+          <div className="mb-4">
+            <Button onClick={handleLoad}>Load Saved Design</Button>
+          </div>
+          <ConceptDesignForm 
+            onGenerateDesigns={handleGenerateDesigns} 
+            onSave={handleSave}
+            savedState={savedState}
+          />
           {generatedDesigns.length > 0 && <GeneratedDesigns designs={generatedDesigns} />}
           {criticalPaths.length > 0 && <CriticalPaths paths={criticalPaths} />}
         </TabsContent>
