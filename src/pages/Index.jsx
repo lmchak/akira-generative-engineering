@@ -24,7 +24,7 @@ const Index = () => {
             <span>GE</span>
           </span>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to <span>Generative Engineering</span><span className="js"></span></h1>
+        <h1 className="text-4xl sm:text-5xl font-railway font-bold mb-4 text-center">Welcome to <span>Akira</span><span className="js"></span></h1>
         <p className="text-xl sm:text-2xl mb-8 text-center">Quick and easy GenAI Engineering Framework</p>
         <div className="flex flex-col space-y-4 w-full max-w-md mb-6">
           <Button asChild size="lg" className="w-full bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700">

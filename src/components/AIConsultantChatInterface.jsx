@@ -60,7 +60,7 @@ const AIConsultantChatInterface = () => {
     const data = { question: userInput };
     try {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/prediction/fb77b02d-9e3c-42ed-8d16-cb772cfd8c26",
+        "http://127.0.0.1:3000/api/v1/prediction/2bf3ed1e-66f5-46c3-b44f-24abf9a4c08d",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

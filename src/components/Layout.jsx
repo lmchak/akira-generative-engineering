@@ -91,7 +91,7 @@ const Layout = () => {
         { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
         { icon: <Brain className="w-5 h-5" />, label: 'AI Consultant', path: '/ai-consultant' },
       ],
-    },
+    }, 
     { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
     { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
     { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
@@ -126,7 +126,7 @@ const Layout = () => {
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <Link to="/profile" className="text-3xl text-blue-600 dark:text-blue-400">
-            <span>Generative Engineering</span>
+            <img src="/akira.png" alt="Logo" className="h-8 mr-2" /> {/* Adjust the height and margin as needed */}
           </Link>
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

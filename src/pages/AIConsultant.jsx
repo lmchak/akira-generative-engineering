@@ -6,7 +6,7 @@ import AIConsultantChatInterface from '@/components/AIConsultantChatInterface';
 const AIConsultant = () => {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">AI Real Estate Consultant</h1>
+      <h1 className="text-3xl font-bold">AI Data Center Real Estate Consultant</h1>
       
       <Tabs defaultValue="chat">
         <TabsList>
@@ -16,7 +16,7 @@ const AIConsultant = () => {
         <TabsContent value="chat">
           <Card>
             <CardHeader>
-              <CardTitle>AI Real Estate Consultant</CardTitle>
+              <CardTitle>AI Data Center Real Estate Consultant</CardTitle>
             </CardHeader>
             <CardContent>
               <AIConsultantChatInterface />
