@@ -50,7 +50,7 @@ const ChatInterface = () => {
     const data = { question: userInput };
     try {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/v1/prediction/57d56bfe-28ab-408b-914d-1b25967b136f",
+        "http://127.0.0.1:3000/api/v1/prediction/a164fd14-4780-4f44-848f-b9bb314dff24",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
