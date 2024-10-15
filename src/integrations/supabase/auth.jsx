@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { supabase } from './supabase.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { Auth } from '@supabase/auth-ui-react';
@@ -58,15 +58,25 @@ export const SupabaseAuthProviderInner = ({ children }) => {
     }
   };
 
+  const value = {
+    session,
+    loading,
+    logout
+  };
+
   return (
-    <SupabaseAuthContext.Provider value={{ session, loading, logout }}>
+    <SupabaseAuthContext.Provider value={value}>
       {children}
     </SupabaseAuthContext.Provider>
   );
 };
 
 export const useSupabaseAuth = () => {
-  return useContext(SupabaseAuthContext);
+  const context = useContext(SupabaseAuthContext);
+  if (context === undefined) {
+    throw new Error('useSupabaseAuth must be used within a SupabaseAuthProvider');
+  }
+  return context;
 };
 
 export const SupabaseAuthUI = () => (
