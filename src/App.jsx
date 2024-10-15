@@ -34,6 +34,7 @@ import SiteSelector from "./components/SiteSelector"
 import News from "./components/News"
 import About from "./components/About"
 import AIConsultant from "./pages/AIConsultant"
+import DataCenterDesigner from "./components/data-center-designer"
 
 const queryClient = new QueryClient()
 
@@ -86,6 +87,7 @@ const App = () => (
                 <Route path="/news" element={<News />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/ai-consultant" element={<AIConsultant />} />
+                <Route path="/data-center-designer" element={<DataCenterDesigner />} />
               </Route>
             </Routes>
           </TooltipProvider>

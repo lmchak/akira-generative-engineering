@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { useSupabaseAuth } from '@/integrations/supabase';
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, ChevronDown, ChevronRight } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, PlusCircle, Sun, Moon, Menu, X, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, ChevronDown, ChevronRight, Cpu } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Footer from './Footer';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -78,6 +78,7 @@ const Layout = () => {
         { icon: <Cable className="w-5 h-5" />, label: 'MEP', path: '/mep' },
         { icon: <Construction className="w-5 h-5" />, label: 'Construction', path: '/construction' },
         { icon: <Component className="w-5 h-5" />, label: 'Commissioning', path: '/commissioning' },
+        { icon: <Cpu className="w-5 h-5" />, label: 'Data Center Designer', path: '/data-center-designer' },
       ],
     },
     {
