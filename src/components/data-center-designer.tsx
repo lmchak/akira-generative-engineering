@@ -18,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { ChevronDown, Share2, User, Settings, Send, Image as ImageIcon, Paperclip, File, Folder, Upload, X, Check, Copy, Download, FileSpreadsheet } from "lucide-react"
-import { Canvas, useThree, useFrame } from "@react-three/fiber"
+import { Canvas, useThree } from "@react-three/fiber"
 import { OrbitControls, Box, Plane, Environment, SoftShadows, Text, Html } from "@react-three/drei"
 import * as THREE from 'three'
 import { motion, AnimatePresence } from "framer-motion"
