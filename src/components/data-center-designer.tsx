@@ -60,6 +60,7 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
   const racksRef = useRef<THREE.Group>(null)
   const { camera } = useThree()
   const [isLoading, setIsLoading] = useState(false)
+  const [isGenerated, setIsGenerated] = useState(false)
 
   useEffect(() => {
     if (directionalLightRef.current) {
@@ -71,7 +72,7 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
   }, [])
 
   useEffect(() => {
-    if (racksRef.current && activeTab !== 'define') {
+    if (racksRef.current && (activeTab !== 'define' || isGenerated)) {
       const box = new THREE.Box3().setFromObject(racksRef.current)
       const center = box.getCenter(new THREE.Vector3())
       const size = box.getSize(new THREE.Vector3())
@@ -102,12 +103,13 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
 
       animateCamera()
     }
-  }, [camera, activeTab])
+  }, [camera, activeTab, isGenerated])
 
   const handleGenerate = () => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
+      setIsGenerated(true)
       onGenerateClick()
     }, 3000)
   }
@@ -122,7 +124,7 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
         intensity={0.8}
         castShadow
       />
-      {activeTab !== 'define' && (
+      {(activeTab !== 'define' || isGenerated) && (
         <group ref={racksRef}>
           <DataCenterRacks count={267} rowCount={26} selectedRack={selectedRack} setSelectedRack={setSelectedRack} />
         </group>
@@ -130,7 +132,7 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
       <DataCenterFloor />
       <Environment preset="sunset" background={false} />
       <SoftShadows size={10} samples={16} focus={0.5} />
-      {activeTab === 'define' && (
+      {activeTab === 'define' && !isGenerated && (
         <>
           <Text
             position={[0, 2, 0]}
