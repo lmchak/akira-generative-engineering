@@ -200,11 +200,13 @@ function DataCenterRacks({ count = 267, rowCount = 26, selectedRack, setSelected
   )
 }
 
+
 function DataCenterFloor() {
   return (
     <Plane args={[50, 50]} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
       <meshStandardMaterial color="#ffffff" />
     </Plane>
+  )
 }
 
 function InfoPanel({ rackId }) {
@@ -215,7 +217,9 @@ function InfoPanel({ rackId }) {
       <p className="text-sm">Power Usage: 4500W</p>
       <p className="text-sm">Temperature: 24°C</p>
     </div>
+  )
 }
+
 
 function LoadingOverlay() {
   return (
