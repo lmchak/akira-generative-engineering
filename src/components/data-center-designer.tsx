@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -161,7 +160,7 @@ function Scene({ activeTab, selectedRack, setSelectedRack, onGenerateClick }) {
   )
 }
 
-function ServerRack({ position, id, isSelected, onClick }: { position: [number, number, number], id: number, isSelected: boolean, onClick: () => void }) {
+function ServerRack({ position, id, isSelected, onClick }) {
   const rackRef = useRef<THREE.Mesh>(null)
 
   return (
@@ -206,7 +205,6 @@ function DataCenterFloor() {
     <Plane args={[50, 50]} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
       <meshStandardMaterial color="#ffffff" />
     </Plane>
-  )
 }
 
 function InfoPanel({ rackId }) {
@@ -217,7 +215,6 @@ function InfoPanel({ rackId }) {
       <p className="text-sm">Power Usage: 4500W</p>
       <p className="text-sm">Temperature: 24°C</p>
     </div>
-  )
 }
 
 function LoadingOverlay() {
@@ -350,8 +347,7 @@ function PromptInterface({ onSendClick }) {
 
 function AIAgents() {
   return (
-    
-    <div  className="space-y-3">
+    <div className="space-y-3">
       <div className="p-3 bg-gray-100 rounded-lg">
         <h4 className="font-semibold mb-1 text-sm">Agent 1: Data Center Optimizer</h4>
         <p className="text-xs">Specializes in optimizing data center layouts and resource allocation.</p>
@@ -451,7 +447,6 @@ function ShareModal({ isOpen, onClose, projectState }) {
 
   const generateShareLink = () => {
     try {
-      // In a real application, this would be an API call to generate a unique link
       const encodedState = btoa(JSON.stringify(projectState))
       const link = `https://datacenter-designer.com/share/${encodedState}`
       setShareLink(link)
@@ -637,7 +632,7 @@ The data center will utilize a chilled water system feeding CRAHs or fan walls w
     <div className="flex flex-col h-screen bg-gray-100" style={{ fontFamily: 'Archivo, sans-serif' }}>
       <div className="w-full h-10 bg-gray-200 flex items-center justify-between px-3">
         <div className="flex items-center">
-          <Image
+          <img
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Akira%20Icon-7cokXbzRL4gmCYgYjHGclV4vW5xPW6.png"
             alt="Akira Logo"
             width={20}
