@@ -39,11 +39,10 @@ import DataCenterDesigner from "./components/data-center-designer"
 const queryClient = new QueryClient()
 
 const ProtectedRoute = ({ children }) => {
-  const auth = useSupabaseAuth();
-  if (auth === undefined) {
+  const { session } = useSupabaseAuth();
+  if (session === undefined) {
     return null; // or a loading spinner
   }
-  const { session } = auth;
   if (!session) {
     return <Navigate to="/login" replace />;
   }
@@ -51,50 +50,52 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <Router>
-      <SupabaseAuthProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>
-            <Toaster />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/subscription" element={<Subscription />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/generative-engineering" element={<GenerativeEngineering />} />
-                <Route path="/design" element={<Design />} />
-                <Route path="/mep" element={<Mep />} />
-                <Route path="/construction" element={<Construction />} />
-                <Route path="/commissioning" element={<Commissioning />} />
-                <Route path="/concept-design" element={<ConceptDesign />} />
-                <Route path="/knowledge-management" element={<KnowledgeManagement />} />
-                <Route path="/facility-management" element={<FacilityManagement />} />
-                <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
-                <Route path="/project-management" element={<ProjectManagement />} />
-                <Route path="/map" element={<Map />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/insights" element={<Insights />} />
-                <Route path="/site-selector" element={<SiteSelector />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/ai-consultant" element={<AIConsultant />} />
-                <Route path="/data-center-designer" element={<DataCenterDesigner />} />
-              </Route>
-            </Routes>
-          </TooltipProvider>
-        </ThemeProvider>
-      </SupabaseAuthProvider>
-    </Router>
-  </QueryClientProvider>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <SupabaseAuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <TooltipProvider>
+              <Toaster />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/subscription" element={<Subscription />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/generative-engineering" element={<GenerativeEngineering />} />
+                  <Route path="/design" element={<Design />} />
+                  <Route path="/mep" element={<Mep />} />
+                  <Route path="/construction" element={<Construction />} />
+                  <Route path="/commissioning" element={<Commissioning />} />
+                  <Route path="/concept-design" element={<ConceptDesign />} />
+                  <Route path="/knowledge-management" element={<KnowledgeManagement />} />
+                  <Route path="/facility-management" element={<FacilityManagement />} />
+                  <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
+                  <Route path="/project-management" element={<ProjectManagement />} />
+                  <Route path="/map" element={<Map />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/insights" element={<Insights />} />
+                  <Route path="/site-selector" element={<SiteSelector />} />
+                  <Route path="/news" element={<News />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/ai-consultant" element={<AIConsultant />} />
+                  <Route path="/data-center-designer" element={<DataCenterDesigner />} />
+                </Route>
+              </Routes>
+            </TooltipProvider>
+          </ThemeProvider>
+        </SupabaseAuthProvider>
+      </Router>
+    </QueryClientProvider>
+  </React.StrictMode>
 )
 
 export default App
