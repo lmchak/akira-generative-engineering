@@ -30,6 +30,9 @@ const LoginForm = () => {
 
   const handleGoogleLogin = async () => {
     try {
+      // First check if Google auth is configured
+      const { data: { providers } } = await supabase.auth.getSession()
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -40,9 +43,15 @@ const LoginForm = () => {
           redirectTo: `${window.location.origin}/profile`
         }
       })
+      
+      if (error?.message?.includes('not enabled')) {
+        toast.error('Google authentication is not configured. Please contact support.')
+        return
+      }
+      
       if (error) throw error
     } catch (error) {
-      toast.error(error.message)
+      toast.error('Failed to initialize Google login. Please try again later.')
     }
   }
 
