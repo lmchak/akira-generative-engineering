@@ -1,11 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Toaster } from "@/components/ui/sonner"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { SupabaseAuthProvider, useSupabaseAuth } from '@/integrations/supabase'
-import { ThemeProvider } from 'next-themes'
-import Layout from './components/Layout'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SupabaseAuthProvider, useSupabaseAuth } from '@/integrations/supabase';
+import { ThemeProvider } from 'next-themes';
+import RoleProtectedRoute from './components/RoleProtectedRoute';
+import Layout from './components/Layout';
+
 import Index from './pages/Index'
 import Register from './pages/Register'
 import Login from './pages/Login'
@@ -36,12 +38,12 @@ import About from "./components/About"
 import AIConsultant from "./pages/AIConsultant"
 import DataCenterDesigner from "./components/data-center-designer"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }) => {
   const { session } = useSupabaseAuth();
   if (session === undefined) {
-    return null; // or a loading spinner
+    return null;
   }
   if (!session) {
     return <Navigate to="/login" replace />;
@@ -70,19 +72,34 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/chat" element={<Chat />} />
+                  {/* Admin-only routes */}
+                  <Route path="/analytics" element={
+                    <RoleProtectedRoute requiredRole="admin">
+                      <Analytics />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/insights" element={
+                    <RoleProtectedRoute requiredRole="admin">
+                      <Insights />
+                    </RoleProtectedRoute>
+                  } />
+                  {/* Moderator and admin routes */}
+                  <Route path="/knowledge-management" element={
+                    <RoleProtectedRoute requiredRole="moderator">
+                      <KnowledgeManagement />
+                    </RoleProtectedRoute>
+                  } />
+                  {/* Regular user routes */}
                   <Route path="/generative-engineering" element={<GenerativeEngineering />} />
                   <Route path="/design" element={<Design />} />
                   <Route path="/mep" element={<Mep />} />
                   <Route path="/construction" element={<Construction />} />
                   <Route path="/commissioning" element={<Commissioning />} />
                   <Route path="/concept-design" element={<ConceptDesign />} />
-                  <Route path="/knowledge-management" element={<KnowledgeManagement />} />
                   <Route path="/facility-management" element={<FacilityManagement />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/insights" element={<Insights />} />
                   <Route path="/site-selector" element={<SiteSelector />} />
                   <Route path="/news" element={<News />} />
                   <Route path="/about" element={<About />} />
@@ -96,6 +113,6 @@ const App = () => (
       </Router>
     </QueryClientProvider>
   </React.StrictMode>
-)
+);
 
-export default App
+export default App;

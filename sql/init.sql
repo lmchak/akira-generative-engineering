@@ -1,4 +1,3 @@
-
 -- Create the profiles table in the public schema
 CREATE TABLE public.profiles (
     id UUID REFERENCES auth.users ON DELETE CASCADE,
@@ -95,73 +94,37 @@ $$
 REVOKE ALL ON FUNCTION update_profile(UUID, TEXT, TEXT, TEXT) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION update_profile(UUID, TEXT, TEXT, TEXT) TO authenticated;
 
--- Add an index on the email column for faster lookups
-CREATE INDEX idx_profiles_email ON public.profiles(email);
+-- Add role column to profiles table
+ALTER TABLE public.profiles 
+ADD COLUMN role TEXT DEFAULT 'user' 
+CHECK (role IN ('user', 'admin', 'moderator'));
 
--- Create a view for public profile information
-CREATE VIEW public.public_profiles AS
-SELECT id, first_name, last_name, avatar_url
-FROM public.profiles;
+-- Create policy for role-based access
+CREATE POLICY "Users can only view profiles based on role"
+ON public.profiles
+FOR SELECT
+USING (
+  CASE 
+    WHEN auth.jwt()->>'role' = 'admin' THEN true
+    WHEN auth.jwt()->>'role' = 'moderator' THEN true
+    ELSE id = auth.uid()
+  END
+);
 
--- Grant SELECT permission on the public_profiles view to the 'anon' role
-GRANT SELECT ON public.public_profiles TO anon;
-
--- Create a function to get the current user's profile
-CREATE OR REPLACE FUNCTION get_my_profile()
-RETURNS public.profiles AS $$
-  SELECT *
-  FROM public.profiles
-  WHERE id = auth.uid()
-$$
- LANGUAGE sql SECURITY DEFINER;
-
--- Secure the get_my_profile function
-REVOKE ALL ON FUNCTION get_my_profile() FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION get_my_profile() TO authenticated;
-
--- Enable Row Level Security
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-
--- Drop existing policies if they exist
-DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
-DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
-
--- Create policies
-CREATE POLICY "Users can view their own profile" ON profiles
-  FOR SELECT USING (auth.uid() = id);
-
-CREATE POLICY "Users can update their own profile" ON profiles
-  FOR UPDATE USING (auth.uid() = id);
-
--- Drop existing view if it exists
-DROP VIEW IF EXISTS public_profiles;
-
--- Create public_profiles view
-CREATE VIEW public_profiles AS
-  SELECT id, first_name, last_name, avatar_url
-  FROM profiles;
-
--- Drop existing function if it exists
-DROP FUNCTION IF EXISTS update_profile;
-
--- Create or replace function to update profile
-CREATE OR REPLACE FUNCTION update_profile(
-  user_id UUID,
-  new_first_name TEXT,
-  new_last_name TEXT,
-  new_avatar_url TEXT,
-  new_email TEXT
+-- Create function to update user role (admin only)
+CREATE OR REPLACE FUNCTION update_user_role(
+  target_user_id UUID,
+  new_role TEXT
 )
 RETURNS VOID AS $$
 BEGIN
-  UPDATE profiles
-  SET
-    first_name = COALESCE(new_first_name, first_name),
-    last_name = COALESCE(new_last_name, last_name),
-    avatar_url = COALESCE(new_avatar_url, avatar_url),
-    email = COALESCE(new_email, email),
-    updated_at = NOW()
-  WHERE id = user_id;
+  IF (SELECT role FROM public.profiles WHERE id = auth.uid()) = 'admin' THEN
+    UPDATE public.profiles
+    SET role = new_role
+    WHERE id = target_user_id;
+  ELSE
+    RAISE EXCEPTION 'Only admins can update roles';
+  END IF;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
