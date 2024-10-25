@@ -28,11 +28,15 @@ const LoginForm = () => {
     }
   }
 
-  const handleOAuthLogin = async (provider) => {
+  const handleGoogleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
         options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
           redirectTo: `${window.location.origin}/profile`
         }
       })
@@ -40,6 +44,10 @@ const LoginForm = () => {
     } catch (error) {
       toast.error(error.message)
     }
+  }
+
+  const handleAppleLogin = async () => {
+    toast.error('Apple sign-in is not yet configured')
   }
 
   return (
@@ -83,7 +91,7 @@ const LoginForm = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handleOAuthLogin('google')}
+          onClick={handleGoogleLogin}
           className="w-full bg-transparent border-gray-600 text-white hover:bg-gray-700"
         >
           <FcGoogle className="mr-2 h-4 w-4" />
@@ -92,7 +100,7 @@ const LoginForm = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handleOAuthLogin('apple')}
+          onClick={handleAppleLogin}
           className="w-full bg-transparent border-gray-600 text-white hover:bg-gray-700"
         >
           <FaApple className="mr-2 h-4 w-4" />
