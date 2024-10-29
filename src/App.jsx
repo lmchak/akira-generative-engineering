@@ -115,7 +115,9 @@ const App = () => (
                   <Route path="/facility-management/compliance" element={<ComplianceManagement />} />
                   <Route path="/facility-management/disaster-recovery" element={<DisasterRecovery />} />
                   <Route path="/facility-management/service" element={<ServiceManagement />} />
-                  <Route path="/sustainability" element={<SustainabilityManagement />} />
+                  <Route path="/sustainability/metrics" element={<SustainabilityManagement />} />
+                  <Route path="/sustainability/certifications" element={<SustainabilityManagement />} />
+                  <Route path="/sustainability/practices" element={<SustainabilityManagement />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />
