@@ -26,7 +26,10 @@ import Construction from './pages/Construction'
 import Commissioning from './pages/Commissioning'
 import ConceptDesign from './pages/ConceptDesign'
 import KnowledgeManagement from './pages/KnowledgeManagement'
-import FacilityManagement from './pages/FacilityManagement'
+import FacilityManagement from './pages/FacilityManagement';
+import AssetManagement from './components/facility/AssetManagement';
+import CapacityManagement from './components/facility/CapacityManagement';
+import EnergyManagement from './components/facility/EnergyManagement';
 import OmniChannelCollaboration from './components/OmniChannelCollaboration'
 import ProjectManagement from './components/ProjectManagement'
 import Map from './components/Map'
@@ -97,6 +100,9 @@ const App = () => (
                   <Route path="/commissioning" element={<Commissioning />} />
                   <Route path="/concept-design" element={<ConceptDesign />} />
                   <Route path="/facility-management" element={<FacilityManagement />} />
+                  <Route path="/facility-management/assets" element={<AssetManagement />} />
+                  <Route path="/facility-management/capacity" element={<CapacityManagement />} />
+                  <Route path="/facility-management/energy" element={<EnergyManagement />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />
