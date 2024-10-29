@@ -83,7 +83,6 @@ const App = () => (
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/chat" element={<Chat />} />
-                  {/* Admin-only routes */}
                   <Route path="/analytics" element={
                     <RoleProtectedRoute requiredRole="admin">
                       <Analytics />
@@ -94,13 +93,11 @@ const App = () => (
                       <Insights />
                     </RoleProtectedRoute>
                   } />
-                  {/* Moderator and admin routes */}
                   <Route path="/knowledge-management" element={
                     <RoleProtectedRoute requiredRole="moderator">
                       <KnowledgeManagement />
                     </RoleProtectedRoute>
                   } />
-                  {/* Regular user routes */}
                   <Route path="/generative-engineering" element={<GenerativeEngineering />} />
                   <Route path="/design" element={<Design />} />
                   <Route path="/mep" element={<Mep />} />
@@ -118,7 +115,7 @@ const App = () => (
                   <Route path="/facility-management/compliance" element={<ComplianceManagement />} />
                   <Route path="/facility-management/disaster-recovery" element={<DisasterRecovery />} />
                   <Route path="/facility-management/service" element={<ServiceManagement />} />
-                  <Route path="/facility-management/sustainability" element={<SustainabilityManagement />} />
+                  <Route path="/sustainability" element={<SustainabilityManagement />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />
