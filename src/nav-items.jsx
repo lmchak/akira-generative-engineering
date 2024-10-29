@@ -1,4 +1,4 @@
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge } from 'lucide-react';
 
 const navItems = [
   { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
@@ -26,8 +26,16 @@ const navItems = [
       { icon: <NewspaperIcon className="w-5 h-5" />, label: 'News', path: '/news' },
       { icon: <Brain className="w-5 h-5" />, label: 'AI Consultant', path: '/ai-consultant' },
     ],
-  }, 
-  { icon: <Activity className="w-5 h-5" />, label: 'Facility Management', path: '/facility-management' },
+  },
+  {
+    icon: <Activity className="w-5 h-5" />,
+    label: 'Facility Management',
+    children: [
+      { icon: <Box className="w-5 h-5" />, label: 'Asset Management', path: '/facility-management/assets' },
+      { icon: <Gauge className="w-5 h-5" />, label: 'Capacity Management', path: '/facility-management/capacity' },
+      { icon: <Battery className="w-5 h-5" />, label: 'Energy Management', path: '/facility-management/energy' },
+    ],
+  },
   { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
   { icon: <BookOpen className="w-5 h-5" />, label: 'Knowledge Management', path: '/knowledge-management' },
   { icon: <MessageCircle className="w-5 h-5" />, label: 'Chat', path: '/chat' },
