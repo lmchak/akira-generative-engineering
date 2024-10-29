@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import EnergyChart from './energy/EnergyChart';
 
 const EnergyManagement = () => {
   const energyData = [
@@ -14,7 +14,7 @@ const EnergyManagement = () => {
   ];
 
   const pue = 1.2;
-  const puePercentage = ((pue - 1) / 0.5) * 100; // Assuming 1.5 is the maximum acceptable PUE
+  const puePercentage = ((pue - 1) / 0.5) * 100;
 
   return (
     <Card>
@@ -30,18 +30,7 @@ const EnergyManagement = () => {
             </div>
             <Progress value={puePercentage} className="h-2" />
           </div>
-
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={energyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="consumption" stroke="#82ca9d" fill="#82ca9d" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <EnergyChart data={energyData} />
         </div>
       </CardContent>
     </Card>
