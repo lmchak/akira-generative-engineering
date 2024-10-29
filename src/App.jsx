@@ -43,6 +43,8 @@ import SustainablePractices from "./components/facility/sustainability/Sustainab
 import SustainabilityDashboard from "./components/facility/sustainability/SustainabilityDashboard";
 import InitiativesManagement from "./components/facility/sustainability/InitiativesManagement";
 import ContinuousImprovement from "./components/facility/sustainability/ContinuousImprovement";
+import SustainabilityReports from "./components/facility/sustainability/SustainabilityReports";
+import SustainabilityCompliance from "./components/facility/sustainability/SustainabilityCompliance";
 import OmniChannelCollaboration from './components/OmniChannelCollaboration'
 import ProjectManagement from './components/ProjectManagement'
 import Map from './components/Map'
@@ -126,6 +128,8 @@ const App = () => (
                   <Route path="/sustainability/dashboard" element={<SustainabilityDashboard />} />
                   <Route path="/sustainability/initiatives" element={<InitiativesManagement />} />
                   <Route path="/sustainability/improvement" element={<ContinuousImprovement />} />
+                  <Route path="/sustainability/compliance" element={<SustainabilityCompliance />} />
+                  <Route path="/sustainability/reports" element={<SustainabilityReports />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />

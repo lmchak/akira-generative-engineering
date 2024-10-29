@@ -1,4 +1,4 @@
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge, Thermometer, Shield, Wrench, AlertTriangle, CheckSquare, HardDrive, FileCheck, Leaf, LineChart, Award, Recycle } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge, Thermometer, Shield, Wrench, AlertTriangle, CheckSquare, HardDrive, FileCheck, Leaf, LineChart, Award, Recycle, BarChart2, ClipboardCheck, FileText, Target, TrendingUp } from 'lucide-react';
 
 const navItems = [
   { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
@@ -50,9 +50,11 @@ const navItems = [
       { icon: <LineChart className="w-5 h-5" />, label: 'Metrics & Analytics', path: '/sustainability/metrics' },
       { icon: <Award className="w-5 h-5" />, label: 'Certifications', path: '/sustainability/certifications' },
       { icon: <Recycle className="w-5 h-5" />, label: 'Sustainable Practices', path: '/sustainability/practices' },
-      { icon: <BarChart className="w-5 h-5" />, label: 'Dashboard', path: '/sustainability/dashboard' },
+      { icon: <BarChart2 className="w-5 h-5" />, label: 'Dashboard', path: '/sustainability/dashboard' },
       { icon: <Target className="w-5 h-5" />, label: 'Initiatives', path: '/sustainability/initiatives' },
       { icon: <TrendingUp className="w-5 h-5" />, label: 'Continuous Improvement', path: '/sustainability/improvement' },
+      { icon: <ClipboardCheck className="w-5 h-5" />, label: 'Compliance Management', path: '/sustainability/compliance' },
+      { icon: <FileText className="w-5 h-5" />, label: 'Reports', path: '/sustainability/reports' }
     ],
   },
   { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
