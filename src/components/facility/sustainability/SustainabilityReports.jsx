@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, FileSpreadsheet, FilePdf } from 'lucide-react';
+import { FileText, Download, FileSpreadsheet } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const SustainabilityReports = () => {
@@ -21,7 +21,7 @@ const SustainabilityReports = () => {
         <h1 className="text-2xl font-bold">Sustainability Reports</h1>
         <div className="space-x-2">
           <Button onClick={() => handleExport('pdf')} variant="outline" size="sm">
-            <FilePdf className="mr-2 h-4 w-4" />
+            <FileText className="mr-2 h-4 w-4" />
             Export PDF
           </Button>
           <Button onClick={() => handleExport('csv')} variant="outline" size="sm">

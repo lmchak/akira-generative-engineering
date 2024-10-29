@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Download, FileSpreadsheet, FilePdf } from 'lucide-react';
+import { Download, FileSpreadsheet, FileText } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const SustainabilityDashboard = () => {
@@ -22,7 +22,7 @@ const SustainabilityDashboard = () => {
         <h1 className="text-2xl font-bold">Sustainability Dashboard</h1>
         <div className="space-x-2">
           <Button onClick={() => handleExport('pdf')} variant="outline" size="sm">
-            <FilePdf className="mr-2 h-4 w-4" />
+            <FileText className="mr-2 h-4 w-4" />
             Export PDF
           </Button>
           <Button onClick={() => handleExport('csv')} variant="outline" size="sm">
