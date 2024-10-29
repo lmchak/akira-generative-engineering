@@ -1,4 +1,4 @@
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge, Thermometer, Shield, Wrench, AlertTriangle, CheckSquare, HardDrive, FileCheck } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge, Thermometer, Shield, Wrench, AlertTriangle, CheckSquare, HardDrive, FileCheck, Leaf } from 'lucide-react';
 
 const navItems = [
   { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
@@ -41,6 +41,7 @@ const navItems = [
       { icon: <CheckSquare className="w-5 h-5" />, label: 'Compliance Management', path: '/facility-management/compliance' },
       { icon: <HardDrive className="w-5 h-5" />, label: 'Disaster Recovery', path: '/facility-management/disaster-recovery' },
       { icon: <FileCheck className="w-5 h-5" />, label: 'Service Management', path: '/facility-management/service' },
+      { icon: <Leaf className="w-5 h-5" />, label: 'Sustainability', path: '/facility-management/sustainability' },
     ],
   },
   { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },

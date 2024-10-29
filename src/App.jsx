@@ -37,6 +37,7 @@ import IncidentManagement from './components/facility/incident/IncidentManagemen
 import ComplianceManagement from './components/facility/compliance/ComplianceManagement';
 import DisasterRecovery from './components/facility/disaster/DisasterRecovery';
 import ServiceManagement from './components/facility/service/ServiceManagement';
+import SustainabilityManagement from './components/facility/sustainability/SustainabilityManagement';
 import OmniChannelCollaboration from './components/OmniChannelCollaboration'
 import ProjectManagement from './components/ProjectManagement'
 import Map from './components/Map'
@@ -117,6 +118,7 @@ const App = () => (
                   <Route path="/facility-management/compliance" element={<ComplianceManagement />} />
                   <Route path="/facility-management/disaster-recovery" element={<DisasterRecovery />} />
                   <Route path="/facility-management/service" element={<ServiceManagement />} />
+                  <Route path="/facility-management/sustainability" element={<SustainabilityManagement />} />
                   <Route path="/omni-channel-collaboration" element={<OmniChannelCollaboration />} />
                   <Route path="/project-management" element={<ProjectManagement />} />
                   <Route path="/map" element={<Map />} />
