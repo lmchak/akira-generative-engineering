@@ -1,4 +1,4 @@
-import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge } from 'lucide-react';
+import { Bot, Component, Cable, Brain, Brush, Building, Construction, Home, Search, CreditCard, HelpCircle, Settings, MessageCircle, BookOpen, Activity, Users, Briefcase, MapIcon, TrendingUpIcon, MessageSquareIcon, UserIcon, BarChartIcon, CompassIcon, NewspaperIcon, InfoIcon, Cpu, Box, Battery, Gauge, Thermometer, Shield, Wrench, AlertTriangle } from 'lucide-react';
 
 const navItems = [
   { icon: <Home className="w-5 h-5" />, label: 'Home', path: '/profile' },
@@ -34,6 +34,10 @@ const navItems = [
       { icon: <Box className="w-5 h-5" />, label: 'Asset Management', path: '/facility-management/assets' },
       { icon: <Gauge className="w-5 h-5" />, label: 'Capacity Management', path: '/facility-management/capacity' },
       { icon: <Battery className="w-5 h-5" />, label: 'Energy Management', path: '/facility-management/energy' },
+      { icon: <Thermometer className="w-5 h-5" />, label: 'Environmental Monitoring', path: '/facility-management/environmental' },
+      { icon: <Shield className="w-5 h-5" />, label: 'Security Management', path: '/facility-management/security' },
+      { icon: <Wrench className="w-5 h-5" />, label: 'Maintenance Management', path: '/facility-management/maintenance' },
+      { icon: <AlertTriangle className="w-5 h-5" />, label: 'Incident Management', path: '/facility-management/incident' },
     ],
   },
   { icon: <Users className="w-5 h-5" />, label: 'Omni Channel Collaboration', path: '/omni-channel-collaboration' },
