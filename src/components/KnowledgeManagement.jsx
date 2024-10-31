@@ -3,14 +3,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import KnowledgeBaseHeader from './knowledge/KnowledgeBaseHeader';
 import KnowledgeBaseList from './knowledge/KnowledgeBaseList';
+import CreateKnowledgeBaseDialog from './knowledge/CreateKnowledgeBaseDialog';
 import { toast } from "sonner";
 
 const KnowledgeManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [knowledgeBases, setKnowledgeBases] = useState([]);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const handleCreateNew = () => {
-    toast.info("Create knowledge base functionality coming soon");
+    setIsCreateDialogOpen(true);
   };
 
   const handleEdit = (knowledgeBase) => {
@@ -52,6 +54,11 @@ const KnowledgeManagement = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <CreateKnowledgeBaseDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+      />
     </div>
   );
 };
