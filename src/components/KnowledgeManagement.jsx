@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import KnowledgeBaseHeader from './knowledge/KnowledgeBaseHeader';
 import KnowledgeBaseList from './knowledge/KnowledgeBaseList';
 import CreateKnowledgeBaseDialog from './knowledge/CreateKnowledgeBaseDialog';
+import DocumentChat from './knowledge/DocumentChat';
 import { toast } from "sonner";
 
 const KnowledgeManagement = () => {
@@ -78,8 +79,8 @@ const KnowledgeManagement = () => {
 
         <TabsContent value="chat">
           <Card>
-            <CardContent>
-              Chat with your document feature coming soon...
+            <CardContent className="pt-6">
+              <DocumentChat />
             </CardContent>
           </Card>
         </TabsContent>
