@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Edit, Search, Trash, FileText } from 'lucide-react';
 import { Input } from "@/components/ui/input";
+import DeleteKnowledgeBaseDialog from './DeleteKnowledgeBaseDialog';
 
 const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSearchChange }) => {
   const navigate = useNavigate();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedKnowledgeBase, setSelectedKnowledgeBase] = useState(null);
 
   const handleNameClick = (id) => {
     navigate(`/knowledge-base/${id}`);
+  };
+
+  const handleDeleteClick = (kb) => {
+    setSelectedKnowledgeBase(kb);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedKnowledgeBase) {
+      onDelete(selectedKnowledgeBase.id);
+    }
   };
 
   return (
@@ -72,7 +86,11 @@ const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSe
                     <Button variant="ghost" size="icon" onClick={() => handleNameClick(kb.id)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => onDelete(kb.id)}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={() => handleDeleteClick(kb)}
+                    >
                       <Trash className="h-4 w-4" />
                     </Button>
                   </div>
@@ -82,6 +100,13 @@ const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSe
           )}
         </TableBody>
       </Table>
+
+      <DeleteKnowledgeBaseDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleConfirmDelete}
+        knowledgeBaseName={selectedKnowledgeBase?.name}
+      />
     </div>
   );
 };
