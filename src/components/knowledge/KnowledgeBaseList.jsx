@@ -3,8 +3,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Edit, Search, Trash, FileText } from 'lucide-react';
 import { Input } from "@/components/ui/input";
+import { useNavigate } from 'react-router-dom';
 
 const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSearchChange }) => {
+  const navigate = useNavigate();
+
+  const handleNameClick = (id) => {
+    navigate(`/knowledge-management/${id}`);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
@@ -43,7 +50,15 @@ const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSe
           ) : (
             knowledgeBases.map((kb) => (
               <TableRow key={kb.id}>
-                <TableCell>{kb.name}</TableCell>
+                <TableCell>
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto font-normal"
+                    onClick={() => handleNameClick(kb.id)}
+                  >
+                    {kb.name}
+                  </Button>
+                </TableCell>
                 <TableCell>{kb.status}</TableCell>
                 <TableCell>{kb.description}</TableCell>
                 <TableCell>
