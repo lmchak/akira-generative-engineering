@@ -26,8 +26,8 @@ import Construction from './pages/Construction'
 import Commissioning from './pages/Commissioning'
 import ConceptDesign from './pages/ConceptDesign'
 import KnowledgeManagement from './pages/KnowledgeManagement'
-import FacilityManagement from './pages/FacilityManagement';
-import KnowledgeBaseDetails from './components/knowledge/KnowledgeBaseDetails';
+import FacilityManagement from './pages/FacilityManagement'
+import KnowledgeBaseDetails from './components/knowledge/KnowledgeBaseDetails'
 
 const queryClient = new QueryClient();
 
@@ -64,18 +64,14 @@ const App = () => (
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/chat" element={<Chat />} />
                   <Route path="/knowledge-management" element={<KnowledgeManagement />} />
-                  <Route path="/knowledge-management/:id" element={
-                    <RoleProtectedRoute requiredRole="moderator">
-                      <KnowledgeBaseDetails />
-                    </RoleProtectedRoute>
-                  } />
+                  <Route path="/knowledge-management/:id" element={<KnowledgeBaseDetails />} />
                   <Route path="/generative-engineering" element={<GenerativeEngineering />} />
                   <Route path="/design" element={<Design />} />
                   <Route path="/mep" element={<Mep />} />
                   <Route path="/construction" element={<Construction />} />
                   <Route path="/commissioning" element={<Commissioning />} />
                   <Route path="/concept-design" element={<ConceptDesign />} />
-                  <Route path="/facility-management" element={<FacilityManagement />} />
+                  <Route path="/facility-management/*" element={<FacilityManagement />} />
                 </Route>
               </Routes>
             </TooltipProvider>
