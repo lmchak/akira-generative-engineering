@@ -8,8 +8,38 @@ import { toast } from "sonner";
 
 const KnowledgeManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [knowledgeBases, setKnowledgeBases] = useState([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  
+  // Sample knowledge base data
+  const [knowledgeBases] = useState([
+    {
+      id: 1,
+      name: "Data Center Documentation",
+      status: "Active",
+      description: "Complete documentation for data center operations and procedures",
+      sourceFiles: "25 files",
+      creationTime: "2024-02-15T10:30:00",
+      lastSync: "2024-03-10T15:45:00"
+    },
+    {
+      id: 2,
+      name: "Technical Specifications",
+      status: "Processing",
+      description: "Hardware and software specifications for all equipment",
+      sourceFiles: "12 files",
+      creationTime: "2024-02-20T09:15:00",
+      lastSync: "2024-03-09T14:20:00"
+    },
+    {
+      id: 3,
+      name: "Maintenance Procedures",
+      status: "Active",
+      description: "Standard operating procedures for maintenance tasks",
+      sourceFiles: "18 files",
+      creationTime: "2024-02-25T11:45:00",
+      lastSync: "2024-03-10T16:30:00"
+    }
+  ]);
 
   const handleCreateNew = () => {
     setIsCreateDialogOpen(true);
