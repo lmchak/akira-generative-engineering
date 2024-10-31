@@ -54,7 +54,8 @@ import SiteSelector from "./components/SiteSelector"
 import News from "./components/News"
 import About from "./components/About"
 import AIConsultant from "./pages/AIConsultant"
-import DataCenterDesigner from "./components/data-center-designer"
+import DataCenterDesigner from "./components/data-center-designer";
+import KnowledgeBaseDetails from './pages/KnowledgeBaseDetails';
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,11 @@ const App = () => (
                   <Route path="/about" element={<About />} />
                   <Route path="/ai-consultant" element={<AIConsultant />} />
                   <Route path="/data-center-designer" element={<DataCenterDesigner />} />
+                  <Route path="/knowledge-base/:id" element={
+                    <RoleProtectedRoute requiredRole="moderator">
+                      <KnowledgeBaseDetails />
+                    </RoleProtectedRoute>
+                  } />
                 </Route>
               </Routes>
             </TooltipProvider>

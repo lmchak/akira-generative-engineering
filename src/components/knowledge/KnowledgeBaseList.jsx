@@ -1,10 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Edit, Search, Trash, FileText } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 
 const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSearchChange }) => {
+  const navigate = useNavigate();
+
+  const handleNameClick = (id) => {
+    navigate(`/knowledge-base/${id}`);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
@@ -43,18 +50,26 @@ const KnowledgeBaseList = ({ knowledgeBases, onEdit, onDelete, searchQuery, onSe
           ) : (
             knowledgeBases.map((kb) => (
               <TableRow key={kb.id}>
-                <TableCell>{kb.name}</TableCell>
+                <TableCell>
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto font-normal"
+                    onClick={() => handleNameClick(kb.id)}
+                  >
+                    {kb.name}
+                  </Button>
+                </TableCell>
                 <TableCell>{kb.status}</TableCell>
                 <TableCell>{kb.description}</TableCell>
                 <TableCell>
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-4 w-4 inline mr-1" />
                   {kb.sourceFiles}
                 </TableCell>
                 <TableCell>{new Date(kb.creationTime).toLocaleString()}</TableCell>
                 <TableCell>{new Date(kb.lastSync).toLocaleString()}</TableCell>
                 <TableCell>
                   <div className="flex space-x-2">
-                    <Button variant="ghost" size="icon" onClick={() => onEdit(kb)}>
+                    <Button variant="ghost" size="icon" onClick={() => handleNameClick(kb.id)}>
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => onDelete(kb.id)}>
